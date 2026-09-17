@@ -3900,36 +3900,101 @@ app.<span class="tok-fn">use</span>(<span class="tok-fn">errorHandler</span>());
                     </div>
                 </div>
 
-                <!-- TOPIC 4: NODEMON -->
+                                <!-- TOPIC 4: NODEMON DEEP DIVE -->
                 <div class="concept-block">
-                    <div class="concept-heading">4. nodemon — Auto-Restart Dev Server</div>
+                    <div class="concept-heading">4. nodemon — Auto-Restart Dev Server & File Watcher Internals</div>
 
-                    <div class="concept-sub-title">🔴 4.1 Problem: Har change ke baad Ctrl+C → node app.js — irritating!</div>
-                    <p>Development mein code change karo, manually server restart karo, browser pe test karo — ye cycle 100 baar karna padta tha. <code>nodemon</code> file changes monitor karta hai aur automatically server restart karta hai.</p>
+                    <div class="concept-sub-title">🔴 4.1 Problem Kya Thi? (The 100-Times Manual Restart Fatigue)</div>
+                    <p>Standard Node.js mein jab aap <code>node app.js</code> chalate ho, toh Node memory mein pura code load karke run kar deta hai. Agar aap file mein 1 single line ya spelling bhi change karoge, toh running server ko pata nahi chalta. Developer ko manually:</p>
+                    <ol>
+                        <li>Terminal mein jaakar <code>Ctrl + C</code> daba kar server kill karna padta hai.</li>
+                        <li>Phir se <code>node app.js</code> command type karke restart karna padta hai.</li>
+                        <li>Din bhar mein 200 baar ye repeat karna developer ki productivity barbad kar deta hai!</li>
+                    </ol>
 
+                    <div class="analogy-note">
+                        <div class="analogy-note-title">⚡ Indian Real-Life Analogy: Purana Kerosene Generator vs Smart Auto-Inverter</div>
+                        <p>• <strong>Manual Node (node app.js):</strong> Purana generator jisme light aane-jaane par har baar bahar jaakar rassi kheench ke manually start karna padta hai.<br>
+                        • <strong>Nodemon:</strong> Smart automatic inverter — jaise hi room mein koi switch on/off hota hai (file save hoti hai), ye 0.1 second mein bina kisi manual effort ke restart karke fresh state deliver kar deta hai.</p>
+                    </div>
+
+                    <!-- VISUAL BIO-ANATOMY BOARD: NODEMON FILE WATCHER LIFECYCLE -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Visual Anatomy: Nodemon Process Lifecycle & Auto-Reload Engine</span>
+                            <span class="genz-badge">FILE WATCHER INTERNALS</span>
+                        </div>
+
+                        <div class="anatomy-code-center">
+                            <div>1. Developer edits code ──> <span class="pill-fn">Ctrl + S (File Saved)</span></div>
+                            <div style="margin-top: 8px;">│</div>
+                            <div>2. File System Event ──> <span class="pill-kw">chokidar / fs.watch()</span> detects modified timestamp</div>
+                            <div style="margin-top: 8px;">│</div>
+                            <div>3. Kill Signal ────────> <span class="pill-err">SIGUSR2 / SIGTERM</span> sent to existing child Node.js PID (Port released)</div>
+                            <div style="margin-top: 8px;">│</div>
+                            <div>4. Spawn Fresh Process ─> <span class="pill-await">child_process.spawn('node app.js')</span> executes new code</div>
+                            <div style="margin-top: 8px;">│</div>
+                            <div>5. Ready in 100ms ──────> <span class="pill-res">[nodemon] restarting server... ✅ Live on Port 4000</span></div>
+                        </div>
+
+                        <div class="anatomy-callout-grid">
+                            <div class="anatomy-callout-card">
+                                <span class="callout-badge bg-red">⛔ Never in Production!</span>
+                                <div>Nodemon ko <strong>sirf development</strong> mein use karein (<code>--save-dev</code>). Production (AWS/Docker/Kubernetes) mein standard <code>node app.js</code> ya <code>PM2</code> process manager chalta hai!</div>
+                            </div>
+                            <div class="anatomy-callout-card">
+                                <span class="callout-badge bg-yellow">📁 node_modules Loop Trap</span>
+                                <div>Agar <code>nodemon</code> ko <code>node_modules/</code> ignore karne ko na bolo, toh koi naya package install hone par server infinite loop mein restart hota rahega!</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-sub-title">⚙️ 4.2 Step-by-Step Installation & NPM Scripts Setup</div>
+                    <p><strong>Step 1: Install as Developer Dependency</strong> (Production bundle mein add nahi hona chahiye):</p>
                     <div class="code-container">
-                        <div class="code-top-bar"><span>nodemon_setup</span><span>Install + Configure</span></div>
-                        <pre><code><span class="tok-com">// Install as dev dependency only!</span>
-npm install nodemon --save-dev
+                        <div class="code-top-bar"><span>Terminal</span><span>Dev-Dependency Installation</span></div>
+                        <pre><code><span class="tok-com"># -D / --save-dev flag nodemon ko package.json ke devDependencies section mein daalta hai:</span>
+npm install --save-dev nodemon</code></pre>
+                    </div>
 
-<span class="tok-com">// package.json scripts:</span>
-{
-    <span class="tok-str">"scripts"</span>: {
-        <span class="tok-str">"start"</span>: <span class="tok-str">"node app.js"</span>,          <span class="tok-com">// Production: no nodemon</span>
-        <span class="tok-str">"dev"</span>:   <span class="tok-str">"nodemon app.js"</span>,        <span class="tok-com">// Development: auto-restart!</span>
-        <span class="tok-str">"dev:debug"</span>: <span class="tok-str">"nodemon --inspect app.js"</span> <span class="tok-com">// With Chrome debugger</span>
-    }
-}
-
-<span class="tok-com">// Chalaao:</span>
-npm run dev   <span class="tok-com">// Auto-restarts server on .js, .json file changes</span>
-
-<span class="tok-com">// nodemon.json — custom config (optional):</span>
-{
-    <span class="tok-str">"watch"</span>: [<span class="tok-str">"src/"</span>],           <span class="tok-com">// Only watch src folder</span>
-    <span class="tok-str">"ext"</span>: <span class="tok-str">"js,json,.env"</span>,       <span class="tok-com">// Watch these extensions</span>
-    <span class="tok-str">"ignore"</span>: [<span class="tok-str">"node_modules/"</span>]  <span class="tok-com">// Ignore these</span>
+                    <p><strong>Step 2: package.json Scripts Configure Karna:</strong></p>
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>package.json</span><span>Production vs Development Scripts</span></div>
+                        <pre><code>{
+  <span class="tok-str">"name"</span>: <span class="tok-str">"techjobs-api"</span>,
+  <span class="tok-str">"scripts"</span>: {
+    <span class="tok-str">"start"</span>: <span class="tok-str">"node app.js"</span>,             <span class="tok-com">// 👈 Production standard (AWS/Docker/Render)</span>
+    <span class="tok-str">"dev"</span>: <span class="tok-str">"nodemon app.js"</span>,           <span class="tok-com">// 👈 Development auto-restart: npm run dev</span>
+    <span class="tok-str">"dev:debug"</span>: <span class="tok-str">"nodemon --inspect app.js"</span> <span class="tok-com">// 👈 Chrome DevTools Inspector attach karne ke liye</span>
+  }
 }</code></pre>
+                    </div>
+
+                    <div class="concept-sub-title">🛠️ 4.3 Advanced Project Configuration with nodemon.json</div>
+                    <p>Bade enterprise projects mein hum root directory mein <code>nodemon.json</code> config file banate hain taaki exact rules set kar sakein:</p>
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>nodemon.json</span><span>Fine-Grained Watch Rules</span></div>
+                        <pre><code>{
+  <span class="tok-str">"watch"</span>: [<span class="tok-str">"src/"</span>, <span class="tok-str">"controllers/"</span>, <span class="tok-str">"routes/"</span>], <span class="tok-com">// 1. Sirf in folders ke changes track karo</span>
+  <span class="tok-str">"ext"</span>: <span class="tok-str">"js,json,.env,ejs"</span>,                       <span class="tok-com">// 2. In file extensions par reload trigger karo</span>
+  <span class="tok-str">"ignore"</span>: [<span class="tok-str">"node_modules/"</span>, <span class="tok-str">"logs/"</span>, <span class="tok-str">"*.test.js"</span>], <span class="tok-com">// 3. In folders aur test files ko ignore karo</span>
+  <span class="tok-str">"delay"</span>: <span class="tok-num">500</span>,                                      <span class="tok-com">// 4. 500ms debounce buffer (rapid typing me crash hone se bachta hai)</span>
+  <span class="tok-str">"env"</span>: {
+    <span class="tok-str">"NODE_ENV"</span>: <span class="tok-str">"development"</span>
+  }
+}</code></pre>
+                    </div>
+
+                    <div class="mechanics-table-box">
+                        <table class="mechanics-table">
+                            <thead><tr><th>nodemon.json Key</th><th>Type</th><th>Kya Kaam Karta Hai? (Plain Hindi)</th><th>Why Critical?</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>watch</code></td><td>Array of Strings</td><td>Specific folders define karta hai jinhe monitor karna hai</td><td>Faltu background folders scan hone se CPU usage bachta hai</td></tr>
+                                <tr><td><code>ext</code></td><td>Comma-separated String</td><td>Kin extensions (e.g. <code>.js</code>, <code>.env</code>, <code>.ejs</code>) par reload karna hai</td><td>HTML/CSS/ENV changes par bhi server auto-refresh hota hai</td></tr>
+                                <tr><td><code>ignore</code></td><td>Array of Strings</td><td>Kin directories ko monitor nahi karna</td><td><code>node_modules</code> aur <code>logs</code> folder se infinite loop rokta hai</td></tr>
+                                <tr><td><code>delay</code></td><td>Number (ms)</td><td>File save hone ke baad kitne millisecond ruk kar restart karna hai</td><td>Debouncing — jab aap 5 files ek sath save karte ho toh 5 baar restart nahi hota</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
