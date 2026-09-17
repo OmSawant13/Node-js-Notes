@@ -3748,90 +3748,149 @@ app.<span class="tok-fn">listen</span>(<span class="tok-num">4000</span>);</code
 
                 <div class="brush-banner">Jo sirf ye jaanta hai wo 6 LPA se 10 LPA jaata hai!</div>
 
-                <!-- TOPIC 1: CORS -->
+                                <!-- TOPIC 1: CORS -->
                 <div class="concept-block">
-                    <div class="concept-heading">1. cors — Cross-Origin Resource Sharing</div>
+                    <div class="concept-heading">1. cors — Cross-Origin Resource Sharing & Preflight Internals</div>
 
-                    <div class="concept-sub-title">🔴 1.1 Problem: Browser ne request block kar di — CORS Error!</div>
-                    <p>Jab frontend (<code>localhost:3000</code>) backend (<code>localhost:5000</code>) ko request bhejta hai — alag port = alag "origin". Browser security policy (Same Origin Policy) isko block kar deta hai. Ye error sirf browser mein aata hai — Postman/curl mein nahi! <code>cors</code> package server ko batata hai ki kaunse origins ko allow karna hai.</p>
+                    <div class="concept-sub-title">🔴 1.1 Problem Kya Thi? (The Mysterious Browser Red CORS Error)</div>
+                    <p>Jab aapka React/Vue frontend (<code>http://localhost:3000</code>) par chalta hai aur Express backend (<code>http://localhost:5000</code>) par, toh Protocol + Domain + Port mein se Port alag hone ki wajah se browser isse <strong>"Cross-Origin"</strong> treat karta hai.</p>
+                    <p>Browser ki default <strong>Same-Origin Policy (SOP)</strong> security rule hai: Browser backend se aane wale data ko frontend JS code ko padhne hi nahi deta aur console mein lal rang ka <code>CORS policy blocked</code> error phekta hai. (Note: Ye error Postman ya mobile app mein kabhi nahi aata, sirf browser mein aata hai!)</p>
 
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>cors_setup.js</span><span>Production CORS Configuration</span></div>
-                        <pre><code><span class="tok-kw">const</span> cors = <span class="tok-fn">require</span>(<span class="tok-str">'cors'</span>);
-
-<span class="tok-com">// ❌ DON'T: Open to everyone (use only during dev!)</span>
-app.<span class="tok-fn">use</span>(<span class="tok-fn">cors</span>()); <span class="tok-com">// Any origin can access — security risk!</span>
-
-<span class="tok-com">// ✅ DO: Restrict to specific origins in production</span>
-<span class="tok-kw">const</span> corsOptions = {
-    origin: [<span class="tok-str">'https://myjobapp.vercel.app'</span>, <span class="tok-str">'http://localhost:3000'</span>],
-    methods: [<span class="tok-str">'GET'</span>, <span class="tok-str">'POST'</span>, <span class="tok-str">'PUT'</span>, <span class="tok-str">'PATCH'</span>, <span class="tok-str">'DELETE'</span>],
-    allowedHeaders: [<span class="tok-str">'Content-Type'</span>, <span class="tok-str">'Authorization'</span>],
-    credentials: <span class="tok-kw">true</span> <span class="tok-com">// Allow cookies/auth headers across origins</span>
-};
-app.<span class="tok-fn">use</span>(<span class="tok-fn">cors</span>(corsOptions));
-
-<span class="tok-com">// CORS headers jo server response mein add hote hain:</span>
-<span class="tok-com">// Access-Control-Allow-Origin: https://myjobapp.vercel.app</span>
-<span class="tok-com">// Access-Control-Allow-Methods: GET, POST, PUT...</span>
-<span class="tok-com">// Browser ye headers check karta hai — allowed ho toh proceed karta hai!</span></code></pre>
+                    <div class="analogy-note">
+                        <div class="analogy-note-title">🛂 Indian Real-Life Analogy: International Airport Immigration Visa Check</div>
+                        <p>• <strong>Same-Origin (Domestic Flight):</strong> Mumbai se Delhi jaate waqt koi passport nahi maangta (Same domain request).<br>
+                        • <strong>Cross-Origin (International Flight):</strong> Jab bahar ka person (React domain) desh ke bank locker (Express server) ko access karta hai, toh Airport Immigration Guard (Browser) pehle server se poochta hai ki <em>"Kya ye country/domain aapki approved list mein hai?"</em> Server se <code>Access-Control-Allow-Origin</code> ka Visa stamp milne par hi entry milti hai.</p>
                     </div>
 
+                    <!-- VISUAL BIO-ANATOMY BOARD: CORS PREFLIGHT -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 CORS Error vs No CORS Error</span>
-                            <span class="genz-badge">DEBUG TIP</span>
+                            <span class="anatomy-board-title">🔬 Visual Anatomy: Browser CORS Preflight (OPTIONS) Lifecycle</span>
+                            <span class="genz-badge">TWO-STEP HANDSHAKE</span>
                         </div>
+
                         <div class="anatomy-code-center">
-                            <div><span class="pill-err">CORS Error in Browser:</span> "Access blocked by CORS policy" → Server ne origin allow nahi kiya</div>
-                            <div style="margin-top:8px;"><span class="pill-res">No Error in Postman:</span> Postman browser nahi hai, Same Origin Policy nahi follow karta</div>
-                            <div style="margin-top:8px;"><span class="pill-kw">Fix:</span> Backend pe cors() middleware lagao with correct origins</div>
+                            <div>1. Frontend triggers POST ──> <span class="pill-fn">Browser pauses payload</span></div>
+                            <div style="margin-top: 8px;">│</div>
+                            <div>2. Step 1: Preflight ─────> <span class="pill-kw">OPTIONS /api/jobs</span> sent with <code>Origin: http://localhost:3000</code></div>
+                            <div style="margin-top: 8px;">│</div>
+                            <div>3. Server checks CORS ────> <span class="pill-res">Access-Control-Allow-Origin: http://localhost:3000</span> returned</div>
+                            <div style="margin-top: 8px;">│</div>
+                            <div>4. Step 2: Actual Request ─> <span class="pill-await">POST /api/jobs (JSON Payload)</span> executes safely</div>
+                            <div style="margin-top: 8px;">│</div>
+                            <div>5. Client gets response ──> <span class="pill-res">Status 201 Created ✅ React UI renders!</span></div>
                         </div>
+
                         <div class="anatomy-callout-grid">
                             <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">💼 Interview Q</span>
-                                <div>"CORS kya hai?" → Browser security feature. Different origins ke beech requests control karta hai. Server headers set karta hai jo browser check karta hai.</div>
+                                <span class="callout-badge bg-yellow">⚠️ app.use(cors()) in Prod?</span>
+                                <div>Bina options ke <code>cors()</code> lagane par <code>*</code> (sabko allow) ho jata hai. Hacker kisi bhi malicious website se aapka API abuse kar sakta hai!</div>
                             </div>
                             <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-red">🚨 Preflight</span>
-                                <div>Browser pehle OPTIONS request bhejta hai (preflight) — check karta hai ki actual request allowed hai ya nahi. Ye automatic hota hai!</div>
+                                <span class="callout-badge bg-green">🍪 credentials: true</span>
+                                <div>Agar client se cookies ya Authorization Bearer headers bhejne hain, toh <code>credentials: true</code> set karna mandatory hai.</div>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="concept-sub-title">⚙️ 1.2 Step-by-Step Code Configuration (Production Standard)</div>
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>cors_setup.js</span><span>Production CORS Configuration</span></div>
+                        <pre><code><span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>);
+<span class="tok-kw">const</span> cors    = <span class="tok-fn">require</span>(<span class="tok-str">'cors'</span>);
+<span class="tok-kw">const</span> app     = <span class="tok-fn">express</span>();
+
+<span class="tok-com">// ✅ Production Standard Whitelist Configuration:</span>
+<span class="tok-kw">const</span> allowedOrigins = [
+    <span class="tok-str">'https://myjobportal.com'</span>,      <span class="tok-com">// Production Frontend URL</span>
+    <span class="tok-str">'https://admin.myjobportal.com'</span>,<span class="tok-com">// Internal Admin Dashboard</span>
+    <span class="tok-str">'http://localhost:3000'</span>         <span class="tok-com">// Local development React app</span>
+];
+
+<span class="tok-kw">const</span> corsOptions = {
+    origin: (<span class="tok-num">origin</span>, <span class="tok-num">callback</span>) => {
+        <span class="tok-com">// Allow requests with no origin (like Postman or mobile apps)</span>
+        <span class="tok-kw">if</span> (!origin || allowedOrigins.<span class="tok-fn">indexOf</span>(origin) !== -<span class="tok-num">1</span>) {
+            <span class="tok-fn">callback</span>(<span class="tok-kw">null</span>, <span class="tok-kw">true</span>);
+        } <span class="tok-kw">else</span> {
+            <span class="tok-fn">callback</span>(<span class="tok-kw">new</span> <span class="tok-fn">Error</span>(<span class="tok-str">'CORS Error: Domain Not Allowed by Backend Policy!'</span>));
+        }
+    },
+    methods: [<span class="tok-str">'GET'</span>, <span class="tok-str">'POST'</span>, <span class="tok-str">'PUT'</span>, <span class="tok-str">'PATCH'</span>, <span class="tok-str">'DELETE'</span>],
+    allowedHeaders: [<span class="tok-str">'Content-Type'</span>, <span class="tok-str">'Authorization'</span>],
+    credentials: <span class="tok-kw">true</span>, <span class="tok-com">// Cookies / Bearer headers across domains</span>
+    optionsSuccessStatus: <span class="tok-num">200</span>
+};
+
+app.<span class="tok-fn">use</span>(<span class="tok-fn">cors</span>(corsOptions));</code></pre>
+                    </div>
+
+                    <div class="mechanics-table-box">
+                        <table class="mechanics-table">
+                            <thead><tr><th>CORS Option</th><th>Kya Karta Hai? (Plain Hindi)</th><th>Why Required in 6 LPA API?</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>origin</code></td><td>Approved domain URLs ki whitelist</td><td>Hacker website (evil.com) se aapke server ka data steal hone se rokta hai</td></tr>
+                                <tr><td><code>methods</code></td><td>Kin HTTP Verbs (GET, POST, etc.) ko permission hai</td><td>Restricts unauthorized methods</td></tr>
+                                <tr><td><code>allowedHeaders</code></td><td>Kin headers ko client bhej sakta hai (e.g. <code>Authorization</code>)</td><td>JWT Bearer token aur JSON payloads permit karta hai</td></tr>
+                                <tr><td><code>credentials</code></td><td>Cross-origin cookies aur auth headers allow karta hai</td><td>JWT login session maintain rakhne ke liye zaroori hai</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
                 <!-- TOPIC 2: HELMET -->
                 <div class="concept-block">
-                    <div class="concept-heading">2. helmet — Security Headers (Free Armor)</div>
+                    <div class="concept-heading">2. helmet — Security Headers (Automatic Production Armor)</div>
 
-                    <div class="concept-sub-title">📖 2.1 helmet Kya Karta Hai?</div>
-                    <p><code>helmet</code> Express middleware hai jo HTTP security headers automatically set karta hai. Ye headers browser ko different attacks se bachata hai jaise XSS, clickjacking, MIME sniffing. Ek line lagao — 15+ vulnerabilities cover!</p>
+                    <div class="concept-sub-title">🔴 2.1 Problem Kya Thi? (Server Information Leakage & Vulnerabilities)</div>
+                    <p>By default, Express har response ke sath ek HTTP header bhejta hai: <code>X-Powered-By: Express</code>. Isse hacker ko turant pata chal jata hai ki aapka server Node/Express pe chal raha hai, aur wo specific Express 0-day exploits scan karna shuru kar deta hai. Iske alawa, clickjacking, MIME-sniffing aur XSS attacks ke against default browser settings kamzor hoti hain.</p>
 
+                    <div class="analogy-note">
+                        <div class="analogy-note-title">🪖 Indian Real-Life Analogy: Cricket Batter Helmet & Arm Guard</div>
+                        <p>Jaise 150 km/h ki bouncer ball aane par bina helmet ke batting karna fatal ho sakta hai — waise hi internet par bina <code>helmet()</code> ke Express server chalana hacker ke attacks ko direct dawat dena hai. <code>helmet()</code> ek single line mein 15 security shields pehna deta hai.</p>
+                    </div>
+
+                    <!-- VISUAL BIO-ANATOMY BOARD: HELMET SHIELDS -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Visual Anatomy: The 5 Major Security Shields Injected by Helmet</span>
+                            <span class="genz-badge">HTTP SECURITY ARMOR</span>
+                        </div>
+
+                        <div class="anatomy-code-center">
+                            <div><span class="pill-kw">1. Hide Tech Identity</span> ──> <span class="pill-err">X-Powered-By: Express</span> REMOVED (Hacker blindsided)</div>
+                            <div style="margin-top: 8px;"><span class="pill-fn">2. Anti-Clickjacking</span> ────> <span class="pill-res">X-Frame-Options: SAMEORIGIN</span> (Site cannot be put inside &lt;iframe&gt;)</div>
+                            <div style="margin-top: 8px;"><span class="pill-await">3. Anti-MIME Sniffing</span> ──> <span class="pill-kw">X-Content-Type-Options: nosniff</span> (Blocks malicious file rename hacks)</div>
+                            <div style="margin-top: 8px;"><span class="pill-res">4. Strict HTTPS Only</span> ────> <span class="pill-fn">Strict-Transport-Security (HSTS)</span> (Forces all browser calls to HTTPS)</div>
+                            <div style="margin-top: 8px;"><span class="pill-err">5. Anti-XSS Filter</span> ──────> <span class="pill-err">X-XSS-Protection: 0</span> + CSP rules (Blocks malicious script injections)</div>
+                        </div>
+
+                        <div class="anatomy-callout-grid">
+                            <div class="anatomy-callout-card">
+                                <span class="callout-badge bg-green">🛡️ Free 1-Line Defense</span>
+                                <div>Sirf <code>app.use(helmet())</code> likhne se bina kisi complex config ke top 15 OWASP backend security vulnerabilities automatically patch ho jaati hain!</div>
+                            </div>
+                            <div class="anatomy-callout-card">
+                                <span class="callout-badge bg-yellow">💼 Top Interview Q</span>
+                                <div>"Express mein X-Powered-By header kyu hatana zaroori hai?" → Server technology hide karne ke liye taaki targeted exploits attack na ho sakein.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-sub-title">⚙️ 2.2 Step-by-Step Implementation</div>
                     <div class="code-container">
-                        <div class="code-top-bar"><span>helmet_setup.js</span><span>Security Headers</span></div>
-                        <pre><code><span class="tok-kw">const</span> helmet = <span class="tok-fn">require</span>(<span class="tok-str">'helmet'</span>);
+                        <div class="code-top-bar"><span>helmet_setup.js</span><span>Security Headers Activation</span></div>
+                        <pre><code><span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>);
+<span class="tok-kw">const</span> helmet  = <span class="tok-fn">require</span>(<span class="tok-str">'helmet'</span>);
+<span class="tok-kw">const</span> app     = <span class="tok-fn">express</span>();
 
-<span class="tok-com">// Ek hi line — 15+ security headers set ho jaate hain!</span>
+<span class="tok-com">// 🛡️ Register Helmet as the FIRST middleware (top of pipeline):</span>
 app.<span class="tok-fn">use</span>(<span class="tok-fn">helmet</span>());
 
-<span class="tok-com">// helmet ye headers set karta hai (examples):</span>
-<span class="tok-com">// X-Content-Type-Options: nosniff       → MIME type sniffing rokta hai</span>
-<span class="tok-com">// X-Frame-Options: DENY                 → Clickjacking rokta hai</span>
-<span class="tok-com">// X-XSS-Protection: 1; mode=block      → XSS filter enable</span>
-<span class="tok-com">// Strict-Transport-Security             → HTTPS enforce karta hai</span>
-<span class="tok-com">// Content-Security-Policy               → Script injection rokta hai</span>
-
-<span class="tok-com">// Custom configuration (agar kuch disable karna ho):</span>
-app.<span class="tok-fn">use</span>(<span class="tok-fn">helmet</span>({
-    contentSecurityPolicy: <span class="tok-kw">false</span> <span class="tok-com">// API server ke liye turn off kar sakte ho</span>
-}));
-
-<span class="tok-com">// ✅ Production mein ye order follow karo:</span>
-app.<span class="tok-fn">use</span>(<span class="tok-fn">helmet</span>());           <span class="tok-com">// 1. Security headers</span>
-app.<span class="tok-fn">use</span>(<span class="tok-fn">cors</span>(corsOptions));   <span class="tok-com">// 2. CORS</span>
-app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>());    <span class="tok-com">// 3. Body parser</span>
-app.<span class="tok-fn">use</span>(<span class="tok-str">'/api'</span>, routes);     <span class="tok-com">// 4. Routes</span>
-app.<span class="tok-fn">use</span>(errorHandler);      <span class="tok-com">// 5. Global error handler (last!)</span></code></pre>
+<span class="tok-com">// Ab har incoming request aur outgoing response automatically encrypted security headers ke sath secure hai!</span>
+app.<span class="tok-fn">get</span>(<span class="tok-str">'/'</span>, (<span class="tok-num">req</span>, <span class="tok-num">res</span>) => {
+    res.<span class="tok-fn">send</span>(<span class="tok-str">'Secure Server Live!'</span>);
+});</code></pre>
                     </div>
                 </div>
 
