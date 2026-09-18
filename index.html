@@ -2751,7 +2751,7 @@ app.<span class="tok-fn">post</span>(<span class="tok-str">'/products'</span>, (
                     </div>
                 </div>
 
-                <!-- 6. UPDATE (PUT) & DELETE -->
+                                <!-- 6. UPDATE (PUT) & DELETE -->
                 <div class="concept-block">
                     <div class="concept-heading">6. Update (PUT) & Delete Operations</div>
                     <p>Yaha humare paas dono hain: <code>req.params</code> (Kaunsa product update karna hai?) aur <code>req.body</code> (Kya data update karna hai?).</p>
@@ -2797,7 +2797,46 @@ app.<span class="tok-fn">put</span>(<span class="tok-str">'/products/:id'</span>
 });</code></pre>
                     </div>
 
-                    <div class="concept-sub-title">DELETE Operation</div>
+                    <!-- BIO ANATOMY BOARD FOR PUT -->
+                    <div class="bio-anatomy-board" style="background: #0f172a; border-color: #38bdf8; color: #f8fafc; margin-top: 18px;">
+                        <div class="anatomy-board-header" style="border-bottom-color: #334155;">
+                            <span class="anatomy-board-title" style="color: #38bdf8;">🔬 PUT /products/:id — Step-by-Step Code Dissection</span>
+                            <span class="genz-badge" style="background: #38bdf8; color: #0f172a;">UPDATE ANATOMY</span>
+                        </div>
+                        <div class="anatomy-code-center" style="background: #1e293b; border-color: #475569; font-size: 14.5px; line-height: 2.2;">
+                            <div><span class="pill-kw">Line 1: Number(req.params.id)</span> ─────────▶ URL parameter <code>"2"</code> (string) ko <code>2</code> (number) banata hai</div>
+                            <div><span class="pill-fn">Line 2: const { name, price } = req.body</span> ──▶ Client jo new updates bhej raha hai usse destructure kiya</div>
+                            <div><span class="pill-await">Line 3: products.findIndex(p => p.id === id)</span> ▶ Array me element ka index (0, 1, 2...) dhoondta hai; nahi mila toh <code>-1</code></div>
+                            <div><span class="pill-err">Line 4: if (productIndex === -1) return 404</span> ─▶ Guard Clause: Product nahi mila toh turant 404 return karke execution rok do</div>
+                            <div><span class="pill-res">Line 5: if (name !== undefined)</span> ──────────▶ Partial update safety: Sirf wahi field update karo jo client ne bheji hai</div>
+                            <div><span class="pill-kw">Line 6: Number(price)</span> ──────────────────▶ Agar price string <code>"1800"</code> aayi hai toh number cast kiya</div>
+                            <div><span class="pill-res">Line 7: res.status(200).json(...)</span> ─────────▶ 200 OK status ke saath updated product object client ko return kiya</div>
+                        </div>
+
+                        <div class="anatomy-callout-grid" style="margin-top: 15px;">
+                            <div class="anatomy-callout-card" style="border-left: 4px solid #38bdf8; background: #1e293b; padding: 14px; border-radius: 8px;">
+                                <div style="font-weight: 800; color: #38bdf8; margin-bottom: 6px;">🎯 find() vs findIndex()</div>
+                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
+                                    • <code>find()</code>: Matching item ka <strong>actual object</strong> return karta hai.<br>
+                                    • <code>findIndex()</code>: Matching item ka <strong>index position</strong> (0, 1, 2...) return karta hai. In-place array updates ke liye index chahiye hota hai (<code>products[index].name = ...</code>).
+                                </div>
+                            </div>
+                            <div class="anatomy-callout-card" style="border-left: 4px solid #f59e0b; background: #1e293b; padding: 14px; border-radius: 8px;">
+                                <div style="font-weight: 800; color: #f59e0b; margin-bottom: 6px;">⚠️ `!== undefined` Check Kyu?</div>
+                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
+                                    Agar client ne sirf <code>{ price: 1800 }</code> bheja, toh <code>name</code> hoga <code>undefined</code>. Agar direct <code>products[index].name = name</code> likha, toh purana name mit kar <code>undefined</code> ho jayega! Isliye check zaroori hai.
+                                </div>
+                            </div>
+                            <div class="anatomy-callout-card" style="border-left: 4px solid #ef4444; background: #1e293b; padding: 14px; border-radius: 8px;">
+                                <div style="font-weight: 800; color: #ef4444; margin-bottom: 6px;">🚫 Early `return` in 404</div>
+                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
+                                    <code>return res.status(404).json(...)</code> mein <code>return</code> keyword likhna mandatory hai! Agar <code>return</code> nahi lagaya, toh function aage continue karega aur 200 response bhi bhejne ki koshish karega ➔ <strong>ERR_HTTP_HEADERS_SENT Crash</strong>.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="concept-sub-title" style="margin-top: 25px;">DELETE Operation</div>
                     <p><code>DELETE /products/:id</code> — Delete se pehle length store karte hain. Baad mein compare karenge: length change hui? Agar nahi hui toh product mila hi nahi (404).</p>
 
                     <div class="code-container">
@@ -2825,6 +2864,37 @@ app.<span class="tok-fn">delete</span>(<span class="tok-str">'/products/:id'</sp
         message: <span class="tok-str">`Product ${id} deleted successfully`</span>
     });
 });</code></pre>
+                    </div>
+
+                    <!-- BIO ANATOMY BOARD FOR DELETE -->
+                    <div class="bio-anatomy-board" style="background: #0f172a; border-color: #ec4899; color: #f8fafc; margin-top: 18px;">
+                        <div class="anatomy-board-header" style="border-bottom-color: #334155;">
+                            <span class="anatomy-board-title" style="color: #ec4899;">🔬 DELETE /products/:id — Step-by-Step Code Dissection</span>
+                            <span class="genz-badge" style="background: #ec4899; color: #0f172a;">DELETE ANATOMY</span>
+                        </div>
+                        <div class="anatomy-code-center" style="background: #1e293b; border-color: #475569; font-size: 14.5px; line-height: 2.2;">
+                            <div><span class="pill-kw">Line 1: const initialLength = products.length</span> ──▶ Filter run karne se pehle array length ka snapshot le liya (e.g. <code>3</code>)</div>
+                            <div><span class="pill-fn">Line 2: products.filter(p => p.id !== id)</span> ───▶ Array me se target ID wale product ko nikal kar naya filtered array banaya</div>
+                            <div><span class="pill-err">Line 3: if (products.length === initialLength)</span> ─▶ Agar filter ke baad bhi length same rahi, matlab delete karne ke liye product tha hi nahi (404)!</div>
+                            <div><span class="pill-res">Line 4: res.status(200).json(...)</span> ─────────▶ 200 OK + Success message client ko bhej diya</div>
+                        </div>
+
+                        <div class="anatomy-callout-grid" style="margin-top: 15px;">
+                            <div class="anatomy-callout-card" style="border-left: 4px solid #ec4899; background: #1e293b; padding: 14px; border-radius: 8px;">
+                                <div style="font-weight: 800; color: #ec4899; margin-bottom: 6px;">💡 Filter Deletion Technique</div>
+                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
+                                    JavaScript mein in-memory array se delete karne ke 2 common methods hote hain:<br>
+                                    1. <code>filter()</code>: Immutably new array generate karta hai (Cleanest code).<br>
+                                    2. <code>splice(index, 1)</code>: Mutates array directly (requires <code>findIndex</code> first).
+                                </div>
+                            </div>
+                            <div class="anatomy-callout-card" style="border-left: 4px solid #10b981; background: #1e293b; padding: 14px; border-radius: 8px;">
+                                <div style="font-weight: 800; color: #10b981; margin-bottom: 6px;">⚡ Smart 404 Detection</div>
+                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
+                                    <code>initialLength</code> track karke hume pehle alag se <code>find()</code> chalane ki zarurat nahi padti. One pass filter + length check gives both deletion & 404 verification!
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2861,7 +2931,36 @@ app.<span class="tok-fn">listen</span>(PORT, () => {
 });</code></pre>
                     </div>
 
-                    <div class="analogy-note">
+                    <!-- BIO ANATOMY BOARD FOR SECTION 7 -->
+                    <div class="bio-anatomy-board" style="background: #0f172a; border-color: #a855f7; color: #f8fafc; margin-top: 18px;">
+                        <div class="anatomy-board-header" style="border-bottom-color: #334155;">
+                            <span class="anatomy-board-title" style="color: #a855f7;">🔬 Error Handling & Server Startup Anatomy</span>
+                            <span class="genz-badge" style="background: #a855f7; color: #0f172a;">MIDDLEWARE PIPELINE</span>
+                        </div>
+                        <div class="anatomy-code-center" style="background: #1e293b; border-color: #475569; font-size: 14.5px; line-height: 2.2;">
+                            <div><span class="pill-kw">404 Catch-All: app.use((req, res) => {...})</span> ───▶ Bina path ke middleware pipeline ke end me rakha jata hai; unmatched requests yaha aati hain</div>
+                            <div><span class="pill-err">Global Error: app.use((err, req, res, next))</span> ▶ <strong>Exact 4 arguments!</strong> Express <code>fn.length === 4</code> check karke isse error handler banata hai</div>
+                            <div><span class="pill-res">res.status(500).json(...)</span> ──────────────────▶ Client ko generic 500 error deta hai (Production me <code>err.stack</code> hide karte hain)</div>
+                            <div><span class="pill-fn">app.listen(PORT, callback)</span> ─────────────────▶ Node.js TCP port bind karke incoming HTTP requests sunna shuru karta hai</div>
+                        </div>
+
+                        <div class="anatomy-callout-grid" style="margin-top: 15px;">
+                            <div class="anatomy-callout-card" style="border-left: 4px solid #a855f7; background: #1e293b; padding: 14px; border-radius: 8px;">
+                                <div style="font-weight: 800; color: #a855f7; margin-bottom: 6px;">🧠 Why 4 Parameters Matter in Express?</div>
+                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
+                                    JavaScript functions ka <code>fn.length</code> unke parameter count ko batata hai. Express internally check karta hai: agar <code>fn.length === 4</code> hai, toh koi bhi route handler jab <code>next(err)</code> call karega, Express normal middleware bypass karke directly is 4-arg function ko execute karega!
+                                </div>
+                            </div>
+                            <div class="anatomy-callout-card" style="border-left: 4px solid #38bdf8; background: #1e293b; padding: 14px; border-radius: 8px;">
+                                <div style="font-weight: 800; color: #38bdf8; margin-bottom: 6px;">📍 Top-to-Bottom Pipeline Order</div>
+                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
+                                    Order is everything: <code>Middleware ➔ Routes ➔ 404 Catch-All ➔ Global Error Handler</code>. Agar 404 middleware ko routes ke upar likh diya, toh koi bhi route chal hi nahi payega!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analogy-note" style="margin-top: 20px;">
                         <div class="analogy-note-title">🧠 404 vs 500 Memory Rule</div>
                         <p>• <strong>404 (Not Found):</strong> <em>"Jo maanga woh mila nahi."</em> (Client ne galat route/ID maangi, e.g. <code>/products/999</code>).<br>
                         • <strong>500 (Internal Server Error):</strong> <em>"Server ke andar kuch galat hua."</em> (Database crash, unexpected exception, code syntax/runtime bug).</p>
