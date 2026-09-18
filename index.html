@@ -1550,6 +1550,22 @@ console.<span class="tok-fn">log</span>(role); <span class="tok-com">// Outputs:
 console.<span class="tok-fn">log</span>(score); <span class="tok-com">// Outputs: 50 (Outer variable stays completely safe!)</span></code></pre>
                     </div>
 
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 var vs let/const Ka Post-Mortem (Surgical Code Dissection)</span>
+                            <span class="genz-badge">VARIABLE SCOPING</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">var role = 'user'; if(true) { var role = 'admin'; }</div>
+                            <div class="dissection-explain"><strong>1. The var Leak Bug:</strong> <code>var</code> function-scoped hota hai, block-scoped nahi. Curly braces <code>{ ... }</code> ke andar <code>var</code> declare karne par bahar ka <code>role</code> silently overwrite ho jata hai (Security Bug).</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">let role = 'user'; if(true) { let role = 'admin'; }</div>
+                            <div class="dissection-explain"><strong>2. Block Scope Isolation:</strong> <code>let</code> aur <code>const</code> curly braces <code>{ ... }</code> ke block ke andar isolated rehte hain. Bahar ka <code>role</code> intact rehta hai aur memory leak nahi hoti.</div>
+                        </div>
+                    </div>
+
                     <div class="concept-sub-title">💡 1.2 Hoisting & Temporal Dead Zone (TDZ) Explained with Code</div>
                     <p>• <strong>Hoisting:</strong> JavaScript code execute karne se pehle ek <em>Memory Creation Phase</em> chalata hai jisme saare variables aur functions ko scope ke top par memory allocate hoti hai. <code>var</code> ko <code>undefined</code> se initialize kar diya jata hai, jabki <code>let</code> aur <code>const</code> ko memory toh milti hai lekin unhe <code>&lt;uninitialized&gt;</code> chhod diya jata hai.<br>
                     • <strong>Temporal Dead Zone (TDZ):</strong> Scope me enter hone se lekar <code>let/const</code> ke actual declaration line tak ka time period TDZ kehlata hai. Is doran variable access karne par JS turant <code>ReferenceError</code> phekta hai taaki bug execute hi na ho!</p>
@@ -1689,6 +1705,34 @@ placeFoodOrder
 }</code></pre>
                     </div>
 
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Async/Await Function Ka Post-Mortem (Surgical Code Dissection)</span>
+                            <span class="genz-badge">PROMISE SYNTACTIC SUGAR</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">async function checkoutUserCart(userId)</div>
+                            <div class="dissection-explain"><strong>1. Async Keyword:</strong> Function ke aage <code>async</code> likhne se ye function automatically ek <strong>Promise</strong> return karta hai. Iske andar hum <code>await</code> keyword use karne ke liye authorized ho jaate hain.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">try { ... } catch (err) { ... }</div>
+                            <div class="dissection-explain"><strong>2. Synchronous Error Handling:</strong> Callback hell me har step par alag error check karna padta tha. <code>try/catch</code> block me agar kisi bhi <code>await</code> step par network error ya payment failure hui, toh execution turant <code>catch</code> block me jump kar jayega.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const user = await fetchUserById(userId);</div>
+                            <div class="dissection-explain"><strong>3. Await Execution Pause:</strong> <code>await</code> JavaScript thread ko block kiye bina function ke execution ko tab tak pause karta hai jab tak database se <code>user</code> data resolve hokar na aa jaye. Result milte hi <code>user</code> constant me store hota hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const cart = await fetchCartByUserId(user.id);</div>
+                            <div class="dissection-explain"><strong>4. Dependent Step:</strong> Kyunki cart fetch karne ke liye <code>user.id</code> chahiye, isliye ye step pehle wale step ke baad sequentially execute hota hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">return receipt;</div>
+                            <div class="dissection-explain"><strong>5. Promise Resolution:</strong> Yahan se returned value caller ko ek <code>Promise.resolve(receipt)</code> ke roop me milti hai.</div>
+                        </div>
+                    </div>
+
                     <!-- VISUAL CODE ANATOMY BOARD 2: ASYNC/AWAIT & PROMISE MECHANICS -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
@@ -1768,6 +1812,22 @@ app.<span class="tok-fn">get</span>(<span class="tok-str">'/users/:id'</span>, (
     <span class="tok-kw">const</span> { id } = req.params;    <span class="tok-com">// Object destructuring</span>
     <span class="tok-kw">const</span> { page = <span class="tok-num">1</span> } = req.query; <span class="tok-com">// Destructuring with default!</span>
 });</code></pre>
+                    </div>
+
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Object Destructuring Ka Post-Mortem</span>
+                            <span class="genz-badge">CLEAN DATA EXTRACTION</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const { name, role: userRole, salary = 30000 } = employee;</div>
+                            <div class="dissection-explain"><strong>1. Key Matching & Property Rename:</strong> <code>name</code> property direct extract hoti hai. <code>role: userRole</code> property ko extract karke naya variable name <code>userRole</code> deta hai (name clash avoidance).</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">salary = 30000</div>
+                            <div class="dissection-explain"><strong>2. Default Fallback Value:</strong> Agar <code>employee.salary</code> undefined hai, toh automatically fallback value <code>30000</code> assign ho jayegi.</div>
+                        </div>
                     </div>
 
                     <div class="bio-anatomy-board">
@@ -2001,6 +2061,22 @@ app.<span class="tok-fn">delete</span>(<span class="tok-str">'/admin/user'</span
 <span class="tok-com">// requireRole('admin') returns a middleware that "remembers" 'admin' via closure!</span></code></pre>
                     </div>
 
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 JavaScript Closures Ka Post-Mortem</span>
+                            <span class="genz-badge">LEXICAL SCOPING</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">function makeCounter() { let count = 0; return () => ++count; }</div>
+                            <div class="dissection-explain"><strong>1. Private State Encapsulation:</strong> <code>count</code> variable bahar se direct accessible nahi hai (private state). Inner arrow function apne parent function ke lexical scope ko memory me "band (close)" karke retain karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const counter = makeCounter(); counter();</div>
+                            <div class="dissection-explain"><strong>2. Persistent Memory:</strong> <code>makeCounter</code> return hoke stack se nikal jata hai, lekin Heap memory me closure reference rehne ki wajah se har baar <code>counter()</code> call karne par incremented value milti hai (1, 2, 3...).</div>
+                        </div>
+                    </div>
+
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
                             <span class="anatomy-board-title">🔬 Anatomy: Closure Memory Lifecycle</span>
@@ -2068,6 +2144,26 @@ console.<span class="tok-fn">log</span>(<span class="tok-str">`Eng Payroll after
     <span class="tok-kw">return</span> acc;
 }, {});
 console.<span class="tok-fn">log</span>(byDept); <span class="tok-com">// { HR: ['Sneha'], Eng: ['Ravi', 'Ankit'] }</span></code></pre>
+                    </div>
+
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 map, filter & reduce Ka Post-Mortem</span>
+                            <span class="genz-badge">ARRAY POWER TRIO</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">employees.map(emp => emp.name)</div>
+                            <div class="dissection-explain"><strong>1. Transformation (1-to-1):</strong> Har element ko transform karke exactly same length ki nayi array return karta hai (names ki list). Original array mutate nahi hoti.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">employees.filter(emp => emp.salary >= 600000)</div>
+                            <div class="dissection-explain"><strong>2. Conditional Whitelisting:</strong> Sirf wahi elements nayi array me aate hain jinke liye callback <code>true</code> return kare.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">employees.reduce((acc, emp) => acc + emp.salary, 0)</div>
+                            <div class="dissection-explain"><strong>3. Aggregation to Single Value:</strong> <code>acc</code> (accumulator) initial value <code>0</code> se shuru hota hai aur har iteration me salary add karke poori company ka total payroll calculate karta hai.</div>
+                        </div>
                     </div>
 
                     <div class="bio-anatomy-board">
@@ -2442,6 +2538,26 @@ module.exports = { newFn: () => {} }; <span class="tok-com">// This is the actua
 }</code></pre>
                     </div>
 
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Cluster Multi-Core Scaling Ka Post-Mortem</span>
+                            <span class="genz-badge">MULTI-CORE HARDWARE UTILIZATION</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">if (cluster.isPrimary) { ... }</div>
+                            <div class="dissection-explain"><strong>1. Primary Master Process:</strong> Ye process koi HTTP request handle nahi karta — ye machine ke CPU cores count karta hai aur har core ke liye child worker process spawn karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">cluster.fork()</div>
+                            <div class="dissection-explain"><strong>2. Worker Process Forking:</strong> Har CPU core ke liye ek independent Node.js process fork hota hai jo apna alag V8 instance aur Event Loop chalata hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">else { app.listen(4000); }</div>
+                            <div class="dissection-explain"><strong>3. Port Sharing & Load Balancing:</strong> Saare worker processes ek hi Port 4000 ko share karte hain. Master process incoming network packets ko Round-Robin algorithm se workers me distribute karta hai.</div>
+                        </div>
+                    </div>
+
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
                             <span class="anatomy-board-title">🔬 Cluster vs Worker Threads: Kab Kaunsa Use Karein?</span>
@@ -2500,6 +2616,22 @@ module.exports = { newFn: () => {} }; <span class="tok-com">// This is the actua
     }
 }
 manageFiles();</code></pre>
+                    </div>
+
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 fs.promises File I/O Ka Post-Mortem</span>
+                            <span class="genz-badge">NON-BLOCKING ASYNC FILE I/O</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const fs = require('fs').promises;</div>
+                            <div class="dissection-explain"><strong>1. Modern Promise API:</strong> Legacy callback wale <code>fs</code> ki jagah <code>fs.promises</code> use karne se hum <code>async/await</code> ke sath clean asynchronous file I/O kar paate hain bina Call Stack block kiye.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">await fs.writeFile('config.json', JSON.stringify(data, null, 2));</div>
+                            <div class="dissection-explain"><strong>2. Atomic File Write:</strong> Data ko disk par asynchronously write karta hai. Libuv thread pool background me disk write karta hai aur complete hone par Promise resolve hota hai.</div>
+                        </div>
                     </div>
 
                     <div class="concept-sub-title">📦 1.2 Buffers: What is Binary Data in Node.js?</div>
@@ -2592,6 +2724,30 @@ console.<span class="tok-fn">log</span>(<span class="tok-str">"--- Memory Safe S
         console.<span class="tok-fn">log</span>(<span class="tok-str">"✅ File Compressed Successfully with &lt; 20MB RAM usage!"</span>);
     }
 });</code></pre>
+                    </div>
+
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Stream Pipeline Ka Post-Mortem (Surgical Code Dissection)</span>
+                            <span class="genz-badge">ZERO RAM CRASH</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">fs.createReadStream('huge_server_log.txt')</div>
+                            <div class="dissection-explain"><strong>1. Readable Stream:</strong> Poori 1GB file ko RAM me load nahi karta — disk se chhota <strong>64KB ka chunk</strong> (Buffer) read karke pipeline me push karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">zlib.createGzip()</div>
+                            <div class="dissection-explain"><strong>2. Transform Stream:</strong> Duplex stream jo ek taraf se 64KB uncompressed binary bytes leti hai aur doosri taraf se Gzip-compressed binary bytes emit karti hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">fs.createWriteStream('huge_server_log.txt.gz')</div>
+                            <div class="dissection-explain"><strong>3. Writable Stream (Backpressure Consumer):</strong> Compressed chunks ko target file me write karti hai. Agar disk write slow hai, toh ye automatically ReadStream ko pause kar deti hai (<strong>Backpressure Defense</strong>) taaki RAM crash na ho!</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">pipeline(..., (err) => ...)</div>
+                            <div class="dissection-explain"><strong>4. Safe Cleanup Callback:</strong> Legacy <code>.pipe()</code> streams me error aane par streams leak ho jaate the. <code>pipeline()</code> error aane par automatically saare open file descriptors ko safely destroy aur close karta hai.</div>
+                        </div>
                     </div>
 
                     <div class="mechanics-table-box">
@@ -3939,6 +4095,26 @@ router.<span class="tok-fn">post</span>(<span class="tok-str">'/'</span>, jobCon
 module.exports = router;</code></pre>
                     </div>
 
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 MVC Route Table Ka Post-Mortem</span>
+                            <span class="genz-badge">SEPARATION OF CONCERNS</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const router = express.Router();</div>
+                            <div class="dissection-explain"><strong>1. Modular Mini-Router:</strong> Standalone route registry create karta hai jisse routing logic main <code>app.js</code> se alag rehti hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">router.get('/', jobController.getAllJobs);</div>
+                            <div class="dissection-explain"><strong>2. Route-to-Controller Binding:</strong> Route me koi database query nahi likhte — sirf request ko controller function (<code>getAllJobs</code>) par delegate karte hain.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">module.exports = router;</div>
+                            <div class="dissection-explain"><strong>3. Mountable Export:</strong> Router object export hota hai taaki <code>app.js</code> me <code>app.use('/api/jobs', jobRoutes)</code> se mount ho sake.</div>
+                        </div>
+                    </div>
+
                     <div class="concept-sub-title" style="margin-top: 24px;">🔹 Step 4: Server Assembly in app.js — Sabko Ek Saath Plug Karna</div>
                     <p>Main <code>app.js</code> file ab bilkul clean (sirf ~15 lines) rehti hai, jisme modular router mount hota hai:</p>
                     <div class="code-container">
@@ -4059,6 +4235,22 @@ app.<span class="tok-fn">use</span>(<span class="tok-fn">methodOverride</span>(<
     &lt;input type="text" name="title" value="&lt;%= job.title %&gt;" /&gt;
     &lt;button type="submit"&gt;Update Job&lt;/button&gt;
 &lt;/form&gt;</code></pre>
+                    </div>
+
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 method-override HTML Form Trick Ka Post-Mortem</span>
+                            <span class="genz-badge">HTTP METHOD TRANSFORMATION</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">app.use(methodOverride('_method'));</div>
+                            <div class="dissection-explain"><strong>1. Method Interceptor Middleware:</strong> Har incoming request ke query string me <code>_method</code> check karta hai aur internal HTTP verb ko change karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">&lt;form action="/jobs/42?_method=DELETE" method="POST"&gt;</div>
+                            <div class="dissection-explain"><strong>2. Browser Form Bypass:</strong> HTML <code>&lt;form&gt;</code> sirf GET/POST bhej sakta hai. <code>?_method=DELETE</code> likhne se Express server is POST request ko real <code>app.delete('/jobs/:id')</code> route par route kar deta hai!</div>
+                        </div>
                     </div>
 
                     <div class="concept-sub-title">🎨 1.2 Serving Static Assets securely with express.static()</div>
@@ -4281,6 +4473,22 @@ app.<span class="tok-fn">use</span>(<span class="tok-str">'/api/auth/login'</spa
 app.<span class="tok-fn">use</span>(<span class="tok-fn">cors</span>(corsOptions));</code></pre>
                     </div>
 
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 CORS Whitelist Middleware Ka Post-Mortem</span>
+                            <span class="genz-badge">BROWSER SAME-ORIGIN SECURITY</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">origin: 'http://localhost:3000'</div>
+                            <div class="dissection-explain"><strong>1. Allowed Origin Whitelist:</strong> Browser ko batata hai ki sirf hamare React/Next.js frontend domain se aane wale AJAX/Fetch calls ko response data padhne ki permission hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">credentials: true</div>
+                            <div class="dissection-explain"><strong>2. Cookie & Authorization Passing:</strong> Cross-origin requests ke sath HttpOnly cookies aur Authorization headers ko browser se pass karne ki permission deta hai.</div>
+                        </div>
+                    </div>
+
                     <div class="mechanics-table-box">
                         <table class="mechanics-table">
                             <thead><tr><th>CORS Option</th><th>Kya Karta Hai? (Plain Hindi)</th><th>Why Required in 6 LPA API?</th></tr></thead>
@@ -4347,6 +4555,22 @@ app.<span class="tok-fn">use</span>(<span class="tok-fn">helmet</span>());
 app.<span class="tok-fn">get</span>(<span class="tok-str">'/'</span>, (<span class="tok-num">req</span>, <span class="tok-num">res</span>) => {
     res.<span class="tok-fn">send</span>(<span class="tok-str">'Secure Server Live!'</span>);
 });</code></pre>
+                    </div>
+
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Helmet Security Headers Ka Post-Mortem</span>
+                            <span class="genz-badge">11 DEFENSE-IN-DEPTH HEADERS</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">app.use(helmet());</div>
+                            <div class="dissection-explain"><strong>1. Zero-Config Security Suite:</strong> <code>helmet()</code> call karte hi 11 protective HTTP headers set ho jaate hain (e.g. <code>X-Frame-Options: SAMEORIGIN</code> jo clickjacking rokta hai, <code>X-Content-Type-Options: nosniff</code> jo MIME sniffing rokta hai).</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">app.disable('x-powered-by');</div>
+                            <div class="dissection-explain"><strong>2. Tech Stack Masking:</strong> Default Express response me <code>X-Powered-By: Express</code> header bhejta hai jisse hacker ko pata chal jata hai server Express par hai. Helmet is header ko automatically strip kar deta hai.</div>
+                        </div>
                     </div>
                 </div>
 
@@ -4689,6 +4913,26 @@ module.exports = mongoose.<span class="tok-fn">model</span>(<span class="tok-str
 <span class="tok-com">// Mongoose automatically 'jobs' naam ka collection banata hai (lowercase + plural)!</span></code></pre>
                     </div>
 
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Mongoose Schema Blueprint Ka Post-Mortem</span>
+                            <span class="genz-badge">SCHEMA VALIDATION & TYPES</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">required: [true, 'Job title is required'], trim: true</div>
+                            <div class="dissection-explain"><strong>1. Application-Level Data Integrity:</strong> Schema ensure karta hai ki empty string ya bina title ke document save na ho sake. <code>trim: true</code> leading/trailing whitespace ko automatically remove karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }</div>
+                            <div class="dissection-explain"><strong>2. Relational Reference Link:</strong> <code>ref: 'User'</code> Mongoose ko batata hai ki is field me store hone wali 24-character hex ID <code>users</code> collection ke document ko point karti hai, jisse aage <code>.populate('postedBy')</code> kaam karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">module.exports = mongoose.model('Job', jobSchema);</div>
+                            <div class="dissection-explain"><strong>3. Auto-Pluralized Collection Creation:</strong> Mongoose <code>'Job'</code> naam ko lowercase aur plural karke MongoDB me automatically <code>jobs</code> naam ka collection banata hai aur model class export karta hai.</div>
+                        </div>
+                    </div>
+
                     <!-- BIO-ANATOMY: SCHEMA FIELD OPTIONS -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
@@ -4736,6 +4980,30 @@ module.exports = mongoose.<span class="tok-fn">model</span>(<span class="tok-str
 
 <span class="tok-com">// 4. DELETE:</span>
 <span class="tok-kw">await</span> Job.<span class="tok-fn">findByIdAndDelete</span>(req.params.id);</code></pre>
+                    </div>
+
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Mongoose CRUD Operations Ka Post-Mortem</span>
+                            <span class="genz-badge">ASYNC QUERIES</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">await Job.create({ title, company, salary, postedBy })</div>
+                            <div class="dissection-explain"><strong>1. Document Instantiation & Insert:</strong> Schema validation run karta hai, pre-save hooks chalaata hai, aur valid hone par MongoDB me naya document insert karke returned JSON object deta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">await Job.find({ salary: { $gte: 600000 } })</div>
+                            <div class="dissection-explain"><strong>2. Filter Operators ($gte):</strong> <code>$gte</code> (Greater than or equal to) operator use karke sirf 6 LPA ya usse zyada salary wale jobs fetch karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">findByIdAndUpdate(id, update, { new: true, runValidators: true })</div>
+                            <div class="dissection-explain"><strong>3. The { new: true } Trap:</strong> Default Mongoose update purana (un-updated) document return karta hai! <code>{ new: true }</code> updated document return karta hai, aur <code>runValidators: true</code> ensure karta hai ki update karte waqt bhi schema validation rules (e.g. min salary) check hon!</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">await Job.findByIdAndDelete(req.params.id)</div>
+                            <div class="dissection-explain"><strong>4. Document Deletion:</strong> Targeted ObjectId wale document ko MongoDB collection se permanently delete kar deta hai.</div>
+                        </div>
                     </div>
 
                     <div class="concept-sub-title">🔗 3.2 Relationships: ref & .populate() (⭐ Top Interview Topic)</div>
@@ -5005,6 +5273,30 @@ exports.login = <span class="tok-kw">async</span> (<span class="tok-num">req</sp
         <span class="tok-fn">next</span>(err);
     }
 };</code></pre>
+                    </div>
+
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Signup & Login Controller Ka Post-Mortem</span>
+                            <span class="genz-badge">SECURITY & ANTI-ENUMERATION</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">if (existingUser) return res.status(409)...</div>
+                            <div class="dissection-explain"><strong>1. 409 Conflict (Duplicate Registration):</strong> Agar email already registered hai, toh HTTP status 409 Conflict return karta hai taaki duplicate accounts na banein.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const isMatch = await bcrypt.compare(password, user.password);</div>
+                            <div class="dissection-explain"><strong>2. Cryptographic Hash Comparison:</strong> <code>bcrypt.compare()</code> user ke plain text password ko DB ke hashed string se compare karta hai. Hash ko kabhi "unhash" nahi kiya ja sakta — sirf mathematical match verify hota hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">if (!user || !isMatch) return res.status(401).json({ error: 'Invalid credentials' });</div>
+                            <div class="dissection-explain"><strong>3. Anti-User Enumeration Security Defense:</strong> Kabhi alag-alag error mat do (jaise "Email nahi mila" vs "Password galat hai"). Dono cases me EXACTLY same generic message do — warna hacker ko pata chal jayega kaunsa email database me exist karta hai!</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">res.status(200).json({ success: true, token });</div>
+                            <div class="dissection-explain"><strong>4. Token Emission:</strong> Successful login par 7-day valid JWT token return kiya jata hai jo client apne headers me bhej kar protected routes access karega.</div>
+                        </div>
                     </div>
 
                     <!-- BIO-ANATOMY: SESSION VS JWT COMPARISON -->
