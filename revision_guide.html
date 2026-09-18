@@ -2439,151 +2439,170 @@ res.<span class="tok-fn">writeHead</span>(<span class="tok-num">503</span>); <sp
             </div>
         </section>
 
-                <!-- ==================== VIEW 2: CHAPTER 5 DEEP DIVE ==================== -->
+                        <!-- ==================== VIEW 2: CHAPTER 5 DEEP DIVE ==================== -->
         <section id="chapter-5" class="chapter-content-section">
             <div class="chapter-page-box">
                 <div class="chapter-header-area">
-                    <span class="genz-badge">Chapter 05 • Core Framework</span>
-                    <h2>Express.js Fundamentals — Master Engineering Blueprint</h2>
+                    <span class="genz-badge">Chapter 05 • Express Framework</span>
+                    <h2>Express.js Fundamentals — Step-by-Step Micro Learning</h2>
                 </div>
 
-                <div class="brush-banner">Topics Explanation with Real-Life Mental Models</div>
+                <div class="brush-banner">Chunk-by-Chunk Code & Mental Models</div>
 
-                <!-- TOPIC 1: CHAPTER GOAL & REQUEST LIFECYCLE PIPELINE -->
+                <!-- CHUNK 1: IMPORTS & APP INSTANCE -->
                 <div class="concept-block">
-                    <div class="concept-heading">1. The Request Journey & Express Mental Model</div>
-                    
-                    <div class="concept-sub-title">🎯 1.1 Chapter Goal: Request Ka Complete Safar Samajhna</div>
-                    <p>Is chapter ke baad sirf Express ka syntax nahi, balki ek HTTP Request ka <strong>Zero se Delivery tak ka complete safar</strong> samajhna zaroori hai:</p>
-
-                    <!-- VISUAL REQUEST PIPELINE BOX -->
-                    <div class="bio-anatomy-board" style="background: #0f172a; border-color: #38bdf8; color: #f8fafc;">
-                        <div class="anatomy-board-header" style="border-bottom-color: #334155;">
-                            <span class="anatomy-board-title" style="color: #38bdf8;">🔄 The Complete 7-Step Request Journey Pipeline</span>
-                            <span class="genz-badge" style="background: #38bdf8; color: #0f172a;">END-TO-END FLOW</span>
-                        </div>
-                        <div class="anatomy-code-center" style="background: #1e293b; border-color: #475569; font-size: 16px; line-height: 2.1;">
-                            <div><span class="pill-kw">1. Client / Browser</span> ───────▶ Triggers HTTP Request (e.g. <code>POST /products</code> with JSON payload)</div>
-                            <div><span class="pill-fn">2. TCP Port Listener</span> ──────▶ <code>app.listen(4000)</code> captures the socket connection</div>
-                            <div><span class="pill-await">3. Global Middleware</span> ─────▶ <code>express.json()</code> parses raw incoming chunks into <code>req.body</code></div>
-                            <div><span class="pill-res">4. Route Matcher</span> ─────────▶ Express matches Method (<code>POST</code>) + Path (<code>/products</code>)</div>
-                            <div><span class="pill-err">5. Controller Handler</span> ────▶ <code>(req, res) => { ... }</code> runs validation & business logic</div>
-                            <div><span class="pill-kw">6. Response Dispatch</span> ─────▶ <code>res.status(201).json(...)</code> serializes data & sets HTTP headers</div>
-                            <div><span class="pill-fn">7. Client Receives Data</span> ──▶ Browser/Postman gets formatted JSON + 201 Created Status ✅</div>
-                        </div>
-                        <div class="anatomy-callout-grid" style="margin-top: 24px;">
-                            <div class="anatomy-callout-card" style="background: #1e293b; border-color: #475569;">
-                                <span class="callout-badge bg-yellow">⚠️ Mock Database vs Real DB</span>
-                                <div style="color: #f1f5f9;">Yaha use hone wala <code>products</code> array RAM memory me rehta hai. Server restart hote hi data reset ho jayega (Real DBs like MongoDB persist on disk).</div>
-                            </div>
-                            <div class="anatomy-callout-card" style="background: #1e293b; border-color: #475569;">
-                                <span class="callout-badge bg-green">🧠 Raw Node vs Express</span>
-                                <div style="color: #f1f5f9;">Raw Node me <code>if(req.url === '/p' && req.method === 'GET')</code> manual likhna padta tha. Express me <code>app.get('/p', handler)</code> se declarative micro-routing milti hai.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TOPIC 2: ESSENTIAL BUILT-IN MIDDLEWARE -->
-                <div class="concept-block">
-                    <div class="concept-heading">2. Essential Built-in Middleware (express.json & urlencoded)</div>
-
-                    <div class="concept-sub-title">🛡️ 2.1 Middleware Kya Hota Hai?</div>
-                    <p>Middleware ek aisa function hota hai jo <strong>Incoming Request aur Final Response ke beech me</strong> execute hota hai. Ye request ko read, modify, validate, reject ya next middleware ko pass kar sakta hai:</p>
-
-                    <div class="mechanics-table-box" style="margin: 20px 0;">
-                        <table class="mechanics-table">
-                            <thead>
-                                <tr>
-                                    <th>Middleware</th>
-                                    <th>Incoming Format</th>
-                                    <th>What it Does</th>
-                                    <th>Output Location</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><code>express.json()</code></td>
-                                    <td><code>{"name": "Mouse", "price": 1200}</code></td>
-                                    <td>Raw byte streams ko collect karke <code>JSON.parse()</code> karta hai</td>
-                                    <td><code>req.body</code></td>
-                                </tr>
-                                <tr>
-                                    <td><code>express.urlencoded({ extended: true })</code></td>
-                                    <td><code>name=Mouse&price=1200</code> (HTML Form)</td>
-                                    <td>HTML Form urlencoded payload ko parse karke JS object banata hai</td>
-                                    <td><code>req.body</code></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- TOPIC 3: MASTER EXHAUSTIVE CODE IMPLEMENTATION -->
-                <div class="concept-block">
-                    <div class="concept-heading">3. Complete Production-Ready Express Code (With Line-by-Line Pedagogy)</div>
+                    <div class="concept-heading">Step 1: Imports & Server Initialization</div>
+                    <p>Sabse pehle Express package ko load karte hain aur server application instance banate hain:</p>
 
                     <div class="code-container">
-                        <div class="code-top-bar"><span>express_fundamentals_master.js</span><span>Complete Products REST API with Deep Comments</span></div>
-                        <pre><code><span class="tok-com">// ==========================================================================</span>
-<span class="tok-com">// 1. IMPORTS & INITIALIZATION</span>
-<span class="tok-com">// ==========================================================================</span>
-<span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>); <span class="tok-com">// Load Express module factory</span>
-<span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();              <span class="tok-com">// Create Express app instance</span>
-<span class="tok-kw">const</span> PORT = <span class="tok-num">4000</span>;                   <span class="tok-com">// Machine port for socket listener</span>
+                        <div class="code-top-bar"><span>step1_init.js</span><span>Step 1: Application Instance</span></div>
+                        <pre><code><span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>); <span class="tok-com">// 1. Express package import kiya</span>
+<span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();              <span class="tok-com">// 2. Express application create ki</span>
+<span class="tok-kw">const</span> PORT = <span class="tok-num">4000</span>;                   <span class="tok-com">// 3. Server listening port</span></code></pre>
+                    </div>
 
-<span class="tok-com">// --------------------------------------------------------------------------</span>
-<span class="tok-com">// 2. ESSENTIAL MIDDLEWARE (Mandatory before routes!)</span>
-<span class="tok-com">// --------------------------------------------------------------------------</span>
-app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>());                         <span class="tok-com">// Parse JSON body payloads</span>
-app.<span class="tok-fn">use</span>(express.<span class="tok-fn">urlencoded</span>({ extended: <span class="tok-kw">true</span> })); <span class="tok-com">// Parse HTML Form post data</span>
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Step 1 Anatomy</span>
+                            <span class="genz-badge">INIT BREAKDOWN</span>
+                        </div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+                            <div><span class="pill-kw">require('express')</span> ───▶ <code>node_modules</code> se Express factory function load karta hai.</div>
+                            <div style="margin-top: 10px;"><span class="pill-fn">const app = express()</span> ───▶ Express App object banata hai jiske upar routes aur middleware configure honge.</div>
+                            <div style="margin-top: 10px;"><span class="pill-await">PORT = 4000</span> ───▶ Computer ka specific socket door jahan incoming requests receive hongi.</div>
+                        </div>
+                    </div>
+                </div>
 
-<span class="tok-com">// --------------------------------------------------------------------------</span>
-<span class="tok-com">// 3. MOCK DATABASE (In-Memory Array for Beginners)</span>
-<span class="tok-com">// --------------------------------------------------------------------------</span>
-<span class="tok-kw">let</span> products = [
+                <!-- CHUNK 2: BUILT-IN MIDDLEWARE -->
+                <div class="concept-block">
+                    <div class="concept-heading">Step 2: Essential Built-in Middleware (Body Parsers)</div>
+                    <p>HTTP Request ka JSON payload initially raw byte streams me aata hai. <code>express.json()</code> us binary stream ko JavaScript object me convert karta hai:</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>step2_middleware.js</span><span>Step 2: Body Parsers</span></div>
+                        <pre><code><span class="tok-com">// Incoming JSON payloads ko parse karke req.body me daalta hai</span>
+app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>());
+
+<span class="tok-com">// Traditional HTML form submissions (name=Mouse&price=1200) ko parse karta hai</span>
+app.<span class="tok-fn">use</span>(express.<span class="tok-fn">urlencoded</span>({ extended: <span class="tok-kw">true</span> }));</code></pre>
+                    </div>
+
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Step 2 Anatomy: Middleware Flow</span>
+                            <span class="genz-badge">PARSING LOGIC</span>
+                        </div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+                            <div><span class="pill-kw">Client JSON Payload</span> ───▶ <code>{"name":"Mouse","price":1200}</code> (Raw Streams)</div>
+                            <div style="margin-top: 10px;"><span class="pill-fn">app.use(express.json())</span> ───▶ Bytes collect karke <code>JSON.parse()</code> run karta hai.</div>
+                            <div style="margin-top: 10px;"><span class="pill-res">req.body Available</span> ───▶ Routes me <code>req.body.name</code> directly accessible ho jata hai!</div>
+                        </div>
+                        <div class="anatomy-callout-grid" style="margin-top: 20px;">
+                            <div class="anatomy-callout-card">
+                                <span class="callout-badge bg-red">🚨 The req.body Trap</span>
+                                <div>Agar routes se pehle <code>app.use(express.json())</code> nahi lagaya, toh <code>req.body</code> hamesha <strong>undefined</strong> aayega!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHUNK 3: MOCK DATABASE -->
+                <div class="concept-block">
+                    <div class="concept-heading">Step 3: In-Memory Mock Database</div>
+                    <p>Beginner concepts sikhne ke liye hum temporary JavaScript Array use karenge:</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>step3_database.js</span><span>Step 3: Mock Data Array</span></div>
+                        <pre><code><span class="tok-kw">let</span> products = [
     { id: <span class="tok-num">1</span>, name: <span class="tok-str">'Gaming Laptop'</span>, price: <span class="tok-num">75000</span>, category: <span class="tok-str">'electronics'</span> },
     { id: <span class="tok-num">2</span>, name: <span class="tok-str">'Wireless Mouse'</span>, price: <span class="tok-num">1200</span>, category: <span class="tok-str">'electronics'</span> },
     { id: <span class="tok-num">3</span>, name: <span class="tok-str">'Coffee Mug'</span>, price: <span class="tok-num">350</span>, category: <span class="tok-str">'lifestyle'</span> }
-];
+];</code></pre>
+                    </div>
 
-<span class="tok-com">// --------------------------------------------------------------------------</span>
-<span class="tok-com">// 4. BASIC ROUTE: HTML Response via res.send()</span>
-<span class="tok-com">// --------------------------------------------------------------------------</span>
-app.<span class="tok-fn">get</span>(<span class="tok-str">'/'</span>, (req, res) => {
+                    <div class="analogy-note">
+                        <div class="analogy-note-title">🧠 Real DB vs Memory Array</div>
+                        <p>Real databases (MongoDB/Postgres) hard-disk par data persist karte hain. Yaha <code>products</code> array RAM me store hai — server restart hote hi data reset ho jayega!</p>
+                    </div>
+                </div>
+
+                <!-- CHUNK 4: FIRST BASIC ROUTE -->
+                <div class="concept-block">
+                    <div class="concept-heading">Step 4: Basic Route & res.send()</div>
+                    <p>Jab client root URL (<code>/</code>) hit karta hai, toh HTML string response bhejte hain:</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>step4_basic_route.js</span><span>Step 4: GET / Route</span></div>
+                        <pre><code>app.<span class="tok-fn">get</span>(<span class="tok-str">'/'</span>, (req, res) => {
+    <span class="tok-com">// res.send() HTML string ko auto text/html header ke saath bhejta hai</span>
     res.<span class="tok-fn">send</span>(<span class="tok-str">'&lt;h1&gt;Express Server Running Smoothly! 🚀&lt;/h1&gt;'</span>);
-});
+});</code></pre>
+                    </div>
+                </div>
 
-<span class="tok-com">// --------------------------------------------------------------------------</span>
-<span class="tok-com">// 5. THE BIG THREE REQUEST DATA SOURCES</span>
-<span class="tok-com">// --------------------------------------------------------------------------</span>
+                <!-- CHUNK 5: QUERY PARAMETERS (req.query) -->
+                <div class="concept-block">
+                    <div class="concept-heading">Step 5: Query Parameters (req.query) — Search, Filter & Limit</div>
+                    <p>URL ke <code>?</code> ke baad aane wale optional parameters ko read karke data filter karte hain:</p>
 
-<span class="tok-com">// 🟢 SOURCE 1: req.query (Filtering, Search & Pagination)</span>
-<span class="tok-com">// Hit: GET /products?category=electronics&search=mouse&limit=2</span>
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>step5_query.js</span><span>Step 5: GET /products with Filters</span></div>
+                        <pre><code><span class="tok-com">// Hit: GET /products?category=electronics&search=mouse&limit=2</span>
 app.<span class="tok-fn">get</span>(<span class="tok-str">'/products'</span>, (req, res) => {
+    <span class="tok-com">// 1. req.query se optional filter parameters extract karo</span>
     <span class="tok-kw">const</span> { category, search, limit = <span class="tok-num">10</span> } = req.query;
-    <span class="tok-kw">let</span> result = [...products]; <span class="tok-com">// Shallow copy - don't mutate original</span>
 
+    <span class="tok-com">// 2. Original array ko mutate na karte hue shallow copy banao</span>
+    <span class="tok-kw">let</span> result = [...products];
+
+    <span class="tok-com">// 3. Category Filter</span>
     <span class="tok-kw">if</span> (category) {
         result = result.<span class="tok-fn">filter</span>(p => p.category.<span class="tok-fn">toLowerCase</span>() === category.<span class="tok-fn">toLowerCase</span>());
     }
+
+    <span class="tok-com">// 4. Search by Name</span>
     <span class="tok-kw">if</span> (search) {
         result = result.<span class="tok-fn">filter</span>(p => p.name.<span class="tok-fn">toLowerCase</span>().<span class="tok-fn">includes</span>(search.<span class="tok-fn">toLowerCase</span>()));
     }
 
-    <span class="tok-kw">const</span> numericLimit = <span class="tok-fn">Number</span>(limit);
-    result = result.<span class="tok-fn">slice</span>(<span class="tok-num">0</span>, numericLimit);
+    <span class="tok-com">// 5. Limit (String to Number conversion)</span>
+    result = result.<span class="tok-fn">slice</span>(<span class="tok-num">0</span>, <span class="tok-fn">Number</span>(limit));
 
+    <span class="tok-com">// 6. Return JSON response</span>
     res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">true</span>, total: result.length, data: result });
-});
+});</code></pre>
+                    </div>
 
-<span class="tok-com">// 🟡 SOURCE 2: req.params (Dynamic URL Segments — Resource Identification)</span>
-<span class="tok-com">// Hit: GET /products/2</span>
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Step 5 Anatomy: req.query Execution</span>
+                            <span class="genz-badge">FILTER PIPELINE</span>
+                        </div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+                            <div><span class="pill-kw">URL: /products?limit=2</span> ───▶ <code>req.query.limit</code> gives string <code>"2"</code>.</div>
+                            <div style="margin-top: 10px;"><span class="pill-fn">Number(limit)</span> ───▶ Array slice karne ke liye string ko number me convert kiya.</div>
+                            <div style="margin-top: 10px;"><span class="pill-res">res.status(200).json(...)</span> ───▶ Filtered products client ko JSON format me deliver kiye.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHUNK 6: ROUTE PARAMETERS (req.params) -->
+                <div class="concept-block">
+                    <div class="concept-heading">Step 6: Route Parameters (req.params) — Single Item Lookup</div>
+                    <p>URL ke dynamic segment (<code>:id</code>) se specific product dhoondhte hain:</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>step6_params.js</span><span>Step 6: GET /products/:id</span></div>
+                        <pre><code><span class="tok-com">// Hit: GET /products/2</span>
 app.<span class="tok-fn">get</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
-    <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id); <span class="tok-com">// ⚠️ Mandatory String -> Number conversion</span>
+    <span class="tok-com">// 1. URL param string hota hai, isliye Number me cast karo</span>
+    <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id);
+
+    <span class="tok-com">// 2. Array me product dhoondo</span>
     <span class="tok-kw">const</span> product = products.<span class="tok-fn">find</span>(p => p.id === id);
 
-    <span class="tok-com">// 404 Guard Clause</span>
+    <span class="tok-com">// 3. Guard clause - agar nahi mila toh 404 return karo</span>
     <span class="tok-kw">if</span> (!product) {
         <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">404</span>).<span class="tok-fn">json</span>({
             success: <span class="tok-kw">false</span>,
@@ -2591,15 +2610,37 @@ app.<span class="tok-fn">get</span>(<span class="tok-str">'/products/:id'</span>
         });
     }
 
+    <span class="tok-com">// 4. Found product return karo</span>
     res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">true</span>, data: product });
-});
+});</code></pre>
+                    </div>
 
-<span class="tok-com">// 🔴 SOURCE 3: req.body (HTTP Payload — New Resource Creation)</span>
-<span class="tok-com">// Hit: POST /products with JSON Body</span>
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Step 6 Anatomy: req.params Execution Flow</span>
+                            <span class="genz-badge">LOOKUP & GUARD</span>
+                        </div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+                            <div><span class="pill-kw">GET /products/2</span> ───▶ <code>req.params.id = "2"</code></div>
+                            <div style="margin-top: 10px;"><span class="pill-fn">Number("2") === 2</span> ───▶ Strict equality comparison success!</div>
+                            <div style="margin-top: 10px;"><span class="pill-err">return res.status(404)</span> ───▶ <code>return</code> keyword execution rok kar duplicate response header error se bachata hai.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CHUNK 7: REQUEST BODY (req.body) -->
+                <div class="concept-block">
+                    <div class="concept-heading">Step 7: Request Body (req.body) — Creating Products (POST)</div>
+                    <p>Client se naya product create karne ka JSON payload receive karte hain:</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>step7_post_body.js</span><span>Step 7: POST /products</span></div>
+                        <pre><code><span class="tok-com">// Hit: POST /products with JSON Payload</span>
 app.<span class="tok-fn">post</span>(<span class="tok-str">'/products'</span>, (req, res) => {
+    <span class="tok-com">// 1. req.body se data destructure karo</span>
     <span class="tok-kw">const</span> { name, price, category } = req.body;
 
-    <span class="tok-com">// Validation</span>
+    <span class="tok-com">// 2. Input validation guard clause</span>
     <span class="tok-kw">if</span> (!name || price === undefined) {
         <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">400</span>).<span class="tok-fn">json</span>({
             success: <span class="tok-kw">false</span>,
@@ -2607,6 +2648,7 @@ app.<span class="tok-fn">post</span>(<span class="tok-str">'/products'</span>, (
         });
     }
 
+    <span class="tok-com">// 3. New Product Object create karo</span>
     <span class="tok-kw">const</span> newProduct = {
         id: products.length ? products[products.length - <span class="tok-num">1</span>].id + <span class="tok-num">1</span> : <span class="tok-num">1</span>,
         name,
@@ -2614,18 +2656,27 @@ app.<span class="tok-fn">post</span>(<span class="tok-str">'/products'</span>, (
         category: category || <span class="tok-str">'general'</span>
     };
 
+    <span class="tok-com">// 4. Array me insert karo</span>
     products.<span class="tok-fn">push</span>(newProduct);
 
-    <span class="tok-com">// 201 Created (HTTP standard for newly created resources)</span>
+    <span class="tok-com">// 5. HTTP Status 201 Created return karo</span>
     res.<span class="tok-fn">status</span>(<span class="tok-num">201</span>).<span class="tok-fn">json</span>({
         success: <span class="tok-kw">true</span>,
         message: <span class="tok-str">'Product successfully created!'</span>,
         data: newProduct
     });
-});
+});</code></pre>
+                    </div>
+                </div>
 
-<span class="tok-com">// 🔵 UPDATE (PUT) — Replacing / Updating Resource</span>
-<span class="tok-com">// Hit: PUT /products/2</span>
+                <!-- CHUNK 8: UPDATE & DELETE -->
+                <div class="concept-block">
+                    <div class="concept-heading">Step 8: Updating (PUT) & Deleting (DELETE)</div>
+                    <p>Params aur Body ko combine karke Update aur Delete operations perform karte hain:</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>step8_put_delete.js</span><span>Step 8: Update & Delete Endpoints</span></div>
+                        <pre><code><span class="tok-com">// UPDATE: PUT /products/:id</span>
 app.<span class="tok-fn">put</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
     <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id);
     <span class="tok-kw">const</span> { name, price } = req.body;
@@ -2639,15 +2690,10 @@ app.<span class="tok-fn">put</span>(<span class="tok-str">'/products/:id'</span>
     <span class="tok-kw">if</span> (name !== undefined) products[productIndex].name = name;
     <span class="tok-kw">if</span> (price !== undefined) products[productIndex].price = <span class="tok-fn">Number</span>(price);
 
-    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({
-        success: <span class="tok-kw">true</span>,
-        message: <span class="tok-str">'Product updated'</span>,
-        data: products[productIndex]
-    });
+    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">true</span>, message: <span class="tok-str">'Product updated'</span>, data: products[productIndex] });
 });
 
-<span class="tok-com">// 🔵 DELETE — Removing Resource by ID</span>
-<span class="tok-com">// Hit: DELETE /products/2</span>
+<span class="tok-com">// DELETE: DELETE /products/:id</span>
 app.<span class="tok-fn">delete</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
     <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id);
     <span class="tok-kw">const</span> initialLength = products.length;
@@ -2659,11 +2705,18 @@ app.<span class="tok-fn">delete</span>(<span class="tok-str">'/products/:id'</sp
     }
 
     res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">true</span>, message: <span class="tok-str">`Product ${id} deleted successfully`</span> });
-});
+});</code></pre>
+                    </div>
+                </div>
 
-<span class="tok-com">// --------------------------------------------------------------------------</span>
-<span class="tok-com">// 6. 404 CATCH-ALL & GLOBAL ERROR HANDLING MIDDLEWARE</span>
-<span class="tok-com">// --------------------------------------------------------------------------</span>
+                <!-- CHUNK 9: ERROR HANDLING & SERVER LISTEN -->
+                <div class="concept-block">
+                    <div class="concept-heading">Step 9: 404 Catch-All, Global Error Handler & Starting the Server</div>
+                    <p>Unknown routes ko catch karna aur server ko port par start karna:</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>step9_errors_and_listen.js</span><span>Step 9: 404, 500 & listen()</span></div>
+                        <pre><code><span class="tok-com">// 1. 404 Route Catch-All (Upar koi route match nahi hua toh chalega)</span>
 app.<span class="tok-fn">use</span>((req, res) => {
     res.<span class="tok-fn">status</span>(<span class="tok-num">404</span>).<span class="tok-fn">json</span>({
         success: <span class="tok-kw">false</span>,
@@ -2671,7 +2724,7 @@ app.<span class="tok-fn">use</span>((req, res) => {
     });
 });
 
-<span class="tok-com">// 4-parameter error handler: (err, req, res, next)</span>
+<span class="tok-com">// 2. Global Error Handler (4 arguments mandatory: err, req, res, next)</span>
 app.<span class="tok-fn">use</span>((err, req, res, next) => {
     <span class="tok-fn">console</span>.<span class="tok-fn">error</span>(<span class="tok-str">'🔥 Server Error:'</span>, err.stack);
     res.<span class="tok-fn">status</span>(<span class="tok-num">500</span>).<span class="tok-fn">json</span>({
@@ -2681,68 +2734,17 @@ app.<span class="tok-fn">use</span>((err, req, res, next) => {
     });
 });
 
-<span class="tok-com">// --------------------------------------------------------------------------</span>
-<span class="tok-com">// 7. START SERVER</span>
-<span class="tok-com">// --------------------------------------------------------------------------</span>
+<span class="tok-com">// 3. Start TCP Socket Listener</span>
 app.<span class="tok-fn">listen</span>(PORT, () => {
     <span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">`✅ Express Server running at http://localhost:${PORT}`</span>);
 });</code></pre>
                     </div>
 
-                    <!-- BIO-ANATOMY LABELED DISSECTION -->
-                    <div class="bio-anatomy-board">
-                        <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Complete Express Architecture Blueprint</span>
-                            <span class="genz-badge">EXHAUSTIVE DISSECTION</span>
-                        </div>
-                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
-                            <div><span class="pill-kw">const { category, search, limit = 10 } = req.query;</span> ───▶ <strong>1. req.query Extraction:</strong> URL ke <code>?</code> ke baad waale optional filter parameters ko destructure karta hai default limit 10 ke saath.</div>
-                            <div style="margin-top: 10px;"><span class="pill-fn">const id = Number(req.params.id);</span> ───▶ <strong>2. req.params Cast:</strong> <code>/products/:id</code> route se string <code>"2"</code> lekar number <code>2</code> me convert karta hai strict <code>===</code> equality ke liye.</div>
-                            <div style="margin-top: 10px;"><span class="pill-await">const { name, price } = req.body;</span> ───▶ <strong>3. req.body Payload:</strong> <code>express.json()</code> dwara parse kiye gaye JSON payload se name aur price nikaalta hai.</div>
-                            <div style="margin-top: 10px;"><span class="pill-err">if (!product) return res.status(404)...</span> ───▶ <strong>4. Guard Clause:</strong> <code>return</code> lagakar duplicate response sending error (<code>ERR_HTTP_HEADERS_SENT</code>) se bachata hai.</div>
-                            <div style="margin-top: 10px;"><span class="pill-res">res.status(201).json(...);</span> ───▶ <strong>5. 201 Created Status:</strong> Jab naya product successfully create hota hai, toh HTTP status 201 return kiya jata hai.</div>
-                        </div>
-                        <div class="anatomy-callout-grid" style="margin-top: 24px;">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">💼 Interview Gold</span>
-                                <div><strong>req.params</strong> = URL identity (Mandatory ID). <strong>req.query</strong> = URL options (Filters/Pagination). <strong>req.body</strong> = Data payload (JSON/Forms).</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-green">🔄 PUT vs PATCH</span>
-                                <div><strong>PUT</strong> traditionally pure resource ko replace karta hai. <strong>PATCH</strong> sirf specific fields ko partially update karta hai.</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-red">🚨 404 vs 500</span>
-                                <div><strong>404 Not Found</strong>: Client ne jo maanga wo exist nahi karta. <strong>500 Server Error</strong>: Server side par crash/bug hua.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TOPIC 4: INTERVIEW MASTERY & MEMORY MAP -->
-                <div class="concept-block">
-                    <div class="concept-heading">4. Interview Mastery Q&A & Final Architecture Map</div>
-
-                    <div class="faq-list" style="margin: 24px 0;">
-                        <div style="margin-bottom: 20px;">
-                            <h4 style="font-size: 26px; color: #1e3a8a; margin-bottom: 6px;">Q1. What is the difference between req.params and req.query?</h4>
-                            <p style="font-size: 22px; color: #334155; margin: 0;"><strong>Ans:</strong> <code>req.params</code> captures dynamic segments from the route path (e.g. <code>/products/:id</code> ➔ <code>req.params.id = "25"</code>) to identify a specific resource. <code>req.query</code> captures optional key-value pairs after <code>?</code> (e.g. <code>?category=electronics&limit=10</code>) for filtering, sorting, and pagination.</p>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <h4 style="font-size: 26px; color: #1e3a8a; margin-bottom: 6px;">Q2. Why is express.json() placed before routes?</h4>
-                            <p style="font-size: 22px; color: #334155; margin: 0;"><strong>Ans:</strong> Express executes middleware in top-to-bottom order. If <code>express.json()</code> is placed after routes, incoming POST requests reach the route handler before the raw TCP byte stream is assembled and parsed, leaving <code>req.body</code> as <code>undefined</code>.</p>
-                        </div>
-                        <div style="margin-bottom: 20px;">
-                            <h4 style="font-size: 26px; color: #1e3a8a; margin-bottom: 6px;">Q3. Why does error-handling middleware require 4 parameters?</h4>
-                            <p style="font-size: 22px; color: #334155; margin: 0;"><strong>Ans:</strong> Express checks <code>fn.length === 4</code> to distinguish standard middleware <code>(req, res, next)</code> from global error catchers <code>(err, req, res, next)</code>. Omitting <code>next</code> breaks Express's signature detection.</p>
-                        </div>
-                    </div>
-
-                    <!-- ASCII MEMORY MAP CANVAS -->
+                    <!-- FINAL SUMMARY BLUEPRINT -->
                     <div class="bio-anatomy-board" style="background: #0f172a; border-color: #a855f7; color: #f8fafc;">
                         <div class="anatomy-board-header" style="border-bottom-color: #334155;">
-                            <span class="anatomy-board-title" style="color: #c084fc;">🧠 Final Memory Map: The Express Architecture Engine</span>
-                            <span class="genz-badge" style="background: #c084fc; color: #0f172a;">FULL BLUEPRINT</span>
+                            <span class="anatomy-board-title" style="color: #c084fc;">🧠 Final Architecture Memory Map</span>
+                            <span class="genz-badge" style="background: #c084fc; color: #0f172a;">CHEAT SHEET</span>
                         </div>
                         <pre style="color: #38bdf8; font-family: 'Fira Code', monospace; font-size: 15px; line-height: 1.6; overflow-x: auto; padding: 10px 0;">
                     EXPRESS SERVER
