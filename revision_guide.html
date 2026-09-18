@@ -8,59 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Plus+Jakarta+Sans:wght@500;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* SURGICAL LINE-BY-LINE CODE DISSECTION */
-        .code-dissection-box {
-            margin: 20px 0 28px 0;
-            background: #ffffff;
-            border: 2px solid #0f172a;
-            border-radius: 12px;
-            box-shadow: 4px 4px 0px #0f172a;
-            overflow: hidden;
-        }
-        .dissection-header {
-            background: #f8fafc;
-            padding: 12px 18px;
-            border-bottom: 2px solid #0f172a;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 700;
-            font-size: 16px;
-            color: #0f172a;
-        }
-        .dissection-row {
-            display: grid;
-            grid-template-columns: 340px 1fr;
-            border-bottom: 1px dashed #cbd5e1;
-            padding: 12px 18px;
-            gap: 16px;
-            align-items: center;
-        }
-        .dissection-row:last-child {
-            border-bottom: none;
-        }
-        .dissection-row:nth-child(even) {
-            background: #fafafa;
-        }
-        .dissection-code {
-            font-family: 'Fira Code', monospace;
-            font-size: 14px;
-            background: #0f172a;
-            color: #38bdf8;
-            padding: 8px 12px;
-            border-radius: 6px;
-            word-break: break-word;
-            border: 1px solid #334155;
-            line-height: 1.4;
-        }
-        .dissection-explain {
-            font-size: 15px;
-            line-height: 1.5;
-            color: #334155;
-        }
-        .dissection-explain strong {
-            color: #0f172a;
-        }
+        
         @media (max-width: 850px) {
             .dissection-row {
                 grid-template-columns: 1fr;
@@ -1551,38 +1499,27 @@ console.<span class="tok-fn">log</span>(score); <span class="tok-com">// Outputs
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 var vs let/const Ka Post-Mortem (Surgical Code Dissection)</span>
-                            <span class="genz-badge">VARIABLE SCOPING</span>
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: var vs let/const</span>
+                            <span class="genz-badge">VARIABLE SCOPING • LABELED DIAGRAM</span>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">var role = 'user'; if(true) { var role = 'admin'; }</div>
-                            <div class="dissection-explain"><strong>1. The var Leak Bug:</strong> <code>var</code> function-scoped hota hai, block-scoped nahi. Curly braces <code>{ ... }</code> ke andar <code>var</code> declare karne par bahar ka <code>role</code> silently overwrite ho jata hai (Security Bug).</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">var role = 'user'; if(true) { var role = 'admin'; }</span> ───▶ <strong>1. The var Leak Bug:</strong> <code>var</code> function-scoped hota hai, block-scoped nahi. Curly braces <code>{ ... }</code> ke andar <code>var</code> declare karne par bahar ka <code>role</code> silently overwrite ho jata hai (Security Bug).</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">let role = 'user'; if(true) { let role = 'admin'; }</span> ───▶ <strong>2. Block Scope Isolation:</strong> <code>let</code> aur <code>const</code> curly braces <code>{ ... }</code> ke block ke andar isolated rehte hain. Bahar ka <code>role</code> intact rehta hai aur memory leak nahi hoti.</div></div>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">let role = 'user'; if(true) { let role = 'admin'; }</div>
-                            <div class="dissection-explain"><strong>2. Block Scope Isolation:</strong> <code>let</code> aur <code>const</code> curly braces <code>{ ... }</code> ke block ke andar isolated rehte hain. Bahar ka <code>role</code> intact rehta hai aur memory leak nahi hoti.</div>
-                        </div>
-                    </div>
-
-                    <div class="concept-sub-title">💡 1.2 Hoisting & Temporal Dead Zone (TDZ) Explained with Code</div>
-                    <p>• <strong>Hoisting:</strong> JavaScript code execute karne se pehle ek <em>Memory Creation Phase</em> chalata hai jisme saare variables aur functions ko scope ke top par memory allocate hoti hai. <code>var</code> ko <code>undefined</code> se initialize kar diya jata hai, jabki <code>let</code> aur <code>const</code> ko memory toh milti hai lekin unhe <code>&lt;uninitialized&gt;</code> chhod diya jata hai.<br>
-                    • <strong>Temporal Dead Zone (TDZ):</strong> Scope me enter hone se lekar <code>let/const</code> ke actual declaration line tak ka time period TDZ kehlata hai. Is doran variable access karne par JS turant <code>ReferenceError</code> phekta hai taaki bug execute hi na ho!</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>snippet_tdz_demo.js</span><span>TDZ Behavior</span></div>
-                        <pre><code><span class="tok-com">// ⚠️ var Hoisting gives undefined (Silent bug)</span>
-console.<span class="tok-fn">log</span>(city); <span class="tok-com">// Output: undefined</span>
-<span class="tok-kw">var</span> city = <span class="tok-str">"Mumbai"</span>;
-
-<span class="tok-com">// 🚫 let / const inside TDZ throws error immediately!</span>
-<span class="tok-com">// 👇 TDZ for 'state' starts here</span>
-console.<span class="tok-fn">log</span>(state); <span class="tok-com">// 💥 ReferenceError: Cannot access 'state' before initialization!</span>
-<span class="tok-kw">let</span> state = <span class="tok-str">"Maharashtra"</span>; <span class="tok-com">// 👈 TDZ ends here!</span></code></pre>
-                    </div>
-
-                    <div class="analogy-note">
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. The var Leak Bug:</span>
+            <div><code>var</code> function-scoped hota hai, block-scoped nahi. Curly braces <code>{ ... }</code> ke andar <code>var</code> declare karne par bahar ka <code>role</code> silently overwrite ho jata hai (Security Bug).</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Block Scope Isolation:</span>
+            <div><code>let</code> aur <code>const</code> curly braces <code>{ ... }</code> ke block ke andar isolated rehte hain. Bahar ka <code>role</code> intact rehta hai aur memory leak nahi hoti.</div>
+        </div>
+    </div>
+                    </div><div class="analogy-note">
                         <div class="analogy-note-title">🏢 Indian Real-Life Analogy: Society Notice Board vs Biometric Flat</div>
                         <p>• <strong>var:</strong> Society ka purana khula notice board — koi bhi aakar naya notice chipka kar purana overwrite kar deta hai (Silent Global Bug).<br>
                         • <strong>let / const:</strong> Har resident ka personal flat with biometric lock — jab tak aap flat ke door <code>{}</code> ke andar sahi line pe unlock nahi karte, bahar se koi touch nahi kar sakta (Block Scope & TDZ Protection).</p>
@@ -1706,488 +1643,41 @@ placeFoodOrder
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Async/Await Function Ka Post-Mortem (Surgical Code Dissection)</span>
-                            <span class="genz-badge">PROMISE SYNTACTIC SUGAR</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">async function checkoutUserCart(userId)</div>
-                            <div class="dissection-explain"><strong>1. Async Keyword:</strong> Function ke aage <code>async</code> likhne se ye function automatically ek <strong>Promise</strong> return karta hai. Iske andar hum <code>await</code> keyword use karne ke liye authorized ho jaate hain.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">try { ... } catch (err) { ... }</div>
-                            <div class="dissection-explain"><strong>2. Synchronous Error Handling:</strong> Callback hell me har step par alag error check karna padta tha. <code>try/catch</code> block me agar kisi bhi <code>await</code> step par network error ya payment failure hui, toh execution turant <code>catch</code> block me jump kar jayega.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const user = await fetchUserById(userId);</div>
-                            <div class="dissection-explain"><strong>3. Await Execution Pause:</strong> <code>await</code> JavaScript thread ko block kiye bina function ke execution ko tab tak pause karta hai jab tak database se <code>user</code> data resolve hokar na aa jaye. Result milte hi <code>user</code> constant me store hota hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const cart = await fetchCartByUserId(user.id);</div>
-                            <div class="dissection-explain"><strong>4. Dependent Step:</strong> Kyunki cart fetch karne ke liye <code>user.id</code> chahiye, isliye ye step pehle wale step ke baad sequentially execute hota hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">return receipt;</div>
-                            <div class="dissection-explain"><strong>5. Promise Resolution:</strong> Yahan se returned value caller ko ek <code>Promise.resolve(receipt)</code> ke roop me milti hai.</div>
-                        </div>
-                    </div>
-
-                    <!-- VISUAL CODE ANATOMY BOARD 2: ASYNC/AWAIT & PROMISE MECHANICS -->
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Visual Code Anatomy: Async / Await & Promise Execution Flow</span>
-                            <span class="genz-badge">SYNTAX & KEYWORD BREAKDOWN</span>
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Async/Await Function</span>
+                            <span class="genz-badge">PROMISE SYNTACTIC SUGAR • LABELED DIAGRAM</span>
                         </div>
-
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-kw">async</span> <span class="tok-kw">function</span> <span class="pill-fn">loadUserData</span>(userId) {</div>
-                            <div style="padding-left: 20px;"><span class="pill-err">try</span> {</div>
-                            <div style="padding-left: 40px;"><span class="tok-kw">const</span> user = <span class="pill-await">await</span> <span class="pill-res">fetchUserFromDB</span>(userId);</div>
-                            <div style="padding-left: 40px;"><span class="tok-kw">return</span> user;</div>
-                            <div style="padding-left: 20px;">} <span class="pill-err">catch</span> (err) {</div>
-                            <div style="padding-left: 40px;">console.error(<span class="tok-str">"Failed:"</span>, err.message);</div>
-                            <div style="padding-left: 20px;">}</div>
-                            <div>}</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">async function checkoutUserCart(userId)</span> ───▶ <strong>1. Async Keyword:</strong> Function ke aage <code>async</code> likhne se ye function automatically ek <strong>Promise</strong> return karta hai. Iske andar hum <code>await</code> keyword use karne ke liye authorized ho jaate hain.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">try { ... } catch (err) { ... }</span> ───▶ <strong>2. Synchronous Error Handling:</strong> Callback hell me har step par alag error check karna padta tha. <code>try/catch</code> block me agar kisi bhi <code>await</code> step par network error ya payment failure hui, toh execution turant <code>catch</code> block me jump kar jayega.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">const user = await fetchUserById(userId);</span> ───▶ <strong>3. Await Execution Pause:</strong> <code>await</code> JavaScript thread ko block kiye bina function ke execution ko tab tak pause karta hai jab tak database se <code>user</code> data resolve hokar na aa jaye. Result milte hi <code>user</code> constant me store hota hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">const cart = await fetchCartByUserId(user.id);</span> ───▶ <strong>4. Dependent Step:</strong> Kyunki cart fetch karne ke liye <code>user.id</code> chahiye, isliye ye step pehle wale step ke baad sequentially execute hota hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-err">return receipt;</span> ───▶ <strong>5. Promise Resolution:</strong> Yahan se returned value caller ko ek <code>Promise.resolve(receipt)</code> ke roop me milti hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-kw">const { name, role: userRole, salary = 30000 } = employee;</span> ───▶ <strong>1. Key Matching & Property Rename:</strong> <code>name</code> property direct extract hoti hai. <code>role: userRole</code> property ko extract karke naya variable name <code>userRole</code> deta hai (name clash avoidance).</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">salary = 30000</span> ───▶ <strong>2. Default Fallback Value:</strong> Agar <code>employee.salary</code> undefined hai, toh automatically fallback value <code>30000</code> assign ho jayegi.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">function makeCounter() { let count = 0; return () => ++count; }</span> ───▶ <strong>1. Private State Encapsulation:</strong> <code>count</code> variable bahar se direct accessible nahi hai (private state). Inner arrow function apne parent function ke lexical scope ko memory me "band (close)" karke retain karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">const counter = makeCounter(); counter();</span> ───▶ <strong>2. Persistent Memory:</strong> <code>makeCounter</code> return hoke stack se nikal jata hai, lekin Heap memory me closure reference rehne ki wajah se har baar <code>counter()</code> call karne par incremented value milti hai (1, 2, 3...).</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-err">employees.map(emp => emp.name)</span> ───▶ <strong>1. Transformation (1-to-1):</strong> Har element ko transform karke exactly same length ki nayi array return karta hai (names ki list). Original array mutate nahi hoti.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-kw">employees.filter(emp => emp.salary >= 600000)</span> ───▶ <strong>2. Conditional Whitelisting:</strong> Sirf wahi elements nayi array me aate hain jinke liye callback <code>true</code> return kare.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">employees.reduce((acc, emp) => acc + emp.salary, 0)</span> ───▶ <strong>3. Aggregation to Single Value:</strong> <code>acc</code> (accumulator) initial value <code>0</code> se shuru hota hai aur har iteration me salary add karke poori company ka total payroll calculate karta hai.</div></div>
                         </div>
-
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">📌 1. async Keyword</span>
-                                <div>Function ko promise producer banata hai — always returns a Promise auto-wrapped!</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-green">📌 2. await Keyword</span>
-                                <div><strong>Pause Point:</strong> Engine ko bolta hai 'DB se data aane tak ruk ja, par main JS thread freeze mat kar!'</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-purple">📌 3. Promise Offload</span>
-                                <div>Background task jo resolve hone par unwrap ho jata hai.</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-red">📌 4. try / catch Net</span>
-                                <div><strong>Safety Net:</strong> Kisi bhi error ya rejected promise ko turant pakad leta hai.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TOPIC 3: DESTRUCTURING -->
-                <div class="concept-block">
-                    <div class="concept-heading">3. Destructuring — Object & Array</div>
-
-                    <div class="concept-sub-title">🔴 3.1 Problem Kya Thi?</div>
-                    <p>Pehle hum object ki values access karne ke liye baar baar <code>user.name</code>, <code>user.age</code>, <code>user.city</code> likhte the. 10 properties hongi toh 10 lines waste. Agar spelling galat ho toh <code>undefined</code> silently aata tha — koi error nahi!</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>3_object_destructuring.js</span><span>Rename + Defaults + Nested</span></div>
-                        <pre><code><span class="tok-com">// ❌ OLD WAY — repetitive and error prone</span>
-<span class="tok-kw">const</span> user = { name: <span class="tok-str">'Priya'</span>, age: <span class="tok-num">24</span>, city: <span class="tok-str">'Pune'</span>, role: <span class="tok-str">'Dev'</span> };
-<span class="tok-kw">const</span> name1 = user.name; <span class="tok-kw">const</span> age1 = user.age; <span class="tok-com">// tedious x 4</span>
-
-<span class="tok-com">// ✅ Destructuring — one line, zero repetition</span>
-<span class="tok-kw">const</span> { name, age, city } = user;
-
-<span class="tok-com">// Rename while destructuring: userId → id</span>
-<span class="tok-kw">const</span> apiResponse = { userId: <span class="tok-num">101</span>, userName: <span class="tok-str">'aarav_dev'</span>, status: <span class="tok-str">'active'</span> };
-<span class="tok-kw">const</span> { userId: id, userName: username, role = <span class="tok-str">'viewer'</span> } = apiResponse;
-<span class="tok-com">//             ↑ rename   ↑ rename    ↑ default value if key missing!</span>
-console.<span class="tok-fn">log</span>(id, username, role); <span class="tok-com">// 101 'aarav_dev' 'viewer'</span>
-
-<span class="tok-com">// Nested Object Destructuring</span>
-<span class="tok-kw">const</span> order = { id: <span class="tok-num">501</span>, customer: { name: <span class="tok-str">'Rahul'</span>, city: <span class="tok-str">'Delhi'</span> }, amount: <span class="tok-num">1499</span> };
-<span class="tok-kw">const</span> { customer: { name: custName }, amount } = order;
-console.<span class="tok-fn">log</span>(custName, amount); <span class="tok-com">// 'Rahul' 1499</span>
-
-<span class="tok-com">// Array Destructuring — position based</span>
-<span class="tok-kw">const</span> scores = [<span class="tok-num">98</span>, <span class="tok-num">75</span>, <span class="tok-num">62</span>, <span class="tok-num">89</span>];
-<span class="tok-kw">const</span> [first, second, , fourth] = scores; <span class="tok-com">// skip 3rd with empty comma</span>
-
-<span class="tok-com">// ⭐ Classic Interview: Swap without temp variable!</span>
-<span class="tok-kw">let</span> a = <span class="tok-num">10</span>, b = <span class="tok-num">20</span>;
-[a, b] = [b, a]; <span class="tok-com">// a = 20, b = 10 ✅</span>
-
-<span class="tok-com">// Real Express.js use — ye destructuring hi hai!</span>
-app.<span class="tok-fn">get</span>(<span class="tok-str">'/users/:id'</span>, (req, res) => {
-    <span class="tok-kw">const</span> { id } = req.params;    <span class="tok-com">// Object destructuring</span>
-    <span class="tok-kw">const</span> { page = <span class="tok-num">1</span> } = req.query; <span class="tok-com">// Destructuring with default!</span>
-});</code></pre>
-                    </div>
-
-                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Object Destructuring Ka Post-Mortem</span>
-                            <span class="genz-badge">CLEAN DATA EXTRACTION</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const { name, role: userRole, salary = 30000 } = employee;</div>
-                            <div class="dissection-explain"><strong>1. Key Matching & Property Rename:</strong> <code>name</code> property direct extract hoti hai. <code>role: userRole</code> property ko extract karke naya variable name <code>userRole</code> deta hai (name clash avoidance).</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">salary = 30000</div>
-                            <div class="dissection-explain"><strong>2. Default Fallback Value:</strong> Agar <code>employee.salary</code> undefined hai, toh automatically fallback value <code>30000</code> assign ho jayegi.</div>
-                        </div>
-                    </div>
-
-                    <div class="bio-anatomy-board">
-                        <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Code Anatomy: Object Destructuring with Rename &amp; Default</span>
-                            <span class="genz-badge">LINE BY LINE</span>
-                        </div>
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-kw">const</span> { <span class="pill-fn">userId</span>: <span class="pill-res">id</span>, role = <span class="tok-str">'viewer'</span> } = apiResponse;</div>
-                            <div style="margin-top:12px;">├─ <span class="pill-fn">userId</span> ─── Original key in the object to look up</div>
-                            <div>├─ <span class="pill-res">id</span> ──────── New local variable name (renamed)</div>
-                            <div>├─ <span class="pill-await">role = 'viewer'</span> ─ Default if key is missing</div>
-                            <div>└─ <span class="pill-err">apiResponse</span> ── Object being destructured</div>
-                        </div>
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">💼 Interview Gotcha</span>
-                                <div>"Variable swap without temp variable?" → <code>[a, b] = [b, a]</code> — Array destructuring!</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-green">✅ Used Everywhere</span>
-                                <div><code>const { id } = req.params</code> — ye har Express route mein use hota hai. Destructuring hai ye!</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TOPIC 4: SPREAD & REST -->
-                <div class="concept-block">
-                    <div class="concept-heading">4. Spread (...) &amp; Rest (...) — Same Symbol, Opposite Job</div>
-
-                    <div class="concept-sub-title">🔴 4.1 Problem Kya Tha?</div>
-                    <p>Object copy/merge ke liye <code>Object.assign()</code> aur Array merge ke liye <code>concat()</code> likhna padta tha. Aur functions mein variable arguments handle karna messy tha. <code>...</code> ne dono problems ek hi symbol se solve kar diye.</p>
-
-                    <div class="concept-sub-title">📖 4.2 Spread — iterable ko "phailao"</div>
-                    <p>Jab <code>...</code> value ke <strong>right side pe</strong> assignment mein use ho — ye Spread hai. Object/array ko uske parts mein tod deta hai.</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>4_spread_rest.js</span><span>Spread + Rest Patterns</span></div>
-                        <pre><code><span class="tok-com">// ===== SPREAD =====</span>
-
-<span class="tok-com">// 1. Immutable Object Update (Most used in Node.js + React)</span>
-<span class="tok-kw">const</span> user = { name: <span class="tok-str">'Amit'</span>, age: <span class="tok-num">25</span>, city: <span class="tok-str">'Mumbai'</span> };
-<span class="tok-kw">const</span> updated = { ...user, age: <span class="tok-num">26</span>, designation: <span class="tok-str">'Lead'</span> };
-<span class="tok-com">// user.age is still 25 — original NEVER mutated ✅</span>
-
-<span class="tok-com">// 2. Merge two objects (later key wins)</span>
-<span class="tok-kw">const</span> defaults = { theme: <span class="tok-str">'dark'</span>, lang: <span class="tok-str">'en'</span> };
-<span class="tok-kw">const</span> userPrefs = { lang: <span class="tok-str">'hi'</span> };  <span class="tok-com">// override lang</span>
-<span class="tok-kw">const</span> config = { ...defaults, ...userPrefs }; <span class="tok-com">// { theme:'dark', lang:'hi' }</span>
-
-<span class="tok-com">// 3. Array merge + clone</span>
-<span class="tok-kw">const</span> arr1 = [<span class="tok-num">1</span>, <span class="tok-num">2</span>], arr2 = [<span class="tok-num">3</span>, <span class="tok-num">4</span>];
-<span class="tok-kw">const</span> merged = [...arr1, ...arr2]; <span class="tok-com">// [1, 2, 3, 4]</span>
-
-<span class="tok-com">// 4. Spread into function args</span>
-<span class="tok-kw">const</span> nums = [<span class="tok-num">4</span>, <span class="tok-num">18</span>, <span class="tok-num">7</span>];
-console.<span class="tok-fn">log</span>(Math.<span class="tok-fn">max</span>(...nums)); <span class="tok-com">// 18</span>
-
-<span class="tok-com">// ===== REST =====</span>
-
-<span class="tok-com">// 1. Rest in function — collect remaining args into array</span>
-<span class="tok-kw">function</span> <span class="tok-fn">calcTotal</span>(gst, ...prices) {
-    <span class="tok-kw">const</span> sub = prices.<span class="tok-fn">reduce</span>((s, p) => s + p, <span class="tok-num">0</span>);
-    <span class="tok-kw">return</span> sub + (sub * gst / <span class="tok-num">100</span>);
-}
-<span class="tok-fn">calcTotal</span>(<span class="tok-num">18</span>, <span class="tok-num">500</span>, <span class="tok-num">300</span>, <span class="tok-num">200</span>); <span class="tok-com">// (1000) + 18% = 1180</span>
-
-<span class="tok-com">// 2. Rest in destructuring — extract specific, keep rest</span>
-<span class="tok-kw">const</span> emp = { name: <span class="tok-str">'Kiran'</span>, id: <span class="tok-str">'E204'</span>, salary: <span class="tok-num">95000</span>, dept: <span class="tok-str">'Eng'</span> };
-<span class="tok-kw">const</span> { salary, ...publicProfile } = emp;
-<span class="tok-com">// salary is private. publicProfile = { name, id, dept } — salary gone! ✅</span></code></pre>
-                    </div>
-
-                    <div class="bio-anatomy-board">
-                        <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Anatomy: Spread vs Rest — Same Symbol, Different Context</span>
-                            <span class="genz-badge">KEY DIFFERENCE</span>
-                        </div>
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-kw">SPREAD</span> ── Right side of = ── <span class="pill-res">Expands</span> one into many</div>
-                            <div style="margin-top:6px; padding-left:20px;"><code>const copy = { ...<span class="pill-fn">obj</span> };</code> ─ Opens the object up</div>
-                            <div style="margin-top:14px;"><span class="pill-err">REST</span> ─── Left side of = ── <span class="pill-await">Collects</span> many into one</div>
-                            <div style="margin-top:6px; padding-left:20px;"><code>const { x, ...<span class="pill-fn">rest</span> } = obj;</code> ─ Gathers remaining</div>
-                            <div style="margin-top:6px; padding-left:20px;"><code>function foo(...<span class="pill-fn">args</span>) {}</code> ─ All arguments → array</div>
-                        </div>
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">💼 Interview Q</span>
-                                <div>"Spread aur Rest mein kya fark hai?" — Same <code>...</code> symbol, but <strong>context</strong> decide karta hai kya karega!</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-red">🚨 Rule</span>
-                                <div>Rest parameter hamesha function ki <strong>last position</strong> pe hona chahiye! <code>foo(...a, b)</code> = SyntaxError!</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TOPIC 5: ARROW FUNCTIONS -->
-                <div class="concept-block">
-                    <div class="concept-heading">5. Arrow Functions — Short Syntax + Fixed `this`</div>
-
-                    <div class="concept-sub-title">🔴 5.1 Problem: Regular Functions Ka `this` Dhoka Deta Tha</div>
-                    <p>JavaScript mein <code>this</code> ka value decide hota hai <strong>function kaise call hua</strong> — not where it was written. Regular functions mein <code>this</code> runtime pe change ho jaata tha, especially callbacks mein class ka context kho jaata tha.</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>5_arrow_functions.js</span><span>this Binding + Syntax</span></div>
-                        <pre><code><span class="tok-com">// ❌ Regular Function in setTimeout — 'this' gets lost!</span>
-<span class="tok-kw">function</span> <span class="tok-fn">Timer</span>() {
-    <span class="tok-kw">this</span>.seconds = <span class="tok-num">0</span>;
-    <span class="tok-fn">setInterval</span>(<span class="tok-kw">function</span>() {
-        <span class="tok-kw">this</span>.seconds++; <span class="tok-com">// 💥 'this' is NOT Timer here — it's undefined/Window!</span>
-    }, <span class="tok-num">1000</span>);
-}
-
-<span class="tok-com">// ✅ Arrow Function — LEXICAL 'this' (locked to definition scope)</span>
-<span class="tok-kw">function</span> <span class="tok-fn">TimerFixed</span>() {
-    <span class="tok-kw">this</span>.seconds = <span class="tok-num">0</span>;
-    <span class="tok-fn">setInterval</span>(() => {
-        <span class="tok-kw">this</span>.seconds++; <span class="tok-com">// ✅ 'this' correctly refers to TimerFixed!</span>
-    }, <span class="tok-num">1000</span>);
-}
-
-<span class="tok-com">// Arrow Syntax — from verbose to concise</span>
-<span class="tok-kw">const</span> <span class="tok-fn">add</span> = <span class="tok-kw">function</span>(a, b) { <span class="tok-kw">return</span> a + b; }; <span class="tok-com">// regular</span>
-<span class="tok-kw">const</span> <span class="tok-fn">add</span> = (a, b) => { <span class="tok-kw">return</span> a + b; };      <span class="tok-com">// arrow full</span>
-<span class="tok-kw">const</span> <span class="tok-fn">add</span> = (a, b) => a + b;                    <span class="tok-com">// implicit return ✅</span>
-<span class="tok-kw">const</span> <span class="tok-fn">double</span> = n => n * <span class="tok-num">2</span>;                       <span class="tok-com">// single param, no ()</span>
-<span class="tok-kw">const</span> <span class="tok-fn">getUser</span> = id => ({ id, createdAt: <span class="tok-kw">new</span> <span class="tok-fn">Date</span>() }); <span class="tok-com">// return object: wrap in ()</span>
-
-<span class="tok-com">// ⚠️ WHEN NOT TO USE Arrow Functions</span>
-<span class="tok-kw">const</span> counter = {
-    count: <span class="tok-num">0</span>,
-    <span class="tok-com">// ❌ Arrow — 'this' is NOT counter, it's outer scope!</span>
-    increment: () => { <span class="tok-kw">this</span>.count++; },
-    <span class="tok-com">// ✅ Regular method — 'this' correctly refers to counter</span>
-    decrement() { <span class="tok-kw">this</span>.count--; }
-};</code></pre>
-                    </div>
-
-                    <div class="bio-anatomy-board">
-                        <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Anatomy: Arrow vs Regular — this Binding</span>
-                            <span class="genz-badge">INTERVIEW CRITICAL</span>
-                        </div>
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-kw">Regular Function</span> ── <span class="pill-err">Dynamic this</span> ── Decided at CALL TIME</div>
-                            <div style="color:#94a3b8; padding-left:16px;">obj.method() → this = obj</div>
-                            <div style="color:#94a3b8; padding-left:16px;">setTimeout(fn) → this = undefined (strict mode)</div>
-                            <div style="margin-top:12px;"><span class="pill-await">Arrow Function</span> ── <span class="pill-res">Lexical this</span> ── Decided at DEFINITION TIME</div>
-                            <div style="color:#94a3b8; padding-left:16px;">Inherits this from surrounding scope — LOCKED forever</div>
-                        </div>
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">💼 Interview Q</span>
-                                <div>"Arrow aur regular function mein kya fark hai?" → <code>this</code> binding! Arrow = lexical, Regular = dynamic.</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-red">⛔ No arguments + No new</span>
-                                <div>Arrow ke paas apna <code>arguments</code> object nahi hota. Constructor bhi nahi bana sakte (<code>new Arrow()</code> → Error).</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TOPIC 6: TEMPLATE LITERALS -->
-                <div class="concept-block">
-                    <div class="concept-heading">6. Template Literals — Backtick Strings</div>
-
-                    <div class="concept-sub-title">🔴 6.1 Problem: String Concatenation Hell</div>
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>6_template_literals.js</span><span>Old Way vs Template Literal</span></div>
-                        <pre><code><span class="tok-kw">const</span> name = <span class="tok-str">'Anjali'</span>, score = <span class="tok-num">94</span>, rank = <span class="tok-num">2</span>;
-
-<span class="tok-com">// ❌ OLD — ugly, breaks easily, can't do multiline</span>
-<span class="tok-kw">const</span> msg = <span class="tok-str">"Hello "</span> + name + <span class="tok-str">"! Score: "</span> + score + <span class="tok-str">", Rank: #"</span> + rank;
-
-<span class="tok-com">// ✅ Template Literal — clean, any expression inside ${}</span>
-<span class="tok-kw">const</span> msg = <span class="tok-str">`Hello ${name}! Score: ${score}, Rank: #${rank}`</span>;
-
-<span class="tok-com">// Expressions inside ${} — any valid JS!</span>
-<span class="tok-kw">const</span> bill = <span class="tok-str">`Total with GST: ₹${(score * <span class="tok-num">10</span> * <span class="tok-num">1.18</span>).<span class="tok-fn">toFixed</span>(<span class="tok-num">2</span>)}`</span>;
-
-<span class="tok-com">// Multi-line (no \n needed!)</span>
-<span class="tok-kw">const</span> email = <span class="tok-str">`Dear ${name},
-Your interview is confirmed.
-Report at 10 AM sharp.`</span>;
-
-<span class="tok-com">// Backend use — Log messages (most common!)</span>
-console.<span class="tok-fn">log</span>(<span class="tok-str">`[${<span class="tok-kw">new</span> <span class="tok-fn">Date</span>().<span class="tok-fn">toISOString</span>()}] Server started on port 3000`</span>);
-console.<span class="tok-fn">log</span>(<span class="tok-str">`User ${userId} requested ${req.method} ${req.url}`</span>);</code></pre>
-                    </div>
-                </div>
-
-                <!-- TOPIC 7: CLOSURES -->
-                <div class="concept-block">
-                    <div class="concept-heading">7. Closures — Function Remembers Its Birthplace</div>
-
-                    <div class="concept-sub-title">📖 7.1 Closure Kya Hai?</div>
-                    <p>Jab ek <strong>inner function</strong> apne <strong>outer function ke variables</strong> ko tab bhi access kar sakta hai jab outer function ka execution khatam ho chuka ho — ye <strong>Closure</strong> hai. Inner function apne surrounding lexical scope ka reference memory mein rakhta hai.</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>7_closures.js</span><span>Private State + Real Backend Use</span></div>
-                        <pre><code><span class="tok-com">// makeCounter run hoke khatam ho jata hai...</span>
-<span class="tok-kw">function</span> <span class="tok-fn">makeCounter</span>() {
-    <span class="tok-kw">let</span> count = <span class="tok-num">0</span>; <span class="tok-com">// Private — bahar se directly access nahi kar sakte!</span>
-
-    <span class="tok-kw">return</span> {
-        <span class="tok-fn">increment</span>() { count++; console.<span class="tok-fn">log</span>(<span class="tok-str">`Count: ${count}`</span>); },
-        <span class="tok-fn">getCount</span>()  { <span class="tok-kw">return</span> count; }
-    };
-}
-
-<span class="tok-kw">const</span> counter = <span class="tok-fn">makeCounter</span>(); <span class="tok-com">// khatam hua... lekin count yaad hai!</span>
-counter.<span class="tok-fn">increment</span>(); <span class="tok-com">// Count: 1</span>
-counter.<span class="tok-fn">increment</span>(); <span class="tok-com">// Count: 2</span>
-console.<span class="tok-fn">log</span>(counter.count); <span class="tok-com">// undefined — PRIVATE! ✅</span>
-
-<span class="tok-com">// Real Node.js use: Middleware Factory (closures in Express!)</span>
-<span class="tok-kw">function</span> <span class="tok-fn">requireRole</span>(role) {           <span class="tok-com">// outer function</span>
-    <span class="tok-kw">return</span> <span class="tok-kw">function</span>(req, res, next) {   <span class="tok-com">// inner function (middleware)</span>
-        <span class="tok-kw">if</span> (req.user?.role !== role) {    <span class="tok-com">// 'role' from closure!</span>
-            <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">403</span>).<span class="tok-fn">json</span>({ error: <span class="tok-str">'Access Denied'</span> });
-        }
-        <span class="tok-fn">next</span>();
-    };
-}
-<span class="tok-com">// Usage:</span>
-app.<span class="tok-fn">delete</span>(<span class="tok-str">'/admin/user'</span>, <span class="tok-fn">requireRole</span>(<span class="tok-str">'admin'</span>), deleteUserHandler);
-<span class="tok-com">// requireRole('admin') returns a middleware that "remembers" 'admin' via closure!</span></code></pre>
-                    </div>
-
-                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 JavaScript Closures Ka Post-Mortem</span>
-                            <span class="genz-badge">LEXICAL SCOPING</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">function makeCounter() { let count = 0; return () => ++count; }</div>
-                            <div class="dissection-explain"><strong>1. Private State Encapsulation:</strong> <code>count</code> variable bahar se direct accessible nahi hai (private state). Inner arrow function apne parent function ke lexical scope ko memory me "band (close)" karke retain karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const counter = makeCounter(); counter();</div>
-                            <div class="dissection-explain"><strong>2. Persistent Memory:</strong> <code>makeCounter</code> return hoke stack se nikal jata hai, lekin Heap memory me closure reference rehne ki wajah se har baar <code>counter()</code> call karne par incremented value milti hai (1, 2, 3...).</div>
-                        </div>
-                    </div>
-
-                    <div class="bio-anatomy-board">
-                        <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Anatomy: Closure Memory Lifecycle</span>
-                            <span class="genz-badge">INTERVIEW CRITICAL</span>
-                        </div>
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-fn">makeCounter()</span> called ── Stack frame created with <span class="pill-kw">count = 0</span></div>
-                            <div style="margin-top:8px;">Returns inner object → stored in heap as <span class="pill-res">counter</span></div>
-                            <div>makeCounter stack frame destroyed ✗ (done)</div>
-                            <div style="margin-top:8px;"><span class="pill-err">BUT:</span> inner functions hold <span class="pill-await">[[Environment]]</span> reference to outer scope</div>
-                            <div>└─ <span class="pill-kw">count</span> survives in heap as long as <span class="pill-res">counter</span> object exists!</div>
-                        </div>
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">💼 Interview Q</span>
-                                <div>"Closure kya hai?" → Function + uska surrounding lexical environment. Data encapsulation ke liye use hota hai.</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-green">✅ Used Where?</span>
-                                <div>Middleware factories, Rate limiters, Memoization, Module pattern — real Node.js code mein closures hi hain!</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TOPIC 8: MAP / FILTER / REDUCE -->
-                <div class="concept-block">
-                    <div class="concept-heading">8. map / filter / reduce — Array Ki Power Trio</div>
-
-                    <div class="concept-sub-title">🔴 8.1 Problem: for loops se data transform karna messy tha</div>
-                    <p>Array transform karne ke liye hum <code>for</code> loop likhte, nayi array manually push karte — verbose aur error prone. ES6 ne 3 declarative alternatives diye jo shorter, readable, aur immutable hain.</p>
-
-                    <div class="concept-sub-title">📖 map() — Har Element Transform Karo (Same Size)</div>
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>8_map_filter_reduce.js</span><span>Array Power Trio</span></div>
-                        <pre><code><span class="tok-kw">const</span> employees = [
-    { name: <span class="tok-str">'Sneha'</span>, salary: <span class="tok-num">60000</span>, dept: <span class="tok-str">'HR'</span> },
-    { name: <span class="tok-str">'Ravi'</span>,  salary: <span class="tok-num">85000</span>, dept: <span class="tok-str">'Eng'</span> },
-    { name: <span class="tok-str">'Ankit'</span>, salary: <span class="tok-num">72000</span>, dept: <span class="tok-str">'Eng'</span> }
-];
-
-<span class="tok-com">// ===== MAP — Transform every element, returns SAME SIZE array =====</span>
-<span class="tok-kw">const</span> withHike = employees.<span class="tok-fn">map</span>(emp => ({ ...emp, salary: emp.salary * <span class="tok-num">1.1</span> }));
-<span class="tok-com">// Original employees array UNCHANGED ✅</span>
-
-<span class="tok-com">// ===== FILTER — Keep matching elements, returns SMALLER/EQUAL array =====</span>
-<span class="tok-kw">const</span> engTeam = employees.<span class="tok-fn">filter</span>(emp => emp.dept === <span class="tok-str">'Eng'</span>);
-<span class="tok-com">// [{ name:'Ravi'... }, { name:'Ankit'... }]</span>
-
-<span class="tok-com">// ===== REDUCE — Fold everything into ONE value =====</span>
-<span class="tok-kw">const</span> totalPayroll = employees.<span class="tok-fn">reduce</span>((acc, emp) => acc + emp.salary, <span class="tok-num">0</span>);
-<span class="tok-com">// 60000 + 85000 + 72000 = 217000</span>
-
-<span class="tok-com">// POWER MOVE: Chain all three!</span>
-<span class="tok-kw">const</span> engPayrollAfterHike = employees
-    .<span class="tok-fn">filter</span>(emp => emp.dept === <span class="tok-str">'Eng'</span>)
-    .<span class="tok-fn">map</span>(emp => ({ ...emp, salary: emp.salary * <span class="tok-num">1.1</span> }))
-    .<span class="tok-fn">reduce</span>((acc, emp) => acc + emp.salary, <span class="tok-num">0</span>);
-console.<span class="tok-fn">log</span>(<span class="tok-str">`Eng Payroll after hike: ₹${engPayrollAfterHike}`</span>); <span class="tok-com">// ₹173700</span>
-
-<span class="tok-com">// reduce to build an object (group by)</span>
-<span class="tok-kw">const</span> byDept = employees.<span class="tok-fn">reduce</span>((acc, emp) => {
-    acc[emp.dept] = acc[emp.dept] || [];
-    acc[emp.dept].<span class="tok-fn">push</span>(emp.name);
-    <span class="tok-kw">return</span> acc;
-}, {});
-console.<span class="tok-fn">log</span>(byDept); <span class="tok-com">// { HR: ['Sneha'], Eng: ['Ravi', 'Ankit'] }</span></code></pre>
-                    </div>
-
-                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 map, filter & reduce Ka Post-Mortem</span>
-                            <span class="genz-badge">ARRAY POWER TRIO</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">employees.map(emp => emp.name)</div>
-                            <div class="dissection-explain"><strong>1. Transformation (1-to-1):</strong> Har element ko transform karke exactly same length ki nayi array return karta hai (names ki list). Original array mutate nahi hoti.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">employees.filter(emp => emp.salary >= 600000)</div>
-                            <div class="dissection-explain"><strong>2. Conditional Whitelisting:</strong> Sirf wahi elements nayi array me aate hain jinke liye callback <code>true</code> return kare.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">employees.reduce((acc, emp) => acc + emp.salary, 0)</div>
-                            <div class="dissection-explain"><strong>3. Aggregation to Single Value:</strong> <code>acc</code> (accumulator) initial value <code>0</code> se shuru hota hai aur har iteration me salary add karke poori company ka total payroll calculate karta hai.</div>
-                        </div>
-                    </div>
-
-                    <div class="bio-anatomy-board">
-                        <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 map vs filter vs reduce — Quick Comparison</span>
-                            <span class="genz-badge">MUST REMEMBER</span>
-                        </div>
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-fn">map(fn)</span> ─────── Input[n] → Output[n] ── <span class="pill-res">SAME SIZE</span>, each element transformed</div>
-                            <div style="margin-top:8px;"><span class="pill-await">filter(fn)</span> ───── Input[n] → Output[≤n] ── <span class="pill-res">SMALLER</span>, only matching kept</div>
-                            <div style="margin-top:8px;"><span class="pill-err">reduce(fn, v)</span> ── Input[n] → Output[1] ── <span class="pill-res">ONE VALUE</span> — number, string, or object</div>
-                        </div>
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">💼 Interview Q</span>
-                                <div>"map aur forEach mein fark?" → map returns a NEW array. forEach returns undefined — sirf side effects ke liye!</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-green">⛓️ Chaining</span>
-                                <div><code>arr.filter(...).map(...).reduce(...)</code> — real production code yahi hai! Teen method chain mein powerful transformations.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Async Keyword:</span>
+            <div>Function ke aage <code>async</code> likhne se ye function automatically ek <strong>Promise</strong> return karta hai. Iske andar hum <code>await</code> keyword use karne ke liye authorized ho jaate hain.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Synchronous Error Handling:</span>
+            <div>Callback hell me har step par alag error check karna padta tha. <code>try/catch</code> block me agar kisi bhi <code>await</code> step par network error ya payment failure hui, toh execution turant <code>catch</code> block me jump kar jayega.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. Await Execution Pause:</span>
+            <div><code>await</code> JavaScript thread ko block kiye bina function ke execution ko tab tak pause karta hai jab tak database se <code>user</code> data resolve hokar na aa jaye. Result milte hi <code>user</code> constant me store hota hai.</div>
+        </div>
+    </div>
+                    </div></div>
 
             </div>
         </section>
@@ -2539,41 +2029,32 @@ module.exports = { newFn: () => {} }; <span class="tok-com">// This is the actua
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Cluster Multi-Core Scaling Ka Post-Mortem</span>
-                            <span class="genz-badge">MULTI-CORE HARDWARE UTILIZATION</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">if (cluster.isPrimary) { ... }</div>
-                            <div class="dissection-explain"><strong>1. Primary Master Process:</strong> Ye process koi HTTP request handle nahi karta — ye machine ke CPU cores count karta hai aur har core ke liye child worker process spawn karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">cluster.fork()</div>
-                            <div class="dissection-explain"><strong>2. Worker Process Forking:</strong> Har CPU core ke liye ek independent Node.js process fork hota hai jo apna alag V8 instance aur Event Loop chalata hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">else { app.listen(4000); }</div>
-                            <div class="dissection-explain"><strong>3. Port Sharing & Load Balancing:</strong> Saare worker processes ek hi Port 4000 ko share karte hain. Master process incoming network packets ko Round-Robin algorithm se workers me distribute karta hai.</div>
-                        </div>
-                    </div>
-
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Cluster vs Worker Threads: Kab Kaunsa Use Karein?</span>
-                            <span class="genz-badge">SCALING MATRIX</span>
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Cluster Multi-Core Scaling</span>
+                            <span class="genz-badge">MULTI-CORE HARDWARE UTILIZATION • LABELED DIAGRAM</span>
                         </div>
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-green">⚡ Cluster Module</span>
-                                <div><strong>Multiple Independent Node Processes:</strong> Best for scaling HTTP Web Servers. Har process ki apni memory hoti hai aur wo same port share karte hain.</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">🧠 Worker Threads (worker_threads)</span>
-                                <div><strong>Multiple Threads in SAME Process:</strong> Best for Heavy CPU-bound tasks (Image processing, AI encryption, Video transcoding) with shared memory.</div>
-                            </div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">if (cluster.isPrimary) { ... }</span> ───▶ <strong>1. Primary Master Process:</strong> Ye process koi HTTP request handle nahi karta — ye machine ke CPU cores count karta hai aur har core ke liye child worker process spawn karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">cluster.fork()</span> ───▶ <strong>2. Worker Process Forking:</strong> Har CPU core ke liye ek independent Node.js process fork hota hai jo apna alag V8 instance aur Event Loop chalata hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">else { app.listen(4000); }</span> ───▶ <strong>3. Port Sharing & Load Balancing:</strong> Saare worker processes ek hi Port 4000 ko share karte hain. Master process incoming network packets ko Round-Robin algorithm se workers me distribute karta hai.</div></div>
                         </div>
-                    </div>
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Primary Master Process:</span>
+            <div>Ye process koi HTTP request handle nahi karta — ye machine ke CPU cores count karta hai aur har core ke liye child worker process spawn karta hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Worker Process Forking:</span>
+            <div>Har CPU core ke liye ek independent Node.js process fork hota hai jo apna alag V8 instance aur Event Loop chalata hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. Port Sharing & Load Balancing:</span>
+            <div>Saare worker processes ek hi Port 4000 ko share karte hain. Master process incoming network packets ko Round-Robin algorithm se workers me distribute karta hai.</div>
+        </div>
+    </div>
+                    </div></div>
                 </div>
 
         </section>
@@ -2619,138 +2100,35 @@ manageFiles();</code></pre>
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 fs.promises File I/O Ka Post-Mortem</span>
-                            <span class="genz-badge">NON-BLOCKING ASYNC FILE I/O</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const fs = require('fs').promises;</div>
-                            <div class="dissection-explain"><strong>1. Modern Promise API:</strong> Legacy callback wale <code>fs</code> ki jagah <code>fs.promises</code> use karne se hum <code>async/await</code> ke sath clean asynchronous file I/O kar paate hain bina Call Stack block kiye.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">await fs.writeFile('config.json', JSON.stringify(data, null, 2));</div>
-                            <div class="dissection-explain"><strong>2. Atomic File Write:</strong> Data ko disk par asynchronously write karta hai. Libuv thread pool background me disk write karta hai aur complete hone par Promise resolve hota hai.</div>
-                        </div>
-                    </div>
-
-                    <div class="concept-sub-title">📦 1.2 Buffers: What is Binary Data in Node.js?</div>
-                    <p>• <strong>Buffer:</strong> V8 Heap memory ke bahar allocate kiya gaya raw binary memory chunk hai. JavaScript me pehle binary data handle karne ka tarika nahi tha, isliye Node.js ne <code>Buffer</code> class banayi.<br>
-                    • Data memory me <strong>Octets (Bytes in Hexadecimal format 00-FF)</strong> ke roop me store hota hai.</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>snippet_buffer_basics.js</span><span>Buffer Allocation & Encoding</span></div>
-                        <pre><code><span class="tok-com">// 1. Create buffer from String:</span>
-<span class="tok-kw">const</span> buf = Buffer.<span class="tok-fn">from</span>(<span class="tok-str">'NodeJS'</span>);
-console.<span class="tok-fn">log</span>(buf); <span class="tok-com">// &lt;Buffer 4e 6f 64 65 4a 53&gt; (Hex values of ASCII characters)</span>
-console.<span class="tok-fn">log</span>(buf.<span class="tok-fn">toString</span>(<span class="tok-str">'utf-8'</span>)); <span class="tok-com">// "NodeJS"</span>
-
-<span class="tok-com">// 2. Allocate fixed safe zero-filled memory:</span>
-<span class="tok-kw">const</span> emptyBuf = Buffer.<span class="tok-fn">alloc</span>(<span class="tok-num">5</span>); <span class="tok-com">// &lt;Buffer 00 00 00 00 00&gt; (5 bytes reserved)</span></code></pre>
-                    </div>
-
-                    <div class="concept-sub-title">🌊 1.3 Streams & Backpressure Management</div>
-                    <p>Jab aapko 5 GB ki video ya 1 crore database records transfer karne hote hain, toh pura file RAM me load karne par <code>JavaScript heap out of memory</code> error aayega aur server crash ho jayega.</p>
-                    <p>• <strong>Streams:</strong> Data ko <strong>64 KB ke chhote Chunks</strong> me tod kar ek jagah se dusri jagah pipe karte hain.<br>
-                    • <strong>4 Types of Streams:</strong><br>
-                    &nbsp;&nbsp;1. <strong>Readable Stream:</strong> Jahan se data padha jata hai (e.g. <code>fs.createReadStream</code>, HTTP <code>req</code>).<br>
-                    &nbsp;&nbsp;2. <strong>Writable Stream:</strong> Jahan data likha jata hai (e.g. <code>fs.createWriteStream</code>, HTTP <code>res</code>).<br>
-                    &nbsp;&nbsp;3. <strong>Duplex Stream:</strong> Jo padh aur likh dono sake (e.g. TCP Net Socket).<br>
-                    &nbsp;&nbsp;4. <strong>Transform Stream:</strong> Jo data aane par usse modify/compress kare (e.g. <code>zlib.createGzip()</code>).<br>
-                    • <strong>Backpressure:</strong> Jab reader tezi se chunks bhej raha ho aur writer slow ho, toh internal buffer bhar jata hai. <code>.pipe()</code> ya <code>stream.pipeline()</code> reader ko automatically pause kar deta hai aur writer ke drain hone par resume karta hai!</p>
-
-                    <div class="analogy-note">
-                        <div class="analogy-note-title">🚰 Indian Real-Life Analogy: Chhat Ki 1000L Tanki (Buffer) & Pipe (Stream)</div>
-                        <p>• <strong>readFile (Crash):</strong> 1000 Liter pani ek sath room me daal diya (Flood & Furniture ruined).<br>
-                        • <strong>Streams & Pipe:</strong> Chhat ki tanki se 1/2 inch ke pipe ke zariye glass-by-glass pani lena — sirf 1 glass jitna RAM use hota hai chahe tanki 10,000 Liter ki kyu na ho!</p>
-                    </div>
-
-                    <!-- VISUAL ARCHITECTURE BOARD: STREAM PIPELINE -->
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Visual Architecture Blueprint: Stream Pipeline & Backpressure Flow</span>
-                            <span class="genz-badge">FLOW CONTROL MECHANICS</span>
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: fs.promises File I/O</span>
+                            <span class="genz-badge">NON-BLOCKING ASYNC FILE I/O • LABELED DIAGRAM</span>
                         </div>
-
-                        <div class="anatomy-code-center">
-                            <div>[ 10 GB Video File ] ──> <span class="pill-fn">fs.createReadStream()</span> (Reads 64 KB Chunks)</div>
-                            <div style="margin-top: 8px;">│</div>
-                            <div>▼ Chunks emitted via 'data' events: [ Chunk 1 (64KB) ] ➔ [ Chunk 2 (64KB) ]</div>
-                            <div style="margin-top: 8px;">│ <span class="pill-kw">.pipe() Flow Control</span> (Monitors internal highWaterMark buffer = 16KB)</div>
-                            <div>▼</div>
-                            <div><span class="pill-res">zlib.createGzip()</span> ──> [ Transform Stream compresses chunks on-the-fly ]</div>
-                            <div style="margin-top: 8px;">│ (If Disk write is slow: Readable is PAUSED automatically!)</div>
-                            <div>▼ (Resume when 'drain' event fires)</div>
-                            <div>[ Compressed File ] <── <span class="pill-await">fs.createWriteStream('video.mp4.gz')</span></div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">const fs = require('fs').promises;</span> ───▶ <strong>1. Modern Promise API:</strong> Legacy callback wale <code>fs</code> ki jagah <code>fs.promises</code> use karne se hum <code>async/await</code> ke sath clean asynchronous file I/O kar paate hain bina Call Stack block kiye.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">await fs.writeFile('config.json', JSON.stringify(data, null, 2));</span> ───▶ <strong>2. Atomic File Write:</strong> Data ko disk par asynchronously write karta hai. Libuv thread pool background me disk write karta hai aur complete hone par Promise resolve hota hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">fs.createReadStream('huge_server_log.txt')</span> ───▶ <strong>1. Readable Stream:</strong> Poori 1GB file ko RAM me load nahi karta — disk se chhota <strong>64KB ka chunk</strong> (Buffer) read karke pipeline me push karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">zlib.createGzip()</span> ───▶ <strong>2. Transform Stream:</strong> Duplex stream jo ek taraf se 64KB uncompressed binary bytes leti hai aur doosri taraf se Gzip-compressed binary bytes emit karti hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-err">fs.createWriteStream('huge_server_log.txt.gz')</span> ───▶ <strong>3. Writable Stream (Backpressure Consumer):</strong> Compressed chunks ko target file me write karti hai. Agar disk write slow hai, toh ye automatically ReadStream ko pause kar deti hai (<strong>Backpressure Defense</strong>) taaki RAM crash na ho!</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-kw">pipeline(..., (err) => ...)</span> ───▶ <strong>4. Safe Cleanup Callback:</strong> Legacy <code>.pipe()</code> streams me error aane par streams leak ho jaate the. <code>pipeline()</code> error aane par automatically saare open file descriptors ko safely destroy aur close karta hai.</div></div>
                         </div>
-
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">💧 highWaterMark</span>
-                                <div>Stream buffer ki maximum capacity (Default: 64 KB for files, 16 KB for HTTP). Buffer bharne par <code>write()</code> false return karta hai.</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-green">🛡️ stream.pipeline()</span>
-                                <div><code>.pipe()</code> me error handling manual karni padti thi. <code>pipeline()</code> auto-cleanup karta hai aur stream leak nahi hone deta!</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- COMPLETE PRODUCTION CODE -->
-                <div class="concept-block">
-                    <div class="concept-heading">2. Complete Streams Production Pipeline Demo</div>
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>chapter03_master_demo.js</span><span>Safe Streaming with pipeline</span></div>
-                        <pre><code><span class="tok-kw">const</span> fs = <span class="tok-fn">require</span>(<span class="tok-str">'fs'</span>);
-<span class="tok-kw">const</span> zlib = <span class="tok-fn">require</span>(<span class="tok-str">'zlib'</span>);
-<span class="tok-kw">const</span> { pipeline } = <span class="tok-fn">require</span>(<span class="tok-str">'stream'</span>);
-
-console.<span class="tok-fn">log</span>(<span class="tok-str">"--- Memory Safe Stream Compression Pipeline ---"</span>);
-
-<span class="tok-kw">const</span> sourceFile = <span class="tok-str">'./app_log.txt'</span>;
-<span class="tok-kw">const</span> destinationFile = <span class="tok-str">'./app_log.txt.gz'</span>;
-
-<span class="tok-com">// Setup Readable, Transform, and Writable streams:</span>
-<span class="tok-kw">const</span> readStream = fs.<span class="tok-fn">createReadStream</span>(sourceFile);
-<span class="tok-kw">const</span> gzipStream = zlib.<span class="tok-fn">createGzip</span>();
-<span class="tok-kw">const</span> writeStream = fs.<span class="tok-fn">createWriteStream</span>(destinationFile);
-
-<span class="tok-com">// Use pipeline() for automatic error handling and memory cleanup:</span>
-<span class="tok-fn">pipeline</span>(readStream, gzipStream, writeStream, (<span class="tok-num">err</span>) => {
-    <span class="tok-kw">if</span> (err) {
-        console.<span class="tok-fn">error</span>(<span class="tok-str">"❌ Stream Pipeline Crashed:"</span>, err.message);
-    } <span class="tok-kw">else</span> {
-        console.<span class="tok-fn">log</span>(<span class="tok-str">"✅ File Compressed Successfully with &lt; 20MB RAM usage!"</span>);
-    }
-});</code></pre>
-                    </div>
-
-                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Stream Pipeline Ka Post-Mortem (Surgical Code Dissection)</span>
-                            <span class="genz-badge">ZERO RAM CRASH</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">fs.createReadStream('huge_server_log.txt')</div>
-                            <div class="dissection-explain"><strong>1. Readable Stream:</strong> Poori 1GB file ko RAM me load nahi karta — disk se chhota <strong>64KB ka chunk</strong> (Buffer) read karke pipeline me push karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">zlib.createGzip()</div>
-                            <div class="dissection-explain"><strong>2. Transform Stream:</strong> Duplex stream jo ek taraf se 64KB uncompressed binary bytes leti hai aur doosri taraf se Gzip-compressed binary bytes emit karti hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">fs.createWriteStream('huge_server_log.txt.gz')</div>
-                            <div class="dissection-explain"><strong>3. Writable Stream (Backpressure Consumer):</strong> Compressed chunks ko target file me write karti hai. Agar disk write slow hai, toh ye automatically ReadStream ko pause kar deti hai (<strong>Backpressure Defense</strong>) taaki RAM crash na ho!</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">pipeline(..., (err) => ...)</div>
-                            <div class="dissection-explain"><strong>4. Safe Cleanup Callback:</strong> Legacy <code>.pipe()</code> streams me error aane par streams leak ho jaate the. <code>pipeline()</code> error aane par automatically saare open file descriptors ko safely destroy aur close karta hai.</div>
-                        </div>
-                    </div>
-
-                    <div class="mechanics-table-box">
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Modern Promise API:</span>
+            <div>Legacy callback wale <code>fs</code> ki jagah <code>fs.promises</code> use karne se hum <code>async/await</code> ke sath clean asynchronous file I/O kar paate hain bina Call Stack block kiye.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Atomic File Write:</span>
+            <div>Data ko disk par asynchronously write karta hai. Libuv thread pool background me disk write karta hai aur complete hone par Promise resolve hota hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 1. Readable Stream:</span>
+            <div>Poori 1GB file ko RAM me load nahi karta — disk se chhota <strong>64KB ka chunk</strong> (Buffer) read karke pipeline me push karta hai.</div>
+        </div>
+    </div>
+                    </div><div class="mechanics-table-box">
                         <table class="mechanics-table">
                             <thead><tr><th>Stream Feature</th><th>How It Works</th><th>Why Important</th></tr></thead>
                             <tbody>
@@ -3083,50 +2461,40 @@ app.<span class="tok-fn">post</span>(<span class="tok-str">'/api/user'</span>, (
 app.<span class="tok-fn">listen</span>(<span class="tok-num">4000</span>, () => console.<span class="tok-fn">log</span>(<span class="tok-str">'Express running on http://localhost:4000'</span>));</code></pre>
                     </div>
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Har Ek Line Ka Post-Mortem (Surgical Code Dissection)</span>
-                            <span class="genz-badge">ZERO GUESSWORK</span>
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Har Ek Line</span>
+                            <span class="genz-badge">ZERO GUESSWORK • LABELED DIAGRAM</span>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const express = require('express');</div>
-                            <div class="dissection-explain"><strong>1. Framework Module Load:</strong> <code>require('express')</code> <code>node_modules</code> se Express framework ka main export function load karta hai aur use <code>express</code> constant me store karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const app = express();</div>
-                            <div class="dissection-explain"><strong>2. Application Instance Create:</strong> <code>express()</code> factory function ko call karte hi ek naya <strong>Express App Object (<code>app</code>)</strong> initialize hota hai. Is <code>app</code> ke paas routing methods (<code>.get</code>, <code>.post</code>), middleware registry (<code>.use</code>), aur server listener (<code>.listen</code>) hote hain.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">app.use(express.json());</div>
-                            <div class="dissection-explain"><strong>3. JSON Body Parser Middleware:</strong> <code>app.use()</code> har incoming request par middleware lagata hai. <code>express.json()</code> stream se binary chunks collect karke unhe <code>JSON.parse()</code> se JS object me badalta hai aur <code>req.body</code> me attach karta hai. Bina iske POST request me <code>req.body</code> hamesha <code>undefined</code> aayega!</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">app.get('/', (req, res) => { ... });</div>
-                            <div class="dissection-explain"><strong>4. Route Handler Contract:</strong> 
-                                • <code>app.get</code>: Sirf HTTP GET method se match karega.<br>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">const express = require('express');</span> ───▶ <strong>1. Framework Module Load:</strong> <code>require('express')</code> <code>node_modules</code> se Express framework ka main export function load karta hai aur use <code>express</code> constant me store karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">const app = express();</span> ───▶ <strong>2. Application Instance Create:</strong> <code>express()</code> factory function ko call karte hi ek naya <strong>Express App Object (<code>app</code>)</strong> initialize hota hai. Is <code>app</code> ke paas routing methods (<code>.get</code>, <code>.post</code>), middleware registry (<code>.use</code>), aur server listener (<code>.listen</code>) hote hain.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">app.use(express.json());</span> ───▶ <strong>3. JSON Body Parser Middleware:</strong> <code>app.use()</code> har incoming request par middleware lagata hai. <code>express.json()</code> stream se binary chunks collect karke unhe <code>JSON.parse()</code> se JS object me badalta hai aur <code>req.body</code> me attach karta hai. Bina iske POST request me <code>req.body</code> hamesha <code>undefined</code> aayega!</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">app.get('/', (req, res) => { ... });</span> ───▶ <strong>4. Route Handler Contract:</strong> • <code>app.get</code>: Sirf HTTP GET method se match karega.<br>
                                 • <code>'/'</code>: Target URL path (Root / Homepage).<br>
                                 • <code>(req, res) =></code>: Callback handler. <code>req</code> me client ka data (headers, query, IP) aata hai, <code>res</code> se hum client ko response bhejte hain.
-                            </div>
+                            </div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-err">res.send('&lt;h1&gt;...&lt;/h1&gt;');</span> ───▶ <strong>5. Smart Content-Type Detection:</strong> <code>res.send()</code> dekhta hai ki content me HTML tags hain, toh automatic <code>Content-Type: text/html; charset=utf-8</code> header set karta hai aur response stream end kar deta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-kw">res.json({ id: 101, ... });</span> ───▶ <strong>6. Object to JSON Serialization:</strong> <code>res.json()</code> object ko <code>JSON.stringify()</code> karta hai aur <code>Content-Type: application/json; charset=utf-8</code> header set karta hai. API banate waqt 99% yahi method use hota hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">res.status(201).json({ ... });</span> ───▶ <strong>7. Method Chaining & Status Codes:</strong> <code>res.status(201)</code> HTTP status code ko "201 Created" set karta hai aur wapas <code>res</code> object hi return karta hai — isliye dot laga kar <code>.json(...)</code> chain ho jata hai!</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">app.listen(4000, () => ...);</span> ───▶ <strong>8. TCP Port Binding & Loop:</strong> Internally ye Node ka <code>http.createServer(app).listen(4000)</code> chalata hai. Port 4000 par TCP socket open hota hai aur server incoming network traffic ke liye 24x7 actively wait karna shuru kar deta hai.</div></div>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">res.send('&lt;h1&gt;...&lt;/h1&gt;');</div>
-                            <div class="dissection-explain"><strong>5. Smart Content-Type Detection:</strong> <code>res.send()</code> dekhta hai ki content me HTML tags hain, toh automatic <code>Content-Type: text/html; charset=utf-8</code> header set karta hai aur response stream end kar deta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">res.json({ id: 101, ... });</div>
-                            <div class="dissection-explain"><strong>6. Object to JSON Serialization:</strong> <code>res.json()</code> object ko <code>JSON.stringify()</code> karta hai aur <code>Content-Type: application/json; charset=utf-8</code> header set karta hai. API banate waqt 99% yahi method use hota hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">res.status(201).json({ ... });</div>
-                            <div class="dissection-explain"><strong>7. Method Chaining & Status Codes:</strong> <code>res.status(201)</code> HTTP status code ko "201 Created" set karta hai aur wapas <code>res</code> object hi return karta hai — isliye dot laga kar <code>.json(...)</code> chain ho jata hai!</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">app.listen(4000, () => ...);</div>
-                            <div class="dissection-explain"><strong>8. TCP Port Binding & Loop:</strong> Internally ye Node ka <code>http.createServer(app).listen(4000)</code> chalata hai. Port 4000 par TCP socket open hota hai aur server incoming network traffic ke liye 24x7 actively wait karna shuru kar deta hai.</div>
-                        </div>
-                    </div>
-
-                    <div class="analogy-note">
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Framework Module Load:</span>
+            <div><code>require('express')</code> <code>node_modules</code> se Express framework ka main export function load karta hai aur use <code>express</code> constant me store karta hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Application Instance Create:</span>
+            <div><code>express()</code> factory function ko call karte hi ek naya <strong>Express App Object (<code>app</code>)</strong> initialize hota hai. Is <code>app</code> ke paas routing methods (<code>.get</code>, <code>.post</code>), middleware registry (<code>.use</code>), aur server listener (<code>.listen</code>) hote hain.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. JSON Body Parser Middleware:</span>
+            <div><code>app.use()</code> har incoming request par middleware lagata hai. <code>express.json()</code> stream se binary chunks collect karke unhe <code>JSON.parse()</code> se JS object me badalta hai aur <code>req.body</code> me attach karta hai. Bina iske POST request me <code>req.body</code> hamesha <code>undefined</code> aayega!</div>
+        </div>
+    </div>
+                    </div><div class="analogy-note">
                         <div class="analogy-note-title">🛵 Indian Real-Life Analogy: Swiggy / Zomato vs Khud Cycle Chala Ke Hotel Jaana</div>
                         <p>• <strong>Raw HTTP:</strong> Khud cycle chala kar hotel jao, line me lago, cook se baat karo, cash gino, parcel pack karwao (100 lines of manual code).<br>
                         • <strong>Express.js:</strong> Swiggy app par 1 click me order — payment, routing, delivery sab automatic handle ho jata hai (3 lines of clean code)!</p>
@@ -3369,38 +2737,35 @@ app.<span class="tok-fn">use</span>((<span class="tok-num">err</span>, <span cla
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Har Ek Line Ka Post-Mortem (Surgical Code Dissection)</span>
-                            <span class="genz-badge">ZERO GUESSWORK</span>
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Har Ek Line</span>
+                            <span class="genz-badge">ZERO GUESSWORK • LABELED DIAGRAM</span>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">app.use((req, res, next) => { ... });</div>
-                            <div class="dissection-explain"><strong>1. Global Middleware Registration:</strong> <code>app.use()</code> bina kisi route path ke likha gaya hai — iska matlab server par aane wali <strong>HAR SINGLE REQUEST</strong> sabse pehle is function se hokar guzregi.</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">app.use((req, res, next) => { ... });</span> ───▶ <strong>1. Global Middleware Registration:</strong> <code>app.use()</code> bina kisi route path ke likha gaya hai — iska matlab server par aane wali <strong>HAR SINGLE REQUEST</strong> sabse pehle is function se hokar guzregi.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">next();</span> ───▶ <strong>2. Execution Handoff:</strong> <code>next()</code> call karna Express me "Green Light" dena hota hai. Ye Express ko bolta hai: <em>"Mera kaam ho gaya, ab pipeline ke agle middleware/route handler ko chalao."</em> Agar ye line bhool gaye, toh browser infinite loading (hanging request) me fas jayega!</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">function requireAuth(req, res, next) { ... }</span> ───▶ <strong>3. Route Guard Middleware:</strong> Ek custom reusable function jo incoming HTTP request headers se <code>authorization</code> token check karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">res.status(401).json({ ... });</span> ───▶ <strong>4. Pipeline Short-Circuit:</strong> Agar token missing ya galat hai, toh turant 401 Unauthorized status ke saath response close kar diya. <strong>Notice karo yahan <code>next()</code> call nahi kiya</strong> — taaki dashboard ka secret controller kabhi execute hi na ho sake!</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-err">app.get('/dashboard', requireAuth, (req, res) => ...);</span> ───▶ <strong>5. Route-Specific Middleware Attachment:</strong> Express me route aur controller ke beech me middleware pass karte hain. Jab koi <code>/dashboard</code> kholega, Express pehle <code>requireAuth</code> chalayega. Agar usne <code>next()</code> call kiya, tabhi aakhri <code>(req, res)</code> controller tak pahuncha jayega.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-kw">app.use((err, req, res, next) => { ... });</span> ───▶ <strong>6. 4-Argument Error Handler:</strong> Express function ke <code>length</code> (parameters count) ko check karta hai. Agar 4 parameters (<code>err, req, res, next</code>) hain, toh Express samajh jata hai ki ye **Global Error Handler** hai. Jab bhi kisi route me <code>next(error)</code> call hoga, Express saare normal routes skip karke seedha yahan jump karega!</div></div>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">next();</div>
-                            <div class="dissection-explain"><strong>2. Execution Handoff:</strong> <code>next()</code> call karna Express me "Green Light" dena hota hai. Ye Express ko bolta hai: <em>"Mera kaam ho gaya, ab pipeline ke agle middleware/route handler ko chalao."</em> Agar ye line bhool gaye, toh browser infinite loading (hanging request) me fas jayega!</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">function requireAuth(req, res, next) { ... }</div>
-                            <div class="dissection-explain"><strong>3. Route Guard Middleware:</strong> Ek custom reusable function jo incoming HTTP request headers se <code>authorization</code> token check karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">res.status(401).json({ ... });</div>
-                            <div class="dissection-explain"><strong>4. Pipeline Short-Circuit:</strong> Agar token missing ya galat hai, toh turant 401 Unauthorized status ke saath response close kar diya. <strong>Notice karo yahan <code>next()</code> call nahi kiya</strong> — taaki dashboard ka secret controller kabhi execute hi na ho sake!</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">app.get('/dashboard', requireAuth, (req, res) => ...);</div>
-                            <div class="dissection-explain"><strong>5. Route-Specific Middleware Attachment:</strong> Express me route aur controller ke beech me middleware pass karte hain. Jab koi <code>/dashboard</code> kholega, Express pehle <code>requireAuth</code> chalayega. Agar usne <code>next()</code> call kiya, tabhi aakhri <code>(req, res)</code> controller tak pahuncha jayega.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">app.use((err, req, res, next) => { ... });</div>
-                            <div class="dissection-explain"><strong>6. 4-Argument Error Handler:</strong> Express function ke <code>length</code> (parameters count) ko check karta hai. Agar 4 parameters (<code>err, req, res, next</code>) hain, toh Express samajh jata hai ki ye **Global Error Handler** hai. Jab bhi kisi route me <code>next(error)</code> call hoga, Express saare normal routes skip karke seedha yahan jump karega!</div>
-                        </div>
-                    </div>
-
-                    <div class="analogy-note">
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Global Middleware Registration:</span>
+            <div><code>app.use()</code> bina kisi route path ke likha gaya hai — iska matlab server par aane wali <strong>HAR SINGLE REQUEST</strong> sabse pehle is function se hokar guzregi.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Execution Handoff:</span>
+            <div><code>next()</code> call karna Express me "Green Light" dena hota hai. Ye Express ko bolta hai: <em>"Mera kaam ho gaya, ab pipeline ke agle middleware/route handler ko chalao."</em> Agar ye line bhool gaye, toh browser infinite loading (hanging request) me fas jayega!</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. Route Guard Middleware:</span>
+            <div>Ek custom reusable function jo incoming HTTP request headers se <code>authorization</code> token check karta hai.</div>
+        </div>
+    </div>
+                    </div><div class="analogy-note">
                         <div class="analogy-note-title">🚇 Indian Real-Life Analogy: Delhi Metro Security Check Gates</div>
                         <p>• <strong>Gate 1 (Baggage Scanner):</strong> Request inspect hoti hai — pass hone par bolta hai <code>next()</code>.<br>
                         • <strong>Gate 2 (Metal Detector / Auth Guard):</strong> Agar pass ya ticket nahi hai, guard wahi se return kar deta hai (401 Unauthorized).<br>
@@ -3603,34 +2968,34 @@ app.<span class="tok-fn">listen</span>(<span class="tok-num">4000</span>);</code
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Har Ek Line Ka Post-Mortem (Surgical Code Dissection)</span>
-                            <span class="genz-badge">DATA EXTRACTION</span>
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Har Ek Line</span>
+                            <span class="genz-badge">DATA EXTRACTION • LABELED DIAGRAM</span>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const companyId = req.params.companyId;</div>
-                            <div class="dissection-explain"><strong>1. Route Parameter (Mandatory ID):</strong> Route path me <code>:companyId</code> likha hai. Express URL path me se value nikaal kar <code>req.params.companyId</code> me deta hai (e.g. <code>"501"</code>).</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">const companyId = req.params.companyId;</span> ───▶ <strong>1. Route Parameter (Mandatory ID):</strong> Route path me <code>:companyId</code> likha hai. Express URL path me se value nikaal kar <code>req.params.companyId</code> me deta hai (e.g. <code>"501"</code>).</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">const department = req.query.dept || 'Engineering';</span> ───▶ <strong>2. Query Parameter (Optional Filter):</strong> URL me <code>?dept=Marketing</code> hone par <code>req.query.dept</code> milega. Agar client ne query param nahi diya, toh fallback default value <code>'Engineering'</code> set ho jayegi.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">const { name, role, salary } = req.body;</span> ───▶ <strong>3. JSON Body Destructuring:</strong> Client ne POST request ki payload body me JSON bheja tha. <code>app.use(express.json())</code> ne us binary stream ko parse karke <code>req.body</code> me JavaScript object bana diya.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">salary: Number(salary)</span> ───▶ <strong>4. Explicit Type Casting:</strong> Payloads ya URL strings me numbers aksar string ban kar aate hain (e.g. <code>"80000"</code>). Math calculations aur DB schemas ke liye unhe explicitly <code>Number()</code> me cast karna best practice hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-err">res.status(201).json({ ... });</span> ───▶ <strong>5. Status 201 Created Response:</strong> Jab bhi naya resource create hota hai, standard HTTP code <strong>201 Created</strong> bheja jata hai. <code>.json()</code> method data ko JSON string bana kar bhejta hai.</div></div>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const department = req.query.dept || 'Engineering';</div>
-                            <div class="dissection-explain"><strong>2. Query Parameter (Optional Filter):</strong> URL me <code>?dept=Marketing</code> hone par <code>req.query.dept</code> milega. Agar client ne query param nahi diya, toh fallback default value <code>'Engineering'</code> set ho jayegi.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const { name, role, salary } = req.body;</div>
-                            <div class="dissection-explain"><strong>3. JSON Body Destructuring:</strong> Client ne POST request ki payload body me JSON bheja tha. <code>app.use(express.json())</code> ne us binary stream ko parse karke <code>req.body</code> me JavaScript object bana diya.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">salary: Number(salary)</div>
-                            <div class="dissection-explain"><strong>4. Explicit Type Casting:</strong> Payloads ya URL strings me numbers aksar string ban kar aate hain (e.g. <code>"80000"</code>). Math calculations aur DB schemas ke liye unhe explicitly <code>Number()</code> me cast karna best practice hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">res.status(201).json({ ... });</div>
-                            <div class="dissection-explain"><strong>5. Status 201 Created Response:</strong> Jab bhi naya resource create hota hai, standard HTTP code <strong>201 Created</strong> bheja jata hai. <code>.json()</code> method data ko JSON string bana kar bhejta hai.</div>
-                        </div>
-                    </div>
-
-                    <div class="mechanics-table-box">
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Route Parameter (Mandatory ID):</span>
+            <div>Route path me <code>:companyId</code> likha hai. Express URL path me se value nikaal kar <code>req.params.companyId</code> me deta hai (e.g. <code>"501"</code>).</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Query Parameter (Optional Filter):</span>
+            <div>URL me <code>?dept=Marketing</code> hone par <code>req.query.dept</code> milega. Agar client ne query param nahi diya, toh fallback default value <code>'Engineering'</code> set ho jayegi.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. JSON Body Destructuring:</span>
+            <div>Client ne POST request ki payload body me JSON bheja tha. <code>app.use(express.json())</code> ne us binary stream ko parse karke <code>req.body</code> me JavaScript object bana diya.</div>
+        </div>
+    </div>
+                    </div><div class="mechanics-table-box">
                         <table class="mechanics-table">
                             <thead><tr><th>Data Container</th><th>Where Found in Request</th><th>Parser Required?</th><th>Typical Use Case</th></tr></thead>
                             <tbody>
@@ -3890,42 +3255,43 @@ app.<span class="tok-fn">delete</span>(<span class="tok-str">'/api/admin/user/:i
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 JWT Login & Verification Ka Post-Mortem (Surgical Code Dissection)</span>
-                            <span class="genz-badge">STATELESS AUTHENTICATION</span>
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: JWT Login & Verification</span>
+                            <span class="genz-badge">STATELESS AUTHENTICATION • LABELED DIAGRAM</span>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const token = jwt.sign({ userId, role }, SECRET, { expiresIn: '24h' });</div>
-                            <div class="dissection-explain"><strong>1. JWT Token Signing:</strong> <code>jwt.sign()</code> 3 parameters leta hai: 
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">const token = jwt.sign({ userId, role }, SECRET, { expiresIn: '24h' });</span> ───▶ <strong>1. JWT Token Signing:</strong> <code>jwt.sign()</code> 3 parameters leta hai: 
+                                • <strong>Payload:</strong> Public user info (password kabhi mat daalna!).<br>
+                                • <strong>Secret Key:</strong> Server ki private string jo <code>.env</code> me hoti hai.<br>
+                                • <strong>Options:</strong> Expiry time (<code>'24h'</code>) — 24 ghante baad token automatically invalid ho jayega.
+                            </div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">const authHeader = req.headers['authorization'];</span> ───▶ <strong>2. Authorization Header Ingestion:</strong> Client request ke headers me se <code>"Bearer eyJhbGci..."</code> string read karta hai. Express me saare header names lowercase me accessible hote hain.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">const token = authHeader && authHeader.split(' ')[1];</span> ───▶ <strong>3. The Space Split Trick:</strong> Header me do words hote hain — "Bearer" aur token string. <code>split(' ')</code> se array <code>["Bearer", "eyJhbGci..."]</code> banti hai, aur index <code>[1]</code> se hum clean JWT string nikaal lete hain.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">const decoded = jwt.verify(token, process.env.JWT_SECRET);</span> ───▶ <strong>4. Cryptographic Validation:</strong> <code>jwt.verify()</code> secret key se HMAC-SHA256 signature calculate karta hai. Agar token client ne tamper kiya hai ya expire ho chuka hai, toh turant <code>catch</code> block me error throw ho jayegi.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-err">req.user = decoded; next();</span> ───▶ <strong>5. Context Injection:</strong> Decoded payload (<code>{ userId: 101, role: 'admin' }</code>) ko <code>req.user</code> me save kar diya aur <code>next()</code> call kiya taaki agle controllers ko bina database query kiye pata chal jaye ki kaunsa user logged in hai!</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-kw">if (req.user.role !== 'admin') return res.status(403)...</span> ───▶ <strong>6. Role-Based Access Control (RBAC):</strong> Authenticated hone ke baad bhi role check kiya — normal user agar admin route access karega toh <strong>403 Forbidden</strong> bhej kar use reject kar diya.</div></div>
+                        </div>
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. JWT Token Signing:</span>
+            <div><code>jwt.sign()</code> 3 parameters leta hai: 
                                 • <strong>Payload:</strong> Public user info (password kabhi mat daalna!).<br>
                                 • <strong>Secret Key:</strong> Server ki private string jo <code>.env</code> me hoti hai.<br>
                                 • <strong>Options:</strong> Expiry time (<code>'24h'</code>) — 24 ghante baad token automatically invalid ho jayega.
                             </div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const authHeader = req.headers['authorization'];</div>
-                            <div class="dissection-explain"><strong>2. Authorization Header Ingestion:</strong> Client request ke headers me se <code>"Bearer eyJhbGci..."</code> string read karta hai. Express me saare header names lowercase me accessible hote hain.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const token = authHeader && authHeader.split(' ')[1];</div>
-                            <div class="dissection-explain"><strong>3. The Space Split Trick:</strong> Header me do words hote hain — "Bearer" aur token string. <code>split(' ')</code> se array <code>["Bearer", "eyJhbGci..."]</code> banti hai, aur index <code>[1]</code> se hum clean JWT string nikaal lete hain.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const decoded = jwt.verify(token, process.env.JWT_SECRET);</div>
-                            <div class="dissection-explain"><strong>4. Cryptographic Validation:</strong> <code>jwt.verify()</code> secret key se HMAC-SHA256 signature calculate karta hai. Agar token client ne tamper kiya hai ya expire ho chuka hai, toh turant <code>catch</code> block me error throw ho jayegi.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">req.user = decoded; next();</div>
-                            <div class="dissection-explain"><strong>5. Context Injection:</strong> Decoded payload (<code>{ userId: 101, role: 'admin' }</code>) ko <code>req.user</code> me save kar diya aur <code>next()</code> call kiya taaki agle controllers ko bina database query kiye pata chal jaye ki kaunsa user logged in hai!</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">if (req.user.role !== 'admin') return res.status(403)...</div>
-                            <div class="dissection-explain"><strong>6. Role-Based Access Control (RBAC):</strong> Authenticated hone ke baad bhi role check kiya — normal user agar admin route access karega toh <strong>403 Forbidden</strong> bhej kar use reject kar diya.</div>
-                        </div>
-                    </div>
-
-                    <div class="analogy-note" style="margin: 16px 0;">
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Authorization Header Ingestion:</span>
+            <div>Client request ke headers me se <code>"Bearer eyJhbGci..."</code> string read karta hai. Express me saare header names lowercase me accessible hote hain.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. The Space Split Trick:</span>
+            <div>Header me do words hote hain — "Bearer" aur token string. <code>split(' ')</code> se array <code>["Bearer", "eyJhbGci..."]</code> banti hai, aur index <code>[1]</code> se hum clean JWT string nikaal lete hain.</div>
+        </div>
+    </div>
+                    </div><div class="analogy-note" style="margin: 16px 0;">
                         <div class="analogy-note-title">💡 Beginner Terminology: "Bearer Token" Kya Hota Hai?</div>
                         <p><strong>"Bearer"</strong> ka literal matlab hota hai <em>"The person who holds/carries this token"</em>. Jaise cinema hall mein ticket jiske haath mein hoti hai (ticket bearer), guard usko movie dekhne deta hai bina uski identity pooche — waise hi HTTP API mein jiske paas valid signed JWT token hai, server usko authenticated maanta hai.<br>
                         <strong>Standard Header Syntax:</strong> <code>Authorization: Bearer &lt;jwt_token_string&gt;</code></p>
@@ -4110,53 +3476,32 @@ module.exports = router;</code></pre>
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 MVC Route Table Ka Post-Mortem</span>
-                            <span class="genz-badge">SEPARATION OF CONCERNS</span>
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: MVC Route Table</span>
+                            <span class="genz-badge">SEPARATION OF CONCERNS • LABELED DIAGRAM</span>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const router = express.Router();</div>
-                            <div class="dissection-explain"><strong>1. Modular Mini-Router:</strong> Standalone route registry create karta hai jisse routing logic main <code>app.js</code> se alag rehti hai.</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">const router = express.Router();</span> ───▶ <strong>1. Modular Mini-Router:</strong> Standalone route registry create karta hai jisse routing logic main <code>app.js</code> se alag rehti hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">router.get('/', jobController.getAllJobs);</span> ───▶ <strong>2. Route-to-Controller Binding:</strong> Route me koi database query nahi likhte — sirf request ko controller function (<code>getAllJobs</code>) par delegate karte hain.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">module.exports = router;</span> ───▶ <strong>3. Mountable Export:</strong> Router object export hota hai taaki <code>app.js</code> me <code>app.use('/api/jobs', jobRoutes)</code> se mount ho sake.</div></div>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">router.get('/', jobController.getAllJobs);</div>
-                            <div class="dissection-explain"><strong>2. Route-to-Controller Binding:</strong> Route me koi database query nahi likhte — sirf request ko controller function (<code>getAllJobs</code>) par delegate karte hain.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">module.exports = router;</div>
-                            <div class="dissection-explain"><strong>3. Mountable Export:</strong> Router object export hota hai taaki <code>app.js</code> me <code>app.use('/api/jobs', jobRoutes)</code> se mount ho sake.</div>
-                        </div>
-                    </div>
-
-                    <div class="concept-sub-title" style="margin-top: 24px;">🔹 Step 4: Server Assembly in app.js — Sabko Ek Saath Plug Karna</div>
-                    <p>Main <code>app.js</code> file ab bilkul clean (sirf ~15 lines) rehti hai, jisme modular router mount hota hai:</p>
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>app.js</span><span>Layer 4: Server Entry Point</span></div>
-                        <pre><code><span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>);
-<span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();
-<span class="tok-kw">const</span> jobRoutes = <span class="tok-fn">require</span>(<span class="tok-str">'./routes/jobRoutes'</span>);
-
-<span class="tok-com">// 1. Built-in body parser middleware:</span>
-app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>());
-
-<span class="tok-com">// 2. Mount modular router under /api/jobs:</span>
-app.<span class="tok-fn">use</span>(<span class="tok-str">'/api/jobs'</span>, jobRoutes);
-
-<span class="tok-com">// 3. Centralized 4-parameter error handler:</span>
-app.<span class="tok-fn">use</span>((<span class="tok-num">err</span>, <span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) => {
-    console.<span class="tok-fn">error</span>(err.stack);
-    res.<span class="tok-fn">status</span>(err.status || <span class="tok-num">500</span>).<span class="tok-fn">json</span>({
-        success: <span class="tok-kw">false</span>,
-        error: err.message || <span class="tok-str">'Internal Server Error'</span>
-    });
-});
-
-<span class="tok-kw">const</span> PORT = process.env.PORT || <span class="tok-num">4000</span>;
-app.<span class="tok-fn">listen</span>(PORT, () => console.<span class="tok-fn">log</span>(<span class="tok-str"></span>));</code></pre>
-                    </div>
-
-                    <div class="mechanics-table-box">
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Modular Mini-Router:</span>
+            <div>Standalone route registry create karta hai jisse routing logic main <code>app.js</code> se alag rehti hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Route-to-Controller Binding:</span>
+            <div>Route me koi database query nahi likhte — sirf request ko controller function (<code>getAllJobs</code>) par delegate karte hain.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. Mountable Export:</span>
+            <div>Router object export hota hai taaki <code>app.js</code> me <code>app.use('/api/jobs', jobRoutes)</code> se mount ho sake.</div>
+        </div>
+    </div>
+                    </div><div class="mechanics-table-box">
                         <table class="mechanics-table">
                             <thead><tr><th>MVC Layer</th><th>Directory Location</th><th>Responsibility</th></tr></thead>
                             <tbody>
@@ -4252,46 +3597,27 @@ app.<span class="tok-fn">use</span>(<span class="tok-fn">methodOverride</span>(<
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 method-override HTML Form Trick Ka Post-Mortem</span>
-                            <span class="genz-badge">HTTP METHOD TRANSFORMATION</span>
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: method-override HTML Form Trick</span>
+                            <span class="genz-badge">HTTP METHOD TRANSFORMATION • LABELED DIAGRAM</span>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">app.use(methodOverride('_method'));</div>
-                            <div class="dissection-explain"><strong>1. Method Interceptor Middleware:</strong> Har incoming request ke query string me <code>_method</code> check karta hai aur internal HTTP verb ko change karta hai.</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">app.use(methodOverride('_method'));</span> ───▶ <strong>1. Method Interceptor Middleware:</strong> Har incoming request ke query string me <code>_method</code> check karta hai aur internal HTTP verb ko change karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">&lt;form action="/jobs/42?_method=DELETE" method="POST"&gt;</span> ───▶ <strong>2. Browser Form Bypass:</strong> HTML <code>&lt;form&gt;</code> sirf GET/POST bhej sakta hai. <code>?_method=DELETE</code> likhne se Express server is POST request ko real <code>app.delete('/jobs/:id')</code> route par route kar deta hai!</div></div>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">&lt;form action="/jobs/42?_method=DELETE" method="POST"&gt;</div>
-                            <div class="dissection-explain"><strong>2. Browser Form Bypass:</strong> HTML <code>&lt;form&gt;</code> sirf GET/POST bhej sakta hai. <code>?_method=DELETE</code> likhne se Express server is POST request ko real <code>app.delete('/jobs/:id')</code> route par route kar deta hai!</div>
-                        </div>
-                    </div>
-
-                    <div class="concept-sub-title">🎨 1.2 Serving Static Assets securely with express.static()</div>
-                    <p>CSS files, images (<code>logo.png</code>), aur client-side JavaScript ko serve karne ke liye <code>express.static</code> built-in middleware use hota hai:</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>snippet_static_files.js</span><span>Static Asset Hosting</span></div>
-                        <pre><code><span class="tok-kw">const</span> path = <span class="tok-fn">require</span>(<span class="tok-str">'path'</span>);
-<span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>);
-<span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();
-
-<span class="tok-com">// Configure EJS View Engine:</span>
-app.<span class="tok-fn">set</span>(<span class="tok-str">'view engine'</span>, <span class="tok-str">'ejs'</span>);
-app.<span class="tok-fn">set</span>(<span class="tok-str">'views'</span>, path.<span class="tok-fn">join</span>(__dirname, <span class="tok-str">'views'</span>));
-
-<span class="tok-com">// Serve static assets securely from /public folder:</span>
-app.<span class="tok-fn">use</span>(express.<span class="tok-fn">static</span>(path.<span class="tok-fn">join</span>(__dirname, <span class="tok-str">'public'</span>)));
-
-app.<span class="tok-fn">get</span>(<span class="tok-str">'/portal'</span>, (<span class="tok-num">req</span>, <span class="tok-num">res</span>) => {
-    res.<span class="tok-fn">render</span>(<span class="tok-str">'jobs'</span>, {
-        user: { username: <span class="tok-str">'Aarav'</span> },
-        jobs: [{ title: <span class="tok-str">'Backend Dev'</span>, company: <span class="tok-str">'Google'</span>, salary: <span class="tok-num">120000</span> }]
-    });
-});</code></pre>
-                    </div>
-
-                    <div class="analogy-note">
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Method Interceptor Middleware:</span>
+            <div>Har incoming request ke query string me <code>_method</code> check karta hai aur internal HTTP verb ko change karta hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Browser Form Bypass:</span>
+            <div>HTML <code>&lt;form&gt;</code> sirf GET/POST bhej sakta hai. <code>?_method=DELETE</code> likhne se Express server is POST request ko real <code>app.delete('/jobs/:id')</code> route par route kar deta hai!</div>
+        </div>
+    </div>
+                    </div><div class="analogy-note">
                         <div class="analogy-note-title">💌 Indian Real-Life Analogy: Shaadi Ka Printed Invitation Card</div>
                         <p>• <strong>EJS Template (Blank Gold-Foil Card):</strong> Fixed design, borders, aur venue address jo sabke liye same hai.<br>
                         • <strong>res.render Data ({ user, jobs }):</strong> Mehmaan ka naam jo printer card ke upar print karke complete card tayyar karta hai!</p>
@@ -4488,22 +3814,27 @@ app.<span class="tok-fn">use</span>(<span class="tok-fn">cors</span>(corsOptions
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 CORS Whitelist Middleware Ka Post-Mortem</span>
-                            <span class="genz-badge">BROWSER SAME-ORIGIN SECURITY</span>
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: CORS Whitelist Middleware</span>
+                            <span class="genz-badge">BROWSER SAME-ORIGIN SECURITY • LABELED DIAGRAM</span>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">origin: 'http://localhost:3000'</div>
-                            <div class="dissection-explain"><strong>1. Allowed Origin Whitelist:</strong> Browser ko batata hai ki sirf hamare React/Next.js frontend domain se aane wale AJAX/Fetch calls ko response data padhne ki permission hai.</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">origin: 'http://localhost:3000'</span> ───▶ <strong>1. Allowed Origin Whitelist:</strong> Browser ko batata hai ki sirf hamare React/Next.js frontend domain se aane wale AJAX/Fetch calls ko response data padhne ki permission hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">credentials: true</span> ───▶ <strong>2. Cookie & Authorization Passing:</strong> Cross-origin requests ke sath HttpOnly cookies aur Authorization headers ko browser se pass karne ki permission deta hai.</div></div>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">credentials: true</div>
-                            <div class="dissection-explain"><strong>2. Cookie & Authorization Passing:</strong> Cross-origin requests ke sath HttpOnly cookies aur Authorization headers ko browser se pass karne ki permission deta hai.</div>
-                        </div>
-                    </div>
-
-                    <div class="mechanics-table-box">
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Allowed Origin Whitelist:</span>
+            <div>Browser ko batata hai ki sirf hamare React/Next.js frontend domain se aane wale AJAX/Fetch calls ko response data padhne ki permission hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Cookie & Authorization Passing:</span>
+            <div>Cross-origin requests ke sath HttpOnly cookies aur Authorization headers ko browser se pass karne ki permission deta hai.</div>
+        </div>
+    </div>
+                    </div><div class="mechanics-table-box">
                         <table class="mechanics-table">
                             <thead><tr><th>CORS Option</th><th>Kya Karta Hai? (Plain Hindi)</th><th>Why Required in 6 LPA API?</th></tr></thead>
                             <tbody>
@@ -4572,173 +3903,27 @@ app.<span class="tok-fn">get</span>(<span class="tok-str">'/'</span>, (<span cla
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Helmet Security Headers Ka Post-Mortem</span>
-                            <span class="genz-badge">11 DEFENSE-IN-DEPTH HEADERS</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">app.use(helmet());</div>
-                            <div class="dissection-explain"><strong>1. Zero-Config Security Suite:</strong> <code>helmet()</code> call karte hi 11 protective HTTP headers set ho jaate hain (e.g. <code>X-Frame-Options: SAMEORIGIN</code> jo clickjacking rokta hai, <code>X-Content-Type-Options: nosniff</code> jo MIME sniffing rokta hai).</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">app.disable('x-powered-by');</div>
-                            <div class="dissection-explain"><strong>2. Tech Stack Masking:</strong> Default Express response me <code>X-Powered-By: Express</code> header bhejta hai jisse hacker ko pata chal jata hai server Express par hai. Helmet is header ko automatically strip kar deta hai.</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- TOPIC 3: GLOBAL ERROR HANDLING -->
-                <div class="concept-block">
-                    <div class="concept-heading">3. Global Error Handler Middleware — Ek Central Error Catch</div>
-
-                    <div class="concept-sub-title">🔴 3.1 Problem: Har route mein try/catch = code duplication nightmare!</div>
-                    <p>Agar har route mein alag try/catch aur alag error response likho — 50 routes mein 50 baar same error handling code. DRY principle violate! Solution: Ek <strong>global error handler middleware</strong> jo sabki errors pakad le.</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>errorHandler.js + app.js</span><span>Global Error Handling Pattern</span></div>
-                        <pre><code><span class="tok-com">// ===== routes/jobs.js — Sirf error throw karo, handle mat karo! =====</span>
-<span class="tok-kw">const</span> <span class="tok-fn">asyncHandler</span> = fn => (req, res, next) => Promise.<span class="tok-fn">resolve</span>(<span class="tok-fn">fn</span>(req, res, next)).<span class="tok-fn">catch</span>(next);
-
-router.<span class="tok-fn">get</span>(<span class="tok-str">'/:id'</span>, <span class="tok-fn">asyncHandler</span>(<span class="tok-kw">async</span> (req, res) => {
-    <span class="tok-kw">const</span> job = <span class="tok-kw">await</span> Job.<span class="tok-fn">findById</span>(req.params.id);
-    <span class="tok-kw">if</span> (!job) {
-        <span class="tok-kw">const</span> err = <span class="tok-kw">new</span> <span class="tok-fn">Error</span>(<span class="tok-str">'Job not found'</span>);
-        err.statusCode = <span class="tok-num">404</span>;
-        <span class="tok-kw">throw</span> err; <span class="tok-com">// asyncHandler catches this and calls next(err)</span>
-    }
-    res.<span class="tok-fn">json</span>(job);
-}));
-
-<span class="tok-com">// ===== middleware/errorHandler.js =====</span>
-<span class="tok-kw">function</span> <span class="tok-fn">errorHandler</span>(err, req, res, next) { <span class="tok-com">// 4 params = error middleware!</span>
-    console.<span class="tok-fn">error</span>(<span class="tok-str">`[ERROR] ${err.message}`</span>, { url: req.url, method: req.method });
-
-    <span class="tok-kw">const</span> statusCode = err.statusCode || <span class="tok-num">500</span>;
-    <span class="tok-kw">const</span> message   = err.message   || <span class="tok-str">'Internal Server Error'</span>;
-
-    res.<span class="tok-fn">status</span>(statusCode).<span class="tok-fn">json</span>({
-        success: <span class="tok-kw">false</span>,
-        error:   message,
-        <span class="tok-com">// Stack trace only in dev — never in production!</span>
-        ...(process.env.NODE_ENV === <span class="tok-str">'development'</span> && { stack: err.stack })
-    });
-}
-module.exports = errorHandler;
-
-<span class="tok-com">// ===== app.js — LAST middleware! =====</span>
-app.<span class="tok-fn">use</span>(<span class="tok-fn">errorHandler</span>()); <span class="tok-com">// Must be AFTER all routes!</span></code></pre>
-                    </div>
-
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Anatomy: Error Middleware — Why 4 Parameters?</span>
-                            <span class="genz-badge">CRITICAL RULE</span>
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Helmet Security Headers</span>
+                            <span class="genz-badge">11 DEFENSE-IN-DEPTH HEADERS • LABELED DIAGRAM</span>
                         </div>
-                        <div class="anatomy-code-center">
-                            <div>Regular middleware: <span class="pill-fn">(req, res, next)</span> → 3 params</div>
-                            <div style="margin-top:8px;"><span class="pill-err">Error middleware: (err, req, res, next)</span> → 4 params — Express isko error handler maan leta hai!</div>
-                            <div style="margin-top:8px;">Jab bhi <span class="pill-kw">next(err)</span> call karo ya async error throw ho — Express automatically is middleware pe jaata hai.</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">app.use(helmet());</span> ───▶ <strong>1. Zero-Config Security Suite:</strong> <code>helmet()</code> call karte hi 11 protective HTTP headers set ho jaate hain (e.g. <code>X-Frame-Options: SAMEORIGIN</code> jo clickjacking rokta hai, <code>X-Content-Type-Options: nosniff</code> jo MIME sniffing rokta hai).</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">app.disable('x-powered-by');</span> ───▶ <strong>2. Tech Stack Masking:</strong> Default Express response me <code>X-Powered-By: Express</code> header bhejta hai jisse hacker ko pata chal jata hai server Express par hai. Helmet is header ko automatically strip kar deta hai.</div></div>
                         </div>
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-red">🚨 Must be LAST</span>
-                                <div>Error handler middleware hamesha sab routes ke BAAD register karo. Pehle lagaoge toh routes ki errors nahi pakad paayega!</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">💼 Interview Q</span>
-                                <div>"Express error middleware regular middleware se kaise alag hai?" → 4 parameters! <code>(err, req, res, next)</code> — pehla parameter err hota hai.</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                                <!-- TOPIC 4: NODEMON DEEP DIVE -->
-                <div class="concept-block">
-                    <div class="concept-heading">4. nodemon — Auto-Restart Dev Server & File Watcher Internals</div>
-
-                    <div class="concept-sub-title">🔴 4.1 Problem Kya Thi? (The 100-Times Manual Restart Fatigue)</div>
-                    <p>Standard Node.js mein jab aap <code>node app.js</code> chalate ho, toh Node memory mein pura code load karke run kar deta hai. Agar aap file mein 1 single line ya spelling bhi change karoge, toh running server ko pata nahi chalta. Developer ko manually:</p>
-                    <ol>
-                        <li>Terminal mein jaakar <code>Ctrl + C</code> daba kar server kill karna padta hai.</li>
-                        <li>Phir se <code>node app.js</code> command type karke restart karna padta hai.</li>
-                        <li>Din bhar mein 200 baar ye repeat karna developer ki productivity barbad kar deta hai!</li>
-                    </ol>
-
-                    <div class="analogy-note">
-                        <div class="analogy-note-title">⚡ Indian Real-Life Analogy: Purana Kerosene Generator vs Smart Auto-Inverter</div>
-                        <p>• <strong>Manual Node (node app.js):</strong> Purana generator jisme light aane-jaane par har baar bahar jaakar rassi kheench ke manually start karna padta hai.<br>
-                        • <strong>Nodemon:</strong> Smart automatic inverter — jaise hi room mein koi switch on/off hota hai (file save hoti hai), ye 0.1 second mein bina kisi manual effort ke restart karke fresh state deliver kar deta hai.</p>
-                    </div>
-
-                    <!-- VISUAL BIO-ANATOMY BOARD: NODEMON FILE WATCHER LIFECYCLE -->
-                    <div class="bio-anatomy-board">
-                        <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Visual Anatomy: Nodemon Process Lifecycle & Auto-Reload Engine</span>
-                            <span class="genz-badge">FILE WATCHER INTERNALS</span>
-                        </div>
-
-                        <div class="anatomy-code-center">
-                            <div>1. Developer edits code ──> <span class="pill-fn">Ctrl + S (File Saved)</span></div>
-                            <div style="margin-top: 8px;">│</div>
-                            <div>2. File System Event ──> <span class="pill-kw">chokidar / fs.watch()</span> detects modified timestamp</div>
-                            <div style="margin-top: 8px;">│</div>
-                            <div>3. Kill Signal ────────> <span class="pill-err">SIGUSR2 / SIGTERM</span> sent to existing child Node.js PID (Port released)</div>
-                            <div style="margin-top: 8px;">│</div>
-                            <div>4. Spawn Fresh Process ─> <span class="pill-await">child_process.spawn('node app.js')</span> executes new code</div>
-                            <div style="margin-top: 8px;">│</div>
-                            <div>5. Ready in 100ms ──────> <span class="pill-res">[nodemon] restarting server... ✅ Live on Port 4000</span></div>
-                        </div>
-
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-red">⛔ Never in Production!</span>
-                                <div>Nodemon ko <strong>sirf development</strong> mein use karein (<code>--save-dev</code>). Production (AWS/Docker/Kubernetes) mein standard <code>node app.js</code> ya <code>PM2</code> process manager chalta hai!</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">📁 node_modules Loop Trap</span>
-                                <div>Agar <code>nodemon</code> ko <code>node_modules/</code> ignore karne ko na bolo, toh koi naya package install hone par server infinite loop mein restart hota rahega!</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="concept-sub-title">⚙️ 4.2 Step-by-Step Installation & NPM Scripts Setup</div>
-                    <p><strong>Step 1: Install as Developer Dependency</strong> (Production bundle mein add nahi hona chahiye):</p>
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>Terminal</span><span>Dev-Dependency Installation</span></div>
-                        <pre><code><span class="tok-com"># -D / --save-dev flag nodemon ko package.json ke devDependencies section mein daalta hai:</span>
-npm install --save-dev nodemon</code></pre>
-                    </div>
-
-                    <p><strong>Step 2: package.json Scripts Configure Karna:</strong></p>
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>package.json</span><span>Production vs Development Scripts</span></div>
-                        <pre><code>{
-  <span class="tok-str">"name"</span>: <span class="tok-str">"techjobs-api"</span>,
-  <span class="tok-str">"scripts"</span>: {
-    <span class="tok-str">"start"</span>: <span class="tok-str">"node app.js"</span>,             <span class="tok-com">// 👈 Production standard (AWS/Docker/Render)</span>
-    <span class="tok-str">"dev"</span>: <span class="tok-str">"nodemon app.js"</span>,           <span class="tok-com">// 👈 Development auto-restart: npm run dev</span>
-    <span class="tok-str">"dev:debug"</span>: <span class="tok-str">"nodemon --inspect app.js"</span> <span class="tok-com">// 👈 Chrome DevTools Inspector attach karne ke liye</span>
-  }
-}</code></pre>
-                    </div>
-
-                    <div class="concept-sub-title">🛠️ 4.3 Advanced Project Configuration with nodemon.json</div>
-                    <p>Bade enterprise projects mein hum root directory mein <code>nodemon.json</code> config file banate hain taaki exact rules set kar sakein:</p>
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>nodemon.json</span><span>Fine-Grained Watch Rules</span></div>
-                        <pre><code>{
-  <span class="tok-str">"watch"</span>: [<span class="tok-str">"src/"</span>, <span class="tok-str">"controllers/"</span>, <span class="tok-str">"routes/"</span>], <span class="tok-com">// 1. Sirf in folders ke changes track karo</span>
-  <span class="tok-str">"ext"</span>: <span class="tok-str">"js,json,.env,ejs"</span>,                       <span class="tok-com">// 2. In file extensions par reload trigger karo</span>
-  <span class="tok-str">"ignore"</span>: [<span class="tok-str">"node_modules/"</span>, <span class="tok-str">"logs/"</span>, <span class="tok-str">"*.test.js"</span>], <span class="tok-com">// 3. In folders aur test files ko ignore karo</span>
-  <span class="tok-str">"delay"</span>: <span class="tok-num">500</span>,                                      <span class="tok-com">// 4. 500ms debounce buffer (rapid typing me crash hone se bachta hai)</span>
-  <span class="tok-str">"env"</span>: {
-    <span class="tok-str">"NODE_ENV"</span>: <span class="tok-str">"development"</span>
-  }
-}</code></pre>
-                    </div>
-
-                    <div class="mechanics-table-box">
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Zero-Config Security Suite:</span>
+            <div><code>helmet()</code> call karte hi 11 protective HTTP headers set ho jaate hain (e.g. <code>X-Frame-Options: SAMEORIGIN</code> jo clickjacking rokta hai, <code>X-Content-Type-Options: nosniff</code> jo MIME sniffing rokta hai).</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Tech Stack Masking:</span>
+            <div>Default Express response me <code>X-Powered-By: Express</code> header bhejta hai jisse hacker ko pata chal jata hai server Express par hai. Helmet is header ko automatically strip kar deta hai.</div>
+        </div>
+    </div>
+                    </div><div class="mechanics-table-box">
                         <table class="mechanics-table">
                             <thead><tr><th>nodemon.json Key</th><th>Type</th><th>Kya Kaam Karta Hai? (Plain Hindi)</th><th>Why Critical?</th></tr></thead>
                             <tbody>
@@ -4928,131 +4113,38 @@ module.exports = mongoose.<span class="tok-fn">model</span>(<span class="tok-str
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Mongoose Schema Blueprint Ka Post-Mortem</span>
-                            <span class="genz-badge">SCHEMA VALIDATION & TYPES</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">required: [true, 'Job title is required'], trim: true</div>
-                            <div class="dissection-explain"><strong>1. Application-Level Data Integrity:</strong> Schema ensure karta hai ki empty string ya bina title ke document save na ho sake. <code>trim: true</code> leading/trailing whitespace ko automatically remove karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }</div>
-                            <div class="dissection-explain"><strong>2. Relational Reference Link:</strong> <code>ref: 'User'</code> Mongoose ko batata hai ki is field me store hone wali 24-character hex ID <code>users</code> collection ke document ko point karti hai, jisse aage <code>.populate('postedBy')</code> kaam karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">module.exports = mongoose.model('Job', jobSchema);</div>
-                            <div class="dissection-explain"><strong>3. Auto-Pluralized Collection Creation:</strong> Mongoose <code>'Job'</code> naam ko lowercase aur plural karke MongoDB me automatically <code>jobs</code> naam ka collection banata hai aur model class export karta hai.</div>
-                        </div>
-                    </div>
-
-                    <!-- BIO-ANATOMY: SCHEMA FIELD OPTIONS -->
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Visual Anatomy: Schema Field Options Dissected</span>
-                            <span class="genz-badge">DATA INTEGRITY RULES</span>
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Mongoose Schema Blueprint</span>
+                            <span class="genz-badge">SCHEMA VALIDATION & TYPES • LABELED DIAGRAM</span>
                         </div>
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-kw">type: String/Number/ObjectId</span> ──> Strict type checking & auto-casting</div>
-                            <div style="margin-top: 8px;"><span class="pill-err">required: [true, 'Msg']</span> ────────> Validation error if missing in payload</div>
-                            <div style="margin-top: 8px;"><span class="pill-fn">trim: true</span> ──────────────────────> Auto-strips leading/trailing spaces</div>
-                            <div style="margin-top: 8px;"><span class="pill-await">enum: ['Eng', 'Design']</span> ─────────> Restricts string to predefined whitelist</div>
-                            <div style="margin-top: 8px;"><span class="pill-res">ref: 'User'</span> ─────────────────────> Foreign key reference link for .populate()</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">required: [true, 'Job title is required'], trim: true</span> ───▶ <strong>1. Application-Level Data Integrity:</strong> Schema ensure karta hai ki empty string ya bina title ke document save na ho sake. <code>trim: true</code> leading/trailing whitespace ko automatically remove karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">postedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }</span> ───▶ <strong>2. Relational Reference Link:</strong> <code>ref: 'User'</code> Mongoose ko batata hai ki is field me store hone wali 24-character hex ID <code>users</code> collection ke document ko point karti hai, jisse aage <code>.populate('postedBy')</code> kaam karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">module.exports = mongoose.model('Job', jobSchema);</span> ───▶ <strong>3. Auto-Pluralized Collection Creation:</strong> Mongoose <code>'Job'</code> naam ko lowercase aur plural karke MongoDB me automatically <code>jobs</code> naam ka collection banata hai aur model class export karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">await Job.create({ title, company, salary, postedBy })</span> ───▶ <strong>1. Document Instantiation & Insert:</strong> Schema validation run karta hai, pre-save hooks chalaata hai, aur valid hone par MongoDB me naya document insert karke returned JSON object deta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-err">await Job.find({ salary: { $gte: 600000 } })</span> ───▶ <strong>2. Filter Operators ($gte):</strong> <code>$gte</code> (Greater than or equal to) operator use karke sirf 6 LPA ya usse zyada salary wale jobs fetch karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-kw">findByIdAndUpdate(id, update, { new: true, runValidators: true })</span> ───▶ <strong>3. The { new: true } Trap:</strong> Default Mongoose update purana (un-updated) document return karta hai! <code>{ new: true }</code> updated document return karta hai, aur <code>runValidators: true</code> ensure karta hai ki update karte waqt bhi schema validation rules (e.g. min salary) check hon!</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">await Job.findByIdAndDelete(req.params.id)</span> ───▶ <strong>4. Document Deletion:</strong> Targeted ObjectId wale document ko MongoDB collection se permanently delete kar deta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">postedBy: { type: ObjectId, ref: 'User' }</span> ───▶ <strong>1. Schema Reference Link:</strong> <code>ref: 'User'</code> Mongoose ko batata hai ki is field me store hone wali 24-hex ObjectId string <code>users</code> collection ke document ko point karti hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">await Job.findById(jobId).populate('postedBy', 'name email -_id');</span> ───▶ <strong>2. Automated 2-Query Join:</strong> Mongoose pehle Job fetch karta hai, phir uski <code>postedBy</code> ObjectId nikaal kar User collection par <code>User.findById()</code> chalata hai aur ID string ko poore User object se replace kar deta hai. <code>'name email -_id'</code> ka matlab hai sirf name aur email laao, password aur _id exclude karo!</div></div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- TOPIC 3: CRUD & POPULATE RELATIONSHIPS -->
-                <div class="concept-block">
-                    <div class="concept-heading">3. Mongoose CRUD & Relationships with .populate()</div>
-
-                    <div class="concept-sub-title">📖 3.1 CRUD Operations with Mongoose Methods</div>
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>controllers/jobController.js</span><span>Async Mongoose Queries</span></div>
-                        <pre><code><span class="tok-kw">const</span> Job = <span class="tok-fn">require</span>(<span class="tok-str">'../models/Job'</span>);
-
-<span class="tok-com">// 1. CREATE:</span>
-<span class="tok-kw">const</span> newJob = <span class="tok-kw">await</span> Job.<span class="tok-fn">create</span>({
-    title: <span class="tok-str">'Backend Node.js Engineer'</span>,
-    company: <span class="tok-str">'Razorpay'</span>,
-    salary: <span class="tok-num">800000</span>,
-    postedBy: req.user.userId
-});
-
-<span class="tok-com">// 2. READ (Find, Filter & Operators):</span>
-<span class="tok-kw">const</span> allJobs    = <span class="tok-kw">await</span> Job.<span class="tok-fn">find</span>();                                 <span class="tok-com">// All documents</span>
-<span class="tok-kw">const</span> oneJob     = <span class="tok-kw">await</span> Job.<span class="tok-fn">findById</span>(req.params.id);               <span class="tok-com">// By ObjectId</span>
-<span class="tok-kw">const</span> highSalary = <span class="tok-kw">await</span> Job.<span class="tok-fn">find</span>({ salary: { $gte: <span class="tok-num">600000</span> } });     <span class="tok-com">// $gte = >= 6 LPA</span>
-
-<span class="tok-com">// 3. UPDATE:</span>
-<span class="tok-kw">const</span> updated = <span class="tok-kw">await</span> Job.<span class="tok-fn">findByIdAndUpdate</span>(
-    req.params.id,
-    { salary: <span class="tok-num">900000</span> },
-    { new: <span class="tok-kw">true</span>, runValidators: <span class="tok-kw">true</span> } <span class="tok-com">// { new: true } returns updated doc!</span>
-);
-
-<span class="tok-com">// 4. DELETE:</span>
-<span class="tok-kw">await</span> Job.<span class="tok-fn">findByIdAndDelete</span>(req.params.id);</code></pre>
-                    </div>
-
-                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Mongoose CRUD Operations Ka Post-Mortem</span>
-                            <span class="genz-badge">ASYNC QUERIES</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">await Job.create({ title, company, salary, postedBy })</div>
-                            <div class="dissection-explain"><strong>1. Document Instantiation & Insert:</strong> Schema validation run karta hai, pre-save hooks chalaata hai, aur valid hone par MongoDB me naya document insert karke returned JSON object deta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">await Job.find({ salary: { $gte: 600000 } })</div>
-                            <div class="dissection-explain"><strong>2. Filter Operators ($gte):</strong> <code>$gte</code> (Greater than or equal to) operator use karke sirf 6 LPA ya usse zyada salary wale jobs fetch karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">findByIdAndUpdate(id, update, { new: true, runValidators: true })</div>
-                            <div class="dissection-explain"><strong>3. The { new: true } Trap:</strong> Default Mongoose update purana (un-updated) document return karta hai! <code>{ new: true }</code> updated document return karta hai, aur <code>runValidators: true</code> ensure karta hai ki update karte waqt bhi schema validation rules (e.g. min salary) check hon!</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">await Job.findByIdAndDelete(req.params.id)</div>
-                            <div class="dissection-explain"><strong>4. Document Deletion:</strong> Targeted ObjectId wale document ko MongoDB collection se permanently delete kar deta hai.</div>
-                        </div>
-                    </div>
-
-                    <div class="concept-sub-title">🔗 3.2 Relationships: ref & .populate() (⭐ Top Interview Topic)</div>
-                    <p><strong>Problem:</strong> <code>job.postedBy</code> sirf ek 24-character hexadecimal ObjectId string hoti hai (e.g. <code>"64f3a2b1c9e77f0012ab34cd"</code>). Client ko recruiter ka naam aur email bhi chahiye.<br>
-                    <strong>Solution — <code>.populate()</code>:</strong> Mongoose automatically ek second query chala kar us ObjectId ko User collection ke actual document se replace kar deta hai!</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>populate_demo.js</span><span>Joining Collections with .populate()</span></div>
-                        <pre><code><span class="tok-com">// ❌ Bina populate:</span>
-<span class="tok-kw">const</span> job = <span class="tok-kw">await</span> Job.<span class="tok-fn">findById</span>(jobId);
-console.<span class="tok-fn">log</span>(job.postedBy); <span class="tok-com">// "64f3a2b1c9e77f0012ab34cd" (Sirf ID)</span>
-
-<span class="tok-com">// ✅ Populate ke sath:</span>
-<span class="tok-kw">const</span> job = <span class="tok-kw">await</span> Job.<span class="tok-fn">findById</span>(jobId).<span class="tok-fn">populate</span>(<span class="tok-str">'postedBy'</span>, <span class="tok-str">'name email -_id'</span>);
-console.<span class="tok-fn">log</span>(job.postedBy.name);  <span class="tok-com">// "Rahul Sharma" (Poora User Object!)</span>
-console.<span class="tok-fn">log</span>(job.postedBy.email); <span class="tok-com">// "rahul@razorpay.com"</span></code></pre>
-                    </div>
-
-                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Mongoose .populate() Ka Post-Mortem</span>
-                            <span class="genz-badge">RELATIONAL JOIN MECHANICS</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">postedBy: { type: ObjectId, ref: 'User' }</div>
-                            <div class="dissection-explain"><strong>1. Schema Reference Link:</strong> <code>ref: 'User'</code> Mongoose ko batata hai ki is field me store hone wali 24-hex ObjectId string <code>users</code> collection ke document ko point karti hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">await Job.findById(jobId).populate('postedBy', 'name email -_id');</div>
-                            <div class="dissection-explain"><strong>2. Automated 2-Query Join:</strong> Mongoose pehle Job fetch karta hai, phir uski <code>postedBy</code> ObjectId nikaal kar User collection par <code>User.findById()</code> chalata hai aur ID string ko poore User object se replace kar deta hai. <code>'name email -_id'</code> ka matlab hai sirf name aur email laao, password aur _id exclude karo!</div>
-                        </div>
-                    </div>
-
-                    <div class="analogy-note">
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Application-Level Data Integrity:</span>
+            <div>Schema ensure karta hai ki empty string ya bina title ke document save na ho sake. <code>trim: true</code> leading/trailing whitespace ko automatically remove karta hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Relational Reference Link:</span>
+            <div><code>ref: 'User'</code> Mongoose ko batata hai ki is field me store hone wali 24-character hex ID <code>users</code> collection ke document ko point karti hai, jisse aage <code>.populate('postedBy')</code> kaam karta hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. Auto-Pluralized Collection Creation:</span>
+            <div>Mongoose <code>'Job'</code> naam ko lowercase aur plural karke MongoDB me automatically <code>jobs</code> naam ka collection banata hai aur model class export karta hai.</div>
+        </div>
+    </div>
+                    </div><div class="analogy-note">
                         <div class="analogy-note-title">🪪 Indian Real-Life Analogy: Aadhar Number vs UIDAI Database Fetch</div>
                         <p>Job document me <code>postedBy: "64f3..."</code> store karna waise hai jaise form pe sirf <strong>Aadhar number</strong> likhna. <code>.populate('postedBy')</code> call karna waise hai jaise us Aadhar number se <strong>UIDAI database query karke</strong> poora naam, photo aur address screen par populate kar dena.</p>
                     </div>
@@ -5290,36 +4382,33 @@ exports.login = <span class="tok-kw">async</span> (<span class="tok-num">req</sp
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Signup & Login Controller Ka Post-Mortem</span>
-                            <span class="genz-badge">SECURITY & ANTI-ENUMERATION</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">if (existingUser) return res.status(409)...</div>
-                            <div class="dissection-explain"><strong>1. 409 Conflict (Duplicate Registration):</strong> Agar email already registered hai, toh HTTP status 409 Conflict return karta hai taaki duplicate accounts na banein.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const isMatch = await bcrypt.compare(password, user.password);</div>
-                            <div class="dissection-explain"><strong>2. Cryptographic Hash Comparison:</strong> <code>bcrypt.compare()</code> user ke plain text password ko DB ke hashed string se compare karta hai. Hash ko kabhi "unhash" nahi kiya ja sakta — sirf mathematical match verify hota hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">if (!user || !isMatch) return res.status(401).json({ error: 'Invalid credentials' });</div>
-                            <div class="dissection-explain"><strong>3. Anti-User Enumeration Security Defense:</strong> Kabhi alag-alag error mat do (jaise "Email nahi mila" vs "Password galat hai"). Dono cases me EXACTLY same generic message do — warna hacker ko pata chal jayega kaunsa email database me exist karta hai!</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">res.status(200).json({ success: true, token });</div>
-                            <div class="dissection-explain"><strong>4. Token Emission:</strong> Successful login par 7-day valid JWT token return kiya jata hai jo client apne headers me bhej kar protected routes access karega.</div>
-                        </div>
-                    </div>
-
-                    <!-- BIO-ANATOMY: SESSION VS JWT COMPARISON -->
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Session vs JWT Matrix (Top 6 LPA Interview Q)</span>
-                            <span class="genz-badge">AUTH ARCHITECTURE</span>
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Signup & Login Controller</span>
+                            <span class="genz-badge">SECURITY & ANTI-ENUMERATION • LABELED DIAGRAM</span>
                         </div>
-                        <div class="mechanics-table-box" style="margin: 0;">
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">if (existingUser) return res.status(409)...</span> ───▶ <strong>1. 409 Conflict (Duplicate Registration):</strong> Agar email already registered hai, toh HTTP status 409 Conflict return karta hai taaki duplicate accounts na banein.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">const isMatch = await bcrypt.compare(password, user.password);</span> ───▶ <strong>2. Cryptographic Hash Comparison:</strong> <code>bcrypt.compare()</code> user ke plain text password ko DB ke hashed string se compare karta hai. Hash ko kabhi "unhash" nahi kiya ja sakta — sirf mathematical match verify hota hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">if (!user || !isMatch) return res.status(401).json({ error: 'Invalid credentials' });</span> ───▶ <strong>3. Anti-User Enumeration Security Defense:</strong> Kabhi alag-alag error mat do (jaise "Email nahi mila" vs "Password galat hai"). Dono cases me EXACTLY same generic message do — warna hacker ko pata chal jayega kaunsa email database me exist karta hai!</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">res.status(200).json({ success: true, token });</span> ───▶ <strong>4. Token Emission:</strong> Successful login par 7-day valid JWT token return kiya jata hai jo client apne headers me bhej kar protected routes access karega.</div></div>
+                        </div>
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. 409 Conflict (Duplicate Registration):</span>
+            <div>Agar email already registered hai, toh HTTP status 409 Conflict return karta hai taaki duplicate accounts na banein.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Cryptographic Hash Comparison:</span>
+            <div><code>bcrypt.compare()</code> user ke plain text password ko DB ke hashed string se compare karta hai. Hash ko kabhi "unhash" nahi kiya ja sakta — sirf mathematical match verify hota hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. Anti-User Enumeration Security Defense:</span>
+            <div>Kabhi alag-alag error mat do (jaise "Email nahi mila" vs "Password galat hai"). Dono cases me EXACTLY same generic message do — warna hacker ko pata chal jayega kaunsa email database me exist karta hai!</div>
+        </div>
+    </div>
+                    </div><div class="mechanics-table-box" style="margin: 0;">
                             <table class="mechanics-table">
                                 <thead><tr><th>Feature</th><th>Session-Based Auth</th><th>JWT-Based Token Auth</th></tr></thead>
                                 <tbody>
@@ -5388,53 +4477,33 @@ module.exports = upload;</code></pre>
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Multer File Upload Engine Ka Post-Mortem</span>
-                            <span class="genz-badge">MULTIPART PARSER</span>
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Multer File Upload Engine</span>
+                            <span class="genz-badge">MULTIPART PARSER • LABELED DIAGRAM</span>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">cb(null, 'public/uploads/');</div>
-                            <div class="dissection-explain"><strong>1. Destination Callback Contract:</strong> Multer Node.js callback convention use karta hai — pehla argument <code>null</code> ka matlab "koi error nahi hai", dusra argument destination folder path hota hai.</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">cb(null, 'public/uploads/');</span> ───▶ <strong>1. Destination Callback Contract:</strong> Multer Node.js callback convention use karta hai — pehla argument <code>null</code> ka matlab "koi error nahi hai", dusra argument destination folder path hota hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">const uniqueName = Date.now() + '-' + file.originalname;</span> ───▶ <strong>2. Unique File Timestamp Prefix:</strong> Agar 2 alag users <code>resume.pdf</code> upload karein, toh server par file overwrite na ho — isliye current timestamp (epoch milliseconds) prefix lagaya jata hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">if (file.mimetype.startsWith('image/'))</span> ───▶ <strong>3. MIME Type Whitelisting:</strong> File extension faked ho sakti hai (e.g. virus.exe ko image.png rename karna). Multer actual HTTP binary stream ka <code>mimetype</code> check karta hai (e.g. <code>image/jpeg</code>, <code>image/png</code>). Non-image aane par error throw karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">limits: { fileSize: 5 * 1024 * 1024 }</span> ───▶ <strong>4. Denial of Service (DoS) Defense:</strong> <code>5 * 1024 * 1024</code> bytes = Exactly 5 MegaBytes. Koi hacker 10GB ki video file bhej kar server ki hard disk full na kar sake, isliye hard limit lagayi hai.</div></div>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const uniqueName = Date.now() + '-' + file.originalname;</div>
-                            <div class="dissection-explain"><strong>2. Unique File Timestamp Prefix:</strong> Agar 2 alag users <code>resume.pdf</code> upload karein, toh server par file overwrite na ho — isliye current timestamp (epoch milliseconds) prefix lagaya jata hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">if (file.mimetype.startsWith('image/'))</div>
-                            <div class="dissection-explain"><strong>3. MIME Type Whitelisting:</strong> File extension faked ho sakti hai (e.g. virus.exe ko image.png rename karna). Multer actual HTTP binary stream ka <code>mimetype</code> check karta hai (e.g. <code>image/jpeg</code>, <code>image/png</code>). Non-image aane par error throw karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">limits: { fileSize: 5 * 1024 * 1024 }</div>
-                            <div class="dissection-explain"><strong>4. Denial of Service (DoS) Defense:</strong> <code>5 * 1024 * 1024</code> bytes = Exactly 5 MegaBytes. Koi hacker 10GB ki video file bhej kar server ki hard disk full na kar sake, isliye hard limit lagayi hai.</div>
-                        </div>
-                    </div>
-
-                    <div class="concept-sub-title">⚙️ 1.2 Route & Controller Integration</div>
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>routes/jobRoutes.js + controllers/jobController.js</span><span>File Ingestion in Controller</span></div>
-                        <pre><code><span class="tok-kw">const</span> upload = <span class="tok-fn">require</span>(<span class="tok-str">'../middleware/upload'</span>);
-
-<span class="tok-com">// Route me single file middleware attach karo:</span>
-router.<span class="tok-fn">post</span>(<span class="tok-str">'/'</span>, authenticateToken, upload.<span class="tok-fn">single</span>(<span class="tok-str">'companyLogo'</span>), jobController.createJob);
-
-<span class="tok-com">// Controller me req.file se uploaded file details access karo:</span>
-exports.createJob = <span class="tok-kw">async</span> (<span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) => {
-    <span class="tok-kw">try</span> {
-        <span class="tok-kw">const</span> logoPath = req.file ? <span class="tok-str">`/uploads/${req.file.filename}`</span> : <span class="tok-str">'/uploads/default-logo.png'</span>;
-        <span class="tok-kw">const</span> job = <span class="tok-kw">await</span> Job.<span class="tok-fn">create</span>({
-            ...req.body,
-            companyLogo: logoPath,
-            postedBy: req.user.userId
-        });
-        res.<span class="tok-fn">status</span>(<span class="tok-num">201</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">true</span>, data: job });
-    } <span class="tok-kw">catch</span> (err) {
-        <span class="tok-fn">next</span>(err);
-    }
-};</code></pre>
-                    </div>
-                </div>
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Destination Callback Contract:</span>
+            <div>Multer Node.js callback convention use karta hai — pehla argument <code>null</code> ka matlab "koi error nahi hai", dusra argument destination folder path hota hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Unique File Timestamp Prefix:</span>
+            <div>Agar 2 alag users <code>resume.pdf</code> upload karein, toh server par file overwrite na ho — isliye current timestamp (epoch milliseconds) prefix lagaya jata hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. MIME Type Whitelisting:</span>
+            <div>File extension faked ho sakti hai (e.g. virus.exe ko image.png rename karna). Multer actual HTTP binary stream ka <code>mimetype</code> check karta hai (e.g. <code>image/jpeg</code>, <code>image/png</code>). Non-image aane par error throw karta hai.</div>
+        </div>
+    </div>
+                    </div></div>
             </div>
         </section>
 
@@ -5478,33 +4547,34 @@ exports.createJob = <span class="tok-kw">async</span> (<span class="tok-num">req
 module.exports = { validateJobInput };</code></pre>
                     </div>
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 express-validator Pipeline Ka Post-Mortem (Surgical Code Dissection)</span>
-                            <span class="genz-badge">PAYLOAD SANITIZATION</span>
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: express-validator Pipeline</span>
+                            <span class="genz-badge">PAYLOAD SANITIZATION • LABELED DIAGRAM</span>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">body('title').notEmpty().withMessage('...').trim()</div>
-                            <div class="dissection-explain"><strong>1. Field Validation Chain:</strong> <code>body('title')</code> incoming JSON payload ke <code>title</code> field ko target karta hai. <code>notEmpty()</code> ensure karta hai ki string empty na ho, aur <code>trim()</code> extra whitespace auto-remove karta hai.</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">body('title').notEmpty().withMessage('...').trim()</span> ───▶ <strong>1. Field Validation Chain:</strong> <code>body('title')</code> incoming JSON payload ke <code>title</code> field ko target karta hai. <code>notEmpty()</code> ensure karta hai ki string empty na ho, aur <code>trim()</code> extra whitespace auto-remove karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">body('salary').isNumeric().isFloat({ min: 0 })</span> ───▶ <strong>2. Strict Numeric Constraints:</strong> Salary string ya alphabets nahi honi chahiye (<code>isNumeric</code>) aur negative value allow nahi hai (<code>isFloat({ min: 0 })</code>).</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">const errors = validationResult(req);</span> ───▶ <strong>3. Error Result Evaluator:</strong> <code>validationResult(req)</code> pichli saari validation rules ko scan karta hai aur agar koi bhi field fail hui hai toh structured error array return karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">if (!errors.isEmpty()) return res.status(400)...</span> ───▶ <strong>4. 400 Bad Request Short-Circuit:</strong> Agar validation fail hui, toh request controller ya database tak jaane hi nahi di — turant 400 Bad Request status bhej kar response close kar diya. Database par zero useless CPU load pada!</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-err">next();</span> ───▶ <strong>5. Validation Passed Green Light:</strong> Agar koi error nahi hai, toh <code>next()</code> call hoke controller ko execution handoff ho jata hai.</div></div>
                         </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">body('salary').isNumeric().isFloat({ min: 0 })</div>
-                            <div class="dissection-explain"><strong>2. Strict Numeric Constraints:</strong> Salary string ya alphabets nahi honi chahiye (<code>isNumeric</code>) aur negative value allow nahi hai (<code>isFloat({ min: 0 })</code>).</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const errors = validationResult(req);</div>
-                            <div class="dissection-explain"><strong>3. Error Result Evaluator:</strong> <code>validationResult(req)</code> pichli saari validation rules ko scan karta hai aur agar koi bhi field fail hui hai toh structured error array return karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">if (!errors.isEmpty()) return res.status(400)...</div>
-                            <div class="dissection-explain"><strong>4. 400 Bad Request Short-Circuit:</strong> Agar validation fail hui, toh request controller ya database tak jaane hi nahi di — turant 400 Bad Request status bhej kar response close kar diya. Database par zero useless CPU load pada!</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">next();</div>
-                            <div class="dissection-explain"><strong>5. Validation Passed Green Light:</strong> Agar koi error nahi hai, toh <code>next()</code> call hoke controller ko execution handoff ho jata hai.</div>
-                        </div>
-                    </div>
-                </div>
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Field Validation Chain:</span>
+            <div><code>body('title')</code> incoming JSON payload ke <code>title</code> field ko target karta hai. <code>notEmpty()</code> ensure karta hai ki string empty na ho, aur <code>trim()</code> extra whitespace auto-remove karta hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. Strict Numeric Constraints:</span>
+            <div>Salary string ya alphabets nahi honi chahiye (<code>isNumeric</code>) aur negative value allow nahi hai (<code>isFloat({ min: 0 })</code>).</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. Error Result Evaluator:</span>
+            <div><code>validationResult(req)</code> pichli saari validation rules ko scan karta hai aur agar koi bhi field fail hui hai toh structured error array return karta hai.</div>
+        </div>
+    </div>
+                    </div></div>
             </div>
         </section>
 
@@ -5616,98 +4686,33 @@ exports.isJobOwner = <span class="tok-kw">async</span> (<span class="tok-num">re
 };</code></pre>
                     </div>
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                    <div class="code-dissection-box">
-                        <div class="dissection-header">
-                            <span>🔍 Ownership Authorization Middleware Ka Post-Mortem</span>
-                            <span class="genz-badge">SECURITY & AUTHORIZATION</span>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">const job = await Job.findById(req.params.id);</div>
-                            <div class="dissection-explain"><strong>1. Resource Lookup:</strong> URL param <code>/jobs/:id</code> se job ka ID utha kar database se Job document fetch karta hai. Agar document exist nahi karta, toh turant 404 Not Found return karta hai.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">if (job.postedBy.toString() !== req.user.userId && req.user.role !== 'admin')</div>
-                            <div class="dissection-explain"><strong>2. The ObjectId Trap (.toString()):</strong> <code>job.postedBy</code> MongoDB me ek <strong>BSON ObjectId Object</strong> hota hai, jabki <code>req.user.userId</code> JWT token se aayi hui <strong>String</strong> hoti hai. JavaScript me <code>object !== string</code> hamesha true ho jata hai! Isliye <code>.toString()</code> lagana mandatory hai taaki dono strings ka exact match ho sake. Sath hi agar user ka role <code>'admin'</code> hai toh use bhi bypass allow karte hain.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">return res.status(403).json({ error: ... });</div>
-                            <div class="dissection-explain"><strong>3. 403 Forbidden (Authorization Failure):</strong> User authenticated toh hai (uske paas valid token hai), lekin woh is job ka malik (creator) nahi hai — isliye 403 Forbidden bhej kar route terminate kar diya.</div>
-                        </div>
-                        <div class="dissection-row">
-                            <div class="dissection-code">req.job = job; next();</div>
-                            <div class="dissection-explain"><strong>4. DB Query Caching Optimization:</strong> Humne already DB query chala kar <code>job</code> object manga liya hai. Use <code>req.job</code> me attach kar diya taaki agle controller (update/delete) ko dubara database query na chalani pade!</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- END-TO-END REQUEST TRACING -->
-                <div class="concept-block">
-                    <div class="concept-heading">2. End-to-End File-to-File Request Tracing (No Confusion Left!)</div>
-                    <p>Students sabse zyada confuse hote hain ki <em>"Maine code toh likh diya, lekin kaunsi file kisko call karti hai?"</em> Yahan real production requests ka line-by-line execution trace hai:</p>
-
-                    <!-- TRACE 1: POST /api/jobs -->
-                    <div class="bio-anatomy-board" style="margin-bottom: 36px;">
-                        <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 TRACE 1: POST /api/jobs (Create Job with Auth, Logo Upload & Validation)</span>
-                            <span class="genz-badge">STEP-BY-STEP EXECUTION</span>
-                        </div>
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-fn">Step 1: app.js</span> ─────────────> <code>app.use('/api/jobs', jobRoutes)</code> mounts request</div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-kw">Step 2: routes/jobRoutes.js</span> ─> Matches <code>router.post('/', authenticateToken, upload.single('logo'), validateJob, jobController.createJob)</code></div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-await">Step 3: authenticateToken.js</span> ─> Reads <code>req.headers.authorization</code>, verifies JWT, sets <code>req.user = { userId, role }</code> ──> <code>next()</code></div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-fn">Step 4: upload.js (Multer)</span> ───> Parses binary multipart stream, saves logo to <code>public/uploads/</code>, sets <code>req.file</code> ──> <code>next()</code></div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-kw">Step 5: validators.js</span> ───────> Checks <code>body('salary').isNumeric()</code>. No errors? ──> <code>next()</code></div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-res">Step 6: jobController.js</span> ────> <code>Job.create({ ...req.body, companyLogo: req.file.filename, postedBy: req.user.userId })</code></div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-await">Step 7: models/Job.js</span> ────────> Mongoose runs schema validators & inserts BSON into MongoDB Atlas cluster</div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-res">Step 8: Response Return</span> ──────> <code>res.status(201).json({ success: true, data: savedJob })</code> ──> Client Browser ✅</div>
-                        </div>
-                    </div>
-
-                    <!-- TRACE 2: GET /api/jobs/:id WITH POPULATE -->
-                    <div class="bio-anatomy-board" style="margin-bottom: 36px;">
-                        <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 TRACE 2: GET /api/jobs/:id (Fetch Job with .populate('postedBy'))</span>
-                            <span class="genz-badge">POPULATE EXECUTION</span>
-                        </div>
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-fn">Step 1: routes/jobRoutes.js</span> ──> Matches <code>router.get('/:id', jobController.getJobById)</code></div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-kw">Step 2: jobController.js</span> ───> Executes <code>await Job.findById(req.params.id).populate('postedBy', 'name email')</code></div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-await">Step 3: Mongoose DB Engine</span> ─> Query 1: Fetches Job doc from <code>jobs</code> collection (has <code>postedBy: ObjectId('u101')</code>)</div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-fn">Step 4: Mongoose Sub-Query</span> ─> Query 2: Automatically runs <code>User.findById('u101')</code> on <code>users</code> collection</div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-res">Step 5: In-Memory Merge</span> ────> Replaces ObjectId with <code>{ name: 'Rahul', email: 'rahul@dev.com' }</code></div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-res">Step 6: Client Delivery</span> ────> <code>res.status(200).json({ success: true, data: jobWithUser })</code> ✅</div>
-                        </div>
-                    </div>
-
-                    <!-- TRACE 3: ERROR HANDLING PIPELINE -->
+                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 TRACE 3: Error Flow (How Express Jumps Directly to errorHandler.js)</span>
-                            <span class="genz-badge">GLOBAL ERROR PIPELINE</span>
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Ownership Authorization Middleware</span>
+                            <span class="genz-badge">SECURITY & AUTHORIZATION • LABELED DIAGRAM</span>
                         </div>
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-err">1. Error Occurs</span> ─────────────> Inside controller: <code>try { ... } catch (err) { next(err); }</code></div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-fn">2. Express Pipeline Bypass</span> ───> Express detects argument in <code>next(err)</code> and SKIPS all remaining regular routes & middlewares!</div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-await">3. Jumps to Last Middleware</span> ─> Catches inside <code>middleware/errorHandler.js</code>: <code>(err, req, res, next)</code></div>
-                            <div style="margin-top: 6px;">│</div>
-                            <div><span class="pill-err">4. Structured JSON Response</span> ──> <code>res.status(err.statusCode || 500).json({ success: false, error: err.message })</code> ✅</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+    <div style="margin-top: 0px;"><div><span class="pill-kw">const job = await Job.findById(req.params.id);</span> ───▶ <strong>1. Resource Lookup:</strong> URL param <code>/jobs/:id</code> se job ka ID utha kar database se Job document fetch karta hai. Agar document exist nahi karta, toh turant 404 Not Found return karta hai.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-fn">if (job.postedBy.toString() !== req.user.userId && req.user.role !== 'admin')</span> ───▶ <strong>2. The ObjectId Trap (.toString()):</strong> <code>job.postedBy</code> MongoDB me ek <strong>BSON ObjectId Object</strong> hota hai, jabki <code>req.user.userId</code> JWT token se aayi hui <strong>String</strong> hoti hai. JavaScript me <code>object !== string</code> hamesha true ho jata hai! Isliye <code>.toString()</code> lagana mandatory hai taaki dono strings ka exact match ho sake. Sath hi agar user ka role <code>'admin'</code> hai toh use bhi bypass allow karte hain.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-await">return res.status(403).json({ error: ... });</span> ───▶ <strong>3. 403 Forbidden (Authorization Failure):</strong> User authenticated toh hai (uske paas valid token hai), lekin woh is job ka malik (creator) nahi hai — isliye 403 Forbidden bhej kar route terminate kar diya.</div></div>
+    <div style="margin-top: 10px;"><div><span class="pill-res">req.job = job; next();</span> ───▶ <strong>4. DB Query Caching Optimization:</strong> Humne already DB query chala kar <code>job</code> object manga liya hai. Use <code>req.job</code> me attach kar diya taaki agle controller (update/delete) ko dubara database query na chalani pade!</div></div>
                         </div>
-                    </div>
-                </div>
+    <div class="anatomy-callout-grid" style="margin-top: 24px;">
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-yellow">💡 1. Resource Lookup:</span>
+            <div>URL param <code>/jobs/:id</code> se job ka ID utha kar database se Job document fetch karta hai. Agar document exist nahi karta, toh turant 404 Not Found return karta hai.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-green">💡 2. The ObjectId Trap (.toString()):</span>
+            <div><code>job.postedBy</code> MongoDB me ek <strong>BSON ObjectId Object</strong> hota hai, jabki <code>req.user.userId</code> JWT token se aayi hui <strong>String</strong> hoti hai. JavaScript me <code>object !== string</code> hamesha true ho jata hai! Isliye <code>.toString()</code> lagana mandatory hai taaki dono strings ka exact match ho sake. Sath hi agar user ka role <code>'admin'</code> hai toh use bhi bypass allow karte hain.</div>
+        </div>
+        <div class="anatomy-callout-card">
+            <span class="callout-badge bg-blue">💡 3. 403 Forbidden (Authorization Failure):</span>
+            <div>User authenticated toh hai (uske paas valid token hai), lekin woh is job ka malik (creator) nahi hai — isliye 403 Forbidden bhej kar route terminate kar diya.</div>
+        </div>
+    </div>
+                    </div></div>
             </div>
         </section>
 
