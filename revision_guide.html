@@ -2435,65 +2435,36 @@ res.<span class="tok-fn">writeHead</span>(<span class="tok-num">503</span>); <sp
                     <p>Raw Node HTTP me agar 20 routes banane ho, toh nested <code>if/else</code> ka pahaad ban jata hai. Har route me manual URL parsing, query string regex, chunk buffering, manual MIME type headers (<code>application/json</code>), aur manual <code>JSON.stringify</code> likhna padta hai.</p>
                     <p><strong>Express Ka Solution:</strong> Express ne in sabhi pain-points ko <strong>Micro-Router</strong> aur <strong>Content Negotiation</strong> se 1-line me convert kar diya!</p>
 
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>snippet_express_bootstrap.js</span><span>Express Routing & Helpers</span></div>
-                        <pre><code><span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>);
-<span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();
-
-<span class="tok-com">// Built-in JSON Body Parser Middleware:</span>
-app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>());
-
-<span class="tok-com">// 1. res.send(): Automatic MIME Type detection (HTML vs Plain Text)</span>
-app.<span class="tok-fn">get</span>(<span class="tok-str">'/'</span>, (<span class="tok-num">req</span>, <span class="tok-num">res</span>) => {
-    res.<span class="tok-fn">send</span>(<span class="tok-str">'&lt;h1&gt;Welcome to Express Server! 🚀&lt;/h1&gt;'</span>);
-});
-
-<span class="tok-com">// 2. res.json(): Auto stringify + Content-Type: application/json header</span>
-app.<span class="tok-fn">get</span>(<span class="tok-str">'/api/user'</span>, (<span class="tok-num">req</span>, <span class="tok-num">res</span>) => {
-    res.<span class="tok-fn">json</span>({ id: <span class="tok-num">101</span>, name: <span class="tok-str">'Amit Sharma'</span>, role: <span class="tok-str">'Backend Dev'</span> });
-});
-
-<span class="tok-com">// 3. res.status(): Custom HTTP Status Codes</span>
-app.<span class="tok-fn">post</span>(<span class="tok-str">'/api/user'</span>, (<span class="tok-num">req</span>, <span class="tok-num">res</span>) => {
-    res.<span class="tok-fn">status</span>(<span class="tok-num">201</span>).<span class="tok-fn">json</span>({ message: <span class="tok-str">'User created successfully'</span>, data: req.body });
-});
-
-app.<span class="tok-fn">listen</span>(<span class="tok-num">4000</span>, () => console.<span class="tok-fn">log</span>(<span class="tok-str">'Express running on http://localhost:4000'</span>));</code></pre>
-                    </div>
-                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
-                                        <!-- VISUAL BIO-ANATOMY LABELED DIAGRAM -->
+                    <!-- UNIFIED BIO-ANATOMY DIAGRAM CARD -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Har Ek Line</span>
-                            <span class="genz-badge">ZERO GUESSWORK • LABELED DIAGRAM</span>
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: Express Server Bootstrap & Routing (Labeled Diagram)</span>
+                            <span class="genz-badge">ZERO GUESSWORK • VISUAL ARROWS</span>
                         </div>
-                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
-    <div style="margin-top: 0px;"><div><span class="pill-kw">const express = require('express');</span> ───▶ <strong>1. Framework Module Load:</strong> <code>require('express')</code> <code>node_modules</code> se Express framework ka main export function load karta hai aur use <code>express</code> constant me store karta hai.</div></div>
-    <div style="margin-top: 10px;"><div><span class="pill-fn">const app = express();</span> ───▶ <strong>2. Application Instance Create:</strong> <code>express()</code> factory function ko call karte hi ek naya <strong>Express App Object (<code>app</code>)</strong> initialize hota hai. Is <code>app</code> ke paas routing methods (<code>.get</code>, <code>.post</code>), middleware registry (<code>.use</code>), aur server listener (<code>.listen</code>) hote hain.</div></div>
-    <div style="margin-top: 10px;"><div><span class="pill-await">app.use(express.json());</span> ───▶ <strong>3. JSON Body Parser Middleware:</strong> <code>app.use()</code> har incoming request par middleware lagata hai. <code>express.json()</code> stream se binary chunks collect karke unhe <code>JSON.parse()</code> se JS object me badalta hai aur <code>req.body</code> me attach karta hai. Bina iske POST request me <code>req.body</code> hamesha <code>undefined</code> aayega!</div></div>
-    <div style="margin-top: 10px;"><div><span class="pill-res">app.get('/', (req, res) => { ... });</span> ───▶ <strong>4. Route Handler Contract:</strong> • <code>app.get</code>: Sirf HTTP GET method se match karega.<br>
-                                • <code>'/'</code>: Target URL path (Root / Homepage).<br>
-                                • <code>(req, res) =></code>: Callback handler. <code>req</code> me client ka data (headers, query, IP) aata hai, <code>res</code> se hum client ko response bhejte hain.
-                            </div></div>
-    <div style="margin-top: 10px;"><div><span class="pill-err">res.send('&lt;h1&gt;...&lt;/h1&gt;');</span> ───▶ <strong>5. Smart Content-Type Detection:</strong> <code>res.send()</code> dekhta hai ki content me HTML tags hain, toh automatic <code>Content-Type: text/html; charset=utf-8</code> header set karta hai aur response stream end kar deta hai.</div></div>
-    <div style="margin-top: 10px;"><div><span class="pill-kw">res.json({ id: 101, ... });</span> ───▶ <strong>6. Object to JSON Serialization:</strong> <code>res.json()</code> object ko <code>JSON.stringify()</code> karta hai aur <code>Content-Type: application/json; charset=utf-8</code> header set karta hai. API banate waqt 99% yahi method use hota hai.</div></div>
-    <div style="margin-top: 10px;"><div><span class="pill-fn">res.status(201).json({ ... });</span> ───▶ <strong>7. Method Chaining & Status Codes:</strong> <code>res.status(201)</code> HTTP status code ko "201 Created" set karta hai aur wapas <code>res</code> object hi return karta hai — isliye dot laga kar <code>.json(...)</code> chain ho jata hai!</div></div>
-    <div style="margin-top: 10px;"><div><span class="pill-await">app.listen(4000, () => ...);</span> ───▶ <strong>8. TCP Port Binding & Loop:</strong> Internally ye Node ka <code>http.createServer(app).listen(4000)</code> chalata hai. Port 4000 par TCP socket open hota hai aur server incoming network traffic ke liye 24x7 actively wait karna shuru kar deta hai.</div></div>
+                        <div class="anatomy-code-center" style="font-size: 16px; line-height: 2.2;">
+                            <div><span class="pill-kw">const express = require('express');</span> ───▶ 🏷️ <strong>Module Factory:</strong> <code>node_modules</code> se Express ka top-level function import karta hai</div>
+                            <div style="margin-top: 10px;"><span class="pill-fn">const app = express();</span> ──────────────▶ ⚡ <strong>App Instance:</strong> Express Application object banata hai (Routing, Middleware & Socket engine)</div>
+                            <div style="margin-top: 10px;"><span class="pill-await">app.use(express.json());</span> ────────────▶ 🛡️ <strong>Body Parser:</strong> Streams se raw bytes collect karke <code>JSON.parse()</code> se <code>req.body</code> me attach karta hai</div>
+                            <div style="margin-top: 10px;"><span class="pill-res">app.get('/', (req, res) => ...);</span> ──────▶ 🚪 <strong>Route Gate:</strong> Sirf GET requests par <code>/</code> URL par trigger hota hai (req = input, res = output)</div>
+                            <div style="margin-top: 10px;"><span class="pill-kw">res.send('&lt;h1&gt;...&lt;/h1&gt;');</span> ─────────────▶ 📄 <strong>Smart MIME:</strong> HTML tags detect karke automatic <code>Content-Type: text/html</code> set karta hai</div>
+                            <div style="margin-top: 10px;"><span class="pill-fn">res.json({ id: 101 });</span> ────────────────▶ 📦 <strong>JSON Response:</strong> Object ko <code>JSON.stringify()</code> karke <code>Content-Type: application/json</code> bhejta hai</div>
+                            <div style="margin-top: 10px;"><span class="pill-res">res.status(201).json(...);</span> ──────────▶ 🔗 <strong>Method Chaining:</strong> <code>res.status(201)</code> wapas <code>res</code> return karta hai isliye <code>.json()</code> chain ho jata hai</div>
+                            <div style="margin-top: 10px;"><span class="pill-err">app.listen(4000, () => ...);</span> ────────▶ 📡 <strong>TCP Listener:</strong> Port 4000 par socket kholta hai aur 24x7 network requests ke liye actively wait karta hai</div>
                         </div>
-    <div class="anatomy-callout-grid" style="margin-top: 24px;">
-        <div class="anatomy-callout-card">
-            <span class="callout-badge bg-yellow">💡 1. Framework Module Load:</span>
-            <div><code>require('express')</code> <code>node_modules</code> se Express framework ka main export function load karta hai aur use <code>express</code> constant me store karta hai.</div>
-        </div>
-        <div class="anatomy-callout-card">
-            <span class="callout-badge bg-green">💡 2. Application Instance Create:</span>
-            <div><code>express()</code> factory function ko call karte hi ek naya <strong>Express App Object (<code>app</code>)</strong> initialize hota hai. Is <code>app</code> ke paas routing methods (<code>.get</code>, <code>.post</code>), middleware registry (<code>.use</code>), aur server listener (<code>.listen</code>) hote hain.</div>
-        </div>
-        <div class="anatomy-callout-card">
-            <span class="callout-badge bg-blue">💡 3. JSON Body Parser Middleware:</span>
-            <div><code>app.use()</code> har incoming request par middleware lagata hai. <code>express.json()</code> stream se binary chunks collect karke unhe <code>JSON.parse()</code> se JS object me badalta hai aur <code>req.body</code> me attach karta hai. Bina iske POST request me <code>req.body</code> hamesha <code>undefined</code> aayega!</div>
-        </div>
-    </div>
+                        <div class="anatomy-callout-grid" style="margin-top: 24px;">
+                            <div class="anatomy-callout-card">
+                                <span class="callout-badge bg-yellow">⚠️ The req.body Trap</span>
+                                <div>Agar <code>app.use(express.json())</code> routes se pehle nahi likha, toh POST request me <code>req.body</code> hamesha <strong>undefined</strong> aayega!</div>
+                            </div>
+                            <div class="anatomy-callout-card">
+                                <span class="callout-badge bg-green">⚡ res.send vs res.json</span>
+                                <div><code>res.send()</code> HTML/strings ke liye hai. <code>res.json()</code> REST API me objects/arrays ko standard JSON format me bhejne ke liye hai.</div>
+                            </div>
+                            <div class="anatomy-callout-card">
+                                <span class="callout-badge bg-blue">🚪 Port Number Kya Hai?</span>
+                                <div>Port machine ka door/flat number hai. Port 4000 par OS incoming network traffic ko Express server process ko redirect karta hai.</div>
+                            </div>
+                        </div>
                     </div><div class="analogy-note">
                         <div class="analogy-note-title">🛵 Indian Real-Life Analogy: Swiggy / Zomato vs Khud Cycle Chala Ke Hotel Jaana</div>
                         <p>• <strong>Raw HTTP:</strong> Khud cycle chala kar hotel jao, line me lago, cook se baat karo, cash gino, parcel pack karwao (100 lines of manual code).<br>
