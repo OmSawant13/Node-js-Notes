@@ -2751,28 +2751,113 @@ app.<span class="tok-fn">post</span>(<span class="tok-str">'/products'</span>, (
                     </div>
                 </div>
 
-                                <!-- 6. UPDATE (PUT) & DELETE -->
+                                                <!-- 6. UPDATE (PUT) & DELETE -->
                 <div class="concept-block">
-                    <div class="concept-heading">6. Update (PUT) & Delete Operations</div>
-                    <p>Yaha humare paas dono hain: <code>req.params</code> (Kaunsa product update karna hai?) aur <code>req.body</code> (Kya data update karna hai?).</p>
+                    <div class="concept-heading">6. Update (PUT) & Delete Operations (Line-by-Line Breakdown)</div>
+                    <p>Yaha humare paas dono inputs hain: <code>req.params</code> (Kaunsa product update/delete karna hai?) aur <code>req.body</code> (Kya naya data set karna hai?).</p>
 
                     <div class="concept-sub-title">PUT vs PATCH Concept</div>
-                    <p>• <strong>PUT:</strong> Existing resource ko complete representation se replace/update karne ke concept ke liye.<br>
-                    • <strong>PATCH:</strong> Resource ke sirf specific fields modify karne ke liye (e.g. sirf price update kiya).<br>
-                    Is example ko practical simplicity ke liye PUT naam diya gaya hai, but real REST API design mein partial updates ke liye PATCH consider karo.</p>
+                    <p>• <strong>PUT:</strong> Resource ko completely replace/update karne ke liye.<br>
+                    • <strong>PATCH:</strong> Resource ke specific fields modify karne ke liye (e.g. sirf price update karna).<br>
+                    Practical simplicity ke liye is route ko PUT naam diya gaya hai.</p>
 
+                    <!-- ================= PUT STEP BY STEP ================= -->
+                    <h3 style="color: #38bdf8; margin-top: 25px; margin-bottom: 12px; font-size: 1.15rem;">🛠️ PUT /products/:id — Step-by-Step Code Walkthrough</h3>
+
+                    <!-- STEP 1 -->
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Step 1: Route Setup & Input Extraction (Params + Body)</strong><br>
+                        URL se target product ki ID aur body se update hone wali values nikalte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>step1_inputs.js</span><span>Extract Params & Body</span></div>
+                            <pre><code>app.<span class="tok-fn">put</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
+    <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id);   <span class="tok-com">// String "2" -> Number 2</span>
+    <span class="tok-kw">const</span> { name, price } = req.body;   <span class="tok-com">// Destructure updated fields</span></code></pre>
+                        </div>
+                        <div style="background: rgba(56, 189, 248, 0.08); border-left: 3px solid #38bdf8; padding: 10px 14px; border-radius: 6px; font-size: 13.5px; color: var(--text-secondary); margin-top: 8px;">
+                            💡 <strong>Kyu kiya:</strong> <code>req.params.id</code> string format mein hoti hai (e.g. <code>"2"</code>). Hamare data array mein IDs numbers hain, isliye <code>Number()</code> cast zaroori hai.
+                        </div>
+                    </div>
+
+                    <!-- STEP 2 -->
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Step 2: Target Product ka Index Dhoondna (<code>.findIndex()</code>)</strong><br>
+                        Array mein us position ko locate karte hain jaha update apply karna hai.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>step2_find_index.js</span><span>Locate Array Index</span></div>
+                            <pre><code>    <span class="tok-com">// .findIndex() matching element ka index (0, 1, 2...) deta hai</span>
+    <span class="tok-com">// Agar nahi mila toh -1 return hota hai</span>
+    <span class="tok-kw">const</span> productIndex = products.<span class="tok-fn">findIndex</span>(
+        p => p.id === id
+    );</code></pre>
+                        </div>
+                        <div style="background: rgba(56, 189, 248, 0.08); border-left: 3px solid #38bdf8; padding: 10px 14px; border-radius: 6px; font-size: 13.5px; color: var(--text-secondary); margin-top: 8px;">
+                            💡 <strong><code>find()</code> vs <code>findIndex()</code>:</strong> <code>find()</code> pura object return karta hai, jabki <code>findIndex()</code> uski numeric position (0, 1, 2...) deta hai taaki hum direct <code>products[productIndex]</code> ko modify kar sakein.
+                        </div>
+                    </div>
+
+                    <!-- STEP 3 -->
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Step 3: 404 Guard Clause (Item Nahi Mila Toh Turant Roko)</strong><br>
+                        Agar product exist nahi karta, toh execution ko wahi stop kar dete hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>step3_guard_clause.js</span><span>404 Not Found Check</span></div>
+                            <pre><code>    <span class="tok-kw">if</span> (productIndex === -<span class="tok-num">1</span>) {
+        <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">404</span>).<span class="tok-fn">json</span>({
+            success: <span class="tok-kw">false</span>,
+            message: <span class="tok-str">'Product not found'</span>
+        });
+    }</code></pre>
+                        </div>
+                        <div style="background: rgba(239, 68, 68, 0.08); border-left: 3px solid #ef4444; padding: 10px 14px; border-radius: 6px; font-size: 13.5px; color: var(--text-secondary); margin-top: 8px;">
+                            🚫 <strong>Important:</strong> <code>return</code> lagana mandatory hai! Agar <code>return</code> bhool gaye, toh execution continue hoga aur aage jaake <code>200 OK</code> bhi bhejega, jisse Node crash ho jayega: <code>ERR_HTTP_HEADERS_SENT</code>.
+                        </div>
+                    </div>
+
+                    <!-- STEP 4 -->
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Step 4: Safe Partial Updates (Field Checking)</strong><br>
+                        Sirf wahi fields overwrite karo jo client ne actual request body mein bheji hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>step4_update_fields.js</span><span>Safe Property Assignment</span></div>
+                            <pre><code>    <span class="tok-com">// Agar client ne name bheja hai tabhi update karo (undefined check)</span>
+    <span class="tok-kw">if</span> (name !== undefined) {
+        products[productIndex].name = name;
+    }
+    <span class="tok-kw">if</span> (price !== undefined) {
+        products[productIndex].price = <span class="tok-fn">Number</span>(price);
+    }</code></pre>
+                        </div>
+                        <div style="background: rgba(245, 158, 11, 0.08); border-left: 3px solid #f59e0b; padding: 10px 14px; border-radius: 6px; font-size: 13.5px; color: var(--text-secondary); margin-top: 8px;">
+                            ⚠️ <strong><code>!== undefined</code> kyu?</strong> Agar client ne sirf <code>{ price: 1800 }</code> bheja, toh <code>name</code> hoga <code>undefined</code>. Agar check nahi lagaya toh purana name mit kar <code>undefined</code> ban jayega!
+                        </div>
+                    </div>
+
+                    <!-- STEP 5 -->
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Step 5: Send 200 OK Response</strong><br>
+                        Client ko success status aur updated product wapas bhejte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>step5_response.js</span><span>200 OK Confirmation</span></div>
+                            <pre><code>    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({
+        success: <span class="tok-kw">true</span>,
+        message: <span class="tok-str">'Product updated'</span>,
+        data: products[productIndex]
+    });
+});</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- ASSEMBLED FULL PUT CODE -->
+                    <div class="concept-sub-title" style="margin-top: 25px;">📦 Complete Assembled Code for PUT</div>
                     <div class="code-container">
-                        <div class="code-top-bar"><span>put_update.js</span><span>PUT /products/:id (findIndex & Update)</span></div>
+                        <div class="code-top-bar"><span>put_full_assembled.js</span><span>Complete PUT Handler</span></div>
                         <pre><code><span class="tok-com">// Hit: PUT /products/2 with Body: { "name": "Gaming Mouse", "price": 1800 }</span>
 app.<span class="tok-fn">put</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
     <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id);
     <span class="tok-kw">const</span> { name, price } = req.body;
 
-    <span class="tok-com">// FIND INDEX: .find() product deta hai, .findIndex() product ka INDEX deta hai</span>
-    <span class="tok-com">// Agar kuch nahi mila: -1 return hota hai</span>
-    <span class="tok-kw">const</span> productIndex = products.<span class="tok-fn">findIndex</span>(
-        p => p.id === id
-    );
+    <span class="tok-kw">const</span> productIndex = products.<span class="tok-fn">findIndex</span>(p => p.id === id);
 
     <span class="tok-kw">if</span> (productIndex === -<span class="tok-num">1</span>) {
         <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">404</span>).<span class="tok-fn">json</span>({
@@ -2781,13 +2866,8 @@ app.<span class="tok-fn">put</span>(<span class="tok-str">'/products/:id'</span>
         });
     }
 
-    <span class="tok-com">// UPDATE FIELDS</span>
-    <span class="tok-kw">if</span> (name !== undefined) {
-        products[productIndex].name = name;
-    }
-    <span class="tok-kw">if</span> (price !== undefined) {
-        products[productIndex].price = <span class="tok-fn">Number</span>(price);
-    }
+    <span class="tok-kw">if</span> (name !== undefined) products[productIndex].name = name;
+    <span class="tok-kw">if</span> (price !== undefined) products[productIndex].price = <span class="tok-fn">Number</span>(price);
 
     res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({
         success: <span class="tok-kw">true</span>,
@@ -2797,61 +2877,74 @@ app.<span class="tok-fn">put</span>(<span class="tok-str">'/products/:id'</span>
 });</code></pre>
                     </div>
 
-                    <!-- BIO ANATOMY BOARD FOR PUT -->
-                    <div class="bio-anatomy-board" style="background: #0f172a; border-color: #38bdf8; color: #f8fafc; margin-top: 18px;">
-                        <div class="anatomy-board-header" style="border-bottom-color: #334155;">
-                            <span class="anatomy-board-title" style="color: #38bdf8;">🔬 PUT /products/:id — Step-by-Step Code Dissection</span>
-                            <span class="genz-badge" style="background: #38bdf8; color: #0f172a;">UPDATE ANATOMY</span>
-                        </div>
-                        <div class="anatomy-code-center" style="background: #1e293b; border-color: #475569; font-size: 14.5px; line-height: 2.2;">
-                            <div><span class="pill-kw">Line 1: Number(req.params.id)</span> ─────────▶ URL parameter <code>"2"</code> (string) ko <code>2</code> (number) banata hai</div>
-                            <div><span class="pill-fn">Line 2: const { name, price } = req.body</span> ──▶ Client jo new updates bhej raha hai usse destructure kiya</div>
-                            <div><span class="pill-await">Line 3: products.findIndex(p => p.id === id)</span> ▶ Array me element ka index (0, 1, 2...) dhoondta hai; nahi mila toh <code>-1</code></div>
-                            <div><span class="pill-err">Line 4: if (productIndex === -1) return 404</span> ─▶ Guard Clause: Product nahi mila toh turant 404 return karke execution rok do</div>
-                            <div><span class="pill-res">Line 5: if (name !== undefined)</span> ──────────▶ Partial update safety: Sirf wahi field update karo jo client ne bheji hai</div>
-                            <div><span class="pill-kw">Line 6: Number(price)</span> ──────────────────▶ Agar price string <code>"1800"</code> aayi hai toh number cast kiya</div>
-                            <div><span class="pill-res">Line 7: res.status(200).json(...)</span> ─────────▶ 200 OK status ke saath updated product object client ko return kiya</div>
-                        </div>
+                    <!-- ================= DELETE STEP BY STEP ================= -->
+                    <h3 style="color: #ec4899; margin-top: 35px; margin-bottom: 12px; font-size: 1.15rem;">🗑️ DELETE /products/:id — Step-by-Step Code Walkthrough</h3>
 
-                        <div class="anatomy-callout-grid" style="margin-top: 15px;">
-                            <div class="anatomy-callout-card" style="border-left: 4px solid #38bdf8; background: #1e293b; padding: 14px; border-radius: 8px;">
-                                <div style="font-weight: 800; color: #38bdf8; margin-bottom: 6px;">🎯 find() vs findIndex()</div>
-                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
-                                    • <code>find()</code>: Matching item ka <strong>actual object</strong> return karta hai.<br>
-                                    • <code>findIndex()</code>: Matching item ka <strong>index position</strong> (0, 1, 2...) return karta hai. In-place array updates ke liye index chahiye hota hai (<code>products[index].name = ...</code>).
-                                </div>
-                            </div>
-                            <div class="anatomy-callout-card" style="border-left: 4px solid #f59e0b; background: #1e293b; padding: 14px; border-radius: 8px;">
-                                <div style="font-weight: 800; color: #f59e0b; margin-bottom: 6px;">⚠️ `!== undefined` Check Kyu?</div>
-                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
-                                    Agar client ne sirf <code>{ price: 1800 }</code> bheja, toh <code>name</code> hoga <code>undefined</code>. Agar direct <code>products[index].name = name</code> likha, toh purana name mit kar <code>undefined</code> ho jayega! Isliye check zaroori hai.
-                                </div>
-                            </div>
-                            <div class="anatomy-callout-card" style="border-left: 4px solid #ef4444; background: #1e293b; padding: 14px; border-radius: 8px;">
-                                <div style="font-weight: 800; color: #ef4444; margin-bottom: 6px;">🚫 Early `return` in 404</div>
-                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
-                                    <code>return res.status(404).json(...)</code> mein <code>return</code> keyword likhna mandatory hai! Agar <code>return</code> nahi lagaya, toh function aage continue karega aur 200 response bhi bhejne ki koshish karega ➔ <strong>ERR_HTTP_HEADERS_SENT Crash</strong>.
-                                </div>
-                            </div>
+                    <!-- DELETE STEP 1 -->
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Step 1: ID Extraction & Initial Length Snapshot</strong><br>
+                        Delete operation run karne se pehle array ki current length save kar lete hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>del_step1_snapshot.js</span><span>Save Initial Length</span></div>
+                            <pre><code>app.<span class="tok-fn">delete</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
+    <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id);
+    <span class="tok-kw">const</span> initialLength = products.length; <span class="tok-com">// e.g. 3</span></code></pre>
                         </div>
                     </div>
 
-                    <div class="concept-sub-title" style="margin-top: 25px;">DELETE Operation</div>
-                    <p><code>DELETE /products/:id</code> — Delete se pehle length store karte hain. Baad mein compare karenge: length change hui? Agar nahi hui toh product mila hi nahi (404).</p>
+                    <!-- DELETE STEP 2 -->
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Step 2: Filter Out Target Product</strong><br>
+                        <code>.filter()</code> chala kar target ID wale item ko array se exclude kar dete hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>del_step2_filter.js</span><span>Filter Array</span></div>
+                            <pre><code>    <span class="tok-com">// .filter() ek new array return karta hai bina matching ID ke</span>
+    products = products.<span class="tok-fn">filter</span>(
+        p => p.id !== id
+    );</code></pre>
+                        </div>
+                    </div>
 
+                    <!-- DELETE STEP 3 -->
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Step 3: 404 Guard via Length Comparison</strong><br>
+                        Agar filtering ke baad bhi array ki length same rahi, matlab delete karne ke liye product exist hi nahi karta tha!</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>del_step3_length_check.js</span><span>Check Length Difference</span></div>
+                            <pre><code>    <span class="tok-kw">if</span> (products.length === initialLength) {
+        <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">404</span>).<span class="tok-fn">json</span>({
+            success: <span class="tok-kw">false</span>,
+            message: <span class="tok-str">'Product not found'</span>
+        });
+    }</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- DELETE STEP 4 -->
+                    <div style="margin-bottom: 20px;">
+                        <p><strong>Step 4: Send 200 OK Success Message</strong><br>
+                        Client ko confirmation response bhejte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>del_step4_response.js</span><span>Success Response</span></div>
+                            <pre><code>    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({
+        success: <span class="tok-kw">true</span>,
+        message: <span class="tok-str">`Product ${id} deleted successfully`</span>
+    });
+});</code></pre>
+                        </div>
+                    </div>
+
+                    <!-- ASSEMBLED FULL DELETE CODE -->
+                    <div class="concept-sub-title" style="margin-top: 25px;">📦 Complete Assembled Code for DELETE</div>
                     <div class="code-container">
-                        <div class="code-top-bar"><span>delete_product.js</span><span>DELETE /products/:id (.filter() removal)</span></div>
+                        <div class="code-top-bar"><span>delete_full_assembled.js</span><span>Complete DELETE Handler</span></div>
                         <pre><code><span class="tok-com">// Hit: DELETE /products/2</span>
 app.<span class="tok-fn">delete</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
     <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id);
     <span class="tok-kw">const</span> initialLength = products.length;
 
-    <span class="tok-com">// .filter() ek NEW array return karta hai jinki ID requested ID ke equal NAHI hai</span>
-    products = products.<span class="tok-fn">filter</span>(
-        p => p.id !== id
-    );
+    products = products.<span class="tok-fn">filter</span>(p => p.id !== id);
 
-    <span class="tok-com">// Agar length same hai -> kuch delete nahi hua -> 404</span>
     <span class="tok-kw">if</span> (products.length === initialLength) {
         <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">404</span>).<span class="tok-fn">json</span>({
             success: <span class="tok-kw">false</span>,
@@ -2864,37 +2957,6 @@ app.<span class="tok-fn">delete</span>(<span class="tok-str">'/products/:id'</sp
         message: <span class="tok-str">`Product ${id} deleted successfully`</span>
     });
 });</code></pre>
-                    </div>
-
-                    <!-- BIO ANATOMY BOARD FOR DELETE -->
-                    <div class="bio-anatomy-board" style="background: #0f172a; border-color: #ec4899; color: #f8fafc; margin-top: 18px;">
-                        <div class="anatomy-board-header" style="border-bottom-color: #334155;">
-                            <span class="anatomy-board-title" style="color: #ec4899;">🔬 DELETE /products/:id — Step-by-Step Code Dissection</span>
-                            <span class="genz-badge" style="background: #ec4899; color: #0f172a;">DELETE ANATOMY</span>
-                        </div>
-                        <div class="anatomy-code-center" style="background: #1e293b; border-color: #475569; font-size: 14.5px; line-height: 2.2;">
-                            <div><span class="pill-kw">Line 1: const initialLength = products.length</span> ──▶ Filter run karne se pehle array length ka snapshot le liya (e.g. <code>3</code>)</div>
-                            <div><span class="pill-fn">Line 2: products.filter(p => p.id !== id)</span> ───▶ Array me se target ID wale product ko nikal kar naya filtered array banaya</div>
-                            <div><span class="pill-err">Line 3: if (products.length === initialLength)</span> ─▶ Agar filter ke baad bhi length same rahi, matlab delete karne ke liye product tha hi nahi (404)!</div>
-                            <div><span class="pill-res">Line 4: res.status(200).json(...)</span> ─────────▶ 200 OK + Success message client ko bhej diya</div>
-                        </div>
-
-                        <div class="anatomy-callout-grid" style="margin-top: 15px;">
-                            <div class="anatomy-callout-card" style="border-left: 4px solid #ec4899; background: #1e293b; padding: 14px; border-radius: 8px;">
-                                <div style="font-weight: 800; color: #ec4899; margin-bottom: 6px;">💡 Filter Deletion Technique</div>
-                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
-                                    JavaScript mein in-memory array se delete karne ke 2 common methods hote hain:<br>
-                                    1. <code>filter()</code>: Immutably new array generate karta hai (Cleanest code).<br>
-                                    2. <code>splice(index, 1)</code>: Mutates array directly (requires <code>findIndex</code> first).
-                                </div>
-                            </div>
-                            <div class="anatomy-callout-card" style="border-left: 4px solid #10b981; background: #1e293b; padding: 14px; border-radius: 8px;">
-                                <div style="font-weight: 800; color: #10b981; margin-bottom: 6px;">⚡ Smart 404 Detection</div>
-                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
-                                    <code>initialLength</code> track karke hume pehle alag se <code>find()</code> chalane ki zarurat nahi padti. One pass filter + length check gives both deletion & 404 verification!
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
