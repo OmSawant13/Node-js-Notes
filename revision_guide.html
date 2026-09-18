@@ -8,6 +8,66 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Plus+Jakarta+Sans:wght@500;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* SURGICAL LINE-BY-LINE CODE DISSECTION */
+        .code-dissection-box {
+            margin: 20px 0 28px 0;
+            background: #ffffff;
+            border: 2px solid #0f172a;
+            border-radius: 12px;
+            box-shadow: 4px 4px 0px #0f172a;
+            overflow: hidden;
+        }
+        .dissection-header {
+            background: #f8fafc;
+            padding: 12px 18px;
+            border-bottom: 2px solid #0f172a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 16px;
+            color: #0f172a;
+        }
+        .dissection-row {
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            border-bottom: 1px dashed #cbd5e1;
+            padding: 12px 18px;
+            gap: 16px;
+            align-items: center;
+        }
+        .dissection-row:last-child {
+            border-bottom: none;
+        }
+        .dissection-row:nth-child(even) {
+            background: #fafafa;
+        }
+        .dissection-code {
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 8px 12px;
+            border-radius: 6px;
+            word-break: break-word;
+            border: 1px solid #334155;
+            line-height: 1.4;
+        }
+        .dissection-explain {
+            font-size: 15px;
+            line-height: 1.5;
+            color: #334155;
+        }
+        .dissection-explain strong {
+            color: #0f172a;
+        }
+        @media (max-width: 850px) {
+            .dissection-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+
         :root {
             --bg-page: #fbfbfd;
             --card-bg: #ffffff;
@@ -2852,6 +2912,49 @@ app.<span class="tok-fn">post</span>(<span class="tok-str">'/api/user'</span>, (
 
 app.<span class="tok-fn">listen</span>(<span class="tok-num">4000</span>, () => console.<span class="tok-fn">log</span>(<span class="tok-str">'Express running on http://localhost:4000'</span>));</code></pre>
                     </div>
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Har Ek Line Ka Post-Mortem (Surgical Code Dissection)</span>
+                            <span class="genz-badge">ZERO GUESSWORK</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const express = require('express');</div>
+                            <div class="dissection-explain"><strong>1. Framework Module Load:</strong> <code>require('express')</code> <code>node_modules</code> se Express framework ka main export function load karta hai aur use <code>express</code> constant me store karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const app = express();</div>
+                            <div class="dissection-explain"><strong>2. Application Instance Create:</strong> <code>express()</code> factory function ko call karte hi ek naya <strong>Express App Object (<code>app</code>)</strong> initialize hota hai. Is <code>app</code> ke paas routing methods (<code>.get</code>, <code>.post</code>), middleware registry (<code>.use</code>), aur server listener (<code>.listen</code>) hote hain.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">app.use(express.json());</div>
+                            <div class="dissection-explain"><strong>3. JSON Body Parser Middleware:</strong> <code>app.use()</code> har incoming request par middleware lagata hai. <code>express.json()</code> stream se binary chunks collect karke unhe <code>JSON.parse()</code> se JS object me badalta hai aur <code>req.body</code> me attach karta hai. Bina iske POST request me <code>req.body</code> hamesha <code>undefined</code> aayega!</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">app.get('/', (req, res) => { ... });</div>
+                            <div class="dissection-explain"><strong>4. Route Handler Contract:</strong> 
+                                • <code>app.get</code>: Sirf HTTP GET method se match karega.<br>
+                                • <code>'/'</code>: Target URL path (Root / Homepage).<br>
+                                • <code>(req, res) =></code>: Callback handler. <code>req</code> me client ka data (headers, query, IP) aata hai, <code>res</code> se hum client ko response bhejte hain.
+                            </div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">res.send('&lt;h1&gt;...&lt;/h1&gt;');</div>
+                            <div class="dissection-explain"><strong>5. Smart Content-Type Detection:</strong> <code>res.send()</code> dekhta hai ki content me HTML tags hain, toh automatic <code>Content-Type: text/html; charset=utf-8</code> header set karta hai aur response stream end kar deta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">res.json({ id: 101, ... });</div>
+                            <div class="dissection-explain"><strong>6. Object to JSON Serialization:</strong> <code>res.json()</code> object ko <code>JSON.stringify()</code> karta hai aur <code>Content-Type: application/json; charset=utf-8</code> header set karta hai. API banate waqt 99% yahi method use hota hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">res.status(201).json({ ... });</div>
+                            <div class="dissection-explain"><strong>7. Method Chaining & Status Codes:</strong> <code>res.status(201)</code> HTTP status code ko "201 Created" set karta hai aur wapas <code>res</code> object hi return karta hai — isliye dot laga kar <code>.json(...)</code> chain ho jata hai!</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">app.listen(4000, () => ...);</div>
+                            <div class="dissection-explain"><strong>8. TCP Port Binding & Loop:</strong> Internally ye Node ka <code>http.createServer(app).listen(4000)</code> chalata hai. Port 4000 par TCP socket open hota hai aur server incoming network traffic ke liye 24x7 actively wait karna shuru kar deta hai.</div>
+                        </div>
+                    </div>
 
                     <div class="analogy-note">
                         <div class="analogy-note-title">🛵 Indian Real-Life Analogy: Swiggy / Zomato vs Khud Cycle Chala Ke Hotel Jaana</div>
@@ -3095,6 +3198,38 @@ app.<span class="tok-fn">use</span>((<span class="tok-num">err</span>, <span cla
 });</code></pre>
                     </div>
 
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Har Ek Line Ka Post-Mortem (Surgical Code Dissection)</span>
+                            <span class="genz-badge">ZERO GUESSWORK</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">app.use((req, res, next) => { ... });</div>
+                            <div class="dissection-explain"><strong>1. Global Middleware Registration:</strong> <code>app.use()</code> bina kisi route path ke likha gaya hai — iska matlab server par aane wali <strong>HAR SINGLE REQUEST</strong> sabse pehle is function se hokar guzregi.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">next();</div>
+                            <div class="dissection-explain"><strong>2. Execution Handoff:</strong> <code>next()</code> call karna Express me "Green Light" dena hota hai. Ye Express ko bolta hai: <em>"Mera kaam ho gaya, ab pipeline ke agle middleware/route handler ko chalao."</em> Agar ye line bhool gaye, toh browser infinite loading (hanging request) me fas jayega!</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">function requireAuth(req, res, next) { ... }</div>
+                            <div class="dissection-explain"><strong>3. Route Guard Middleware:</strong> Ek custom reusable function jo incoming HTTP request headers se <code>authorization</code> token check karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">res.status(401).json({ ... });</div>
+                            <div class="dissection-explain"><strong>4. Pipeline Short-Circuit:</strong> Agar token missing ya galat hai, toh turant 401 Unauthorized status ke saath response close kar diya. <strong>Notice karo yahan <code>next()</code> call nahi kiya</strong> — taaki dashboard ka secret controller kabhi execute hi na ho sake!</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">app.get('/dashboard', requireAuth, (req, res) => ...);</div>
+                            <div class="dissection-explain"><strong>5. Route-Specific Middleware Attachment:</strong> Express me route aur controller ke beech me middleware pass karte hain. Jab koi <code>/dashboard</code> kholega, Express pehle <code>requireAuth</code> chalayega. Agar usne <code>next()</code> call kiya, tabhi aakhri <code>(req, res)</code> controller tak pahuncha jayega.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">app.use((err, req, res, next) => { ... });</div>
+                            <div class="dissection-explain"><strong>6. 4-Argument Error Handler:</strong> Express function ke <code>length</code> (parameters count) ko check karta hai. Agar 4 parameters (<code>err, req, res, next</code>) hain, toh Express samajh jata hai ki ye **Global Error Handler** hai. Jab bhi kisi route me <code>next(error)</code> call hoga, Express saare normal routes skip karke seedha yahan jump karega!</div>
+                        </div>
+                    </div>
+
                     <div class="analogy-note">
                         <div class="analogy-note-title">🚇 Indian Real-Life Analogy: Delhi Metro Security Check Gates</div>
                         <p>• <strong>Gate 1 (Baggage Scanner):</strong> Request inspect hoti hai — pass hone par bolta hai <code>next()</code>.<br>
@@ -3295,6 +3430,34 @@ app.<span class="tok-fn">post</span>(<span class="tok-str">'/api/company/:compan
 });
 
 app.<span class="tok-fn">listen</span>(<span class="tok-num">4000</span>);</code></pre>
+                    </div>
+
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Har Ek Line Ka Post-Mortem (Surgical Code Dissection)</span>
+                            <span class="genz-badge">DATA EXTRACTION</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const companyId = req.params.companyId;</div>
+                            <div class="dissection-explain"><strong>1. Route Parameter (Mandatory ID):</strong> Route path me <code>:companyId</code> likha hai. Express URL path me se value nikaal kar <code>req.params.companyId</code> me deta hai (e.g. <code>"501"</code>).</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const department = req.query.dept || 'Engineering';</div>
+                            <div class="dissection-explain"><strong>2. Query Parameter (Optional Filter):</strong> URL me <code>?dept=Marketing</code> hone par <code>req.query.dept</code> milega. Agar client ne query param nahi diya, toh fallback default value <code>'Engineering'</code> set ho jayegi.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const { name, role, salary } = req.body;</div>
+                            <div class="dissection-explain"><strong>3. JSON Body Destructuring:</strong> Client ne POST request ki payload body me JSON bheja tha. <code>app.use(express.json())</code> ne us binary stream ko parse karke <code>req.body</code> me JavaScript object bana diya.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">salary: Number(salary)</div>
+                            <div class="dissection-explain"><strong>4. Explicit Type Casting:</strong> Payloads ya URL strings me numbers aksar string ban kar aate hain (e.g. <code>"80000"</code>). Math calculations aur DB schemas ke liye unhe explicitly <code>Number()</code> me cast karna best practice hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">res.status(201).json({ ... });</div>
+                            <div class="dissection-explain"><strong>5. Status 201 Created Response:</strong> Jab bhi naya resource create hota hai, standard HTTP code <strong>201 Created</strong> bheja jata hai. <code>.json()</code> method data ko JSON string bana kar bhejta hai.</div>
+                        </div>
                     </div>
 
                     <div class="mechanics-table-box">
@@ -3554,6 +3717,42 @@ app.<span class="tok-fn">delete</span>(<span class="tok-str">'/api/admin/user/:i
         <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">403</span>).<span class="tok-fn">json</span>({ error: <span class="tok-str">'Admin only!'</span> });
     res.<span class="tok-fn">json</span>({ message: <span class="tok-str">`User ${req.params.id} deleted`</span> });
 });</code></pre>
+                    </div>
+
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 JWT Login & Verification Ka Post-Mortem (Surgical Code Dissection)</span>
+                            <span class="genz-badge">STATELESS AUTHENTICATION</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const token = jwt.sign({ userId, role }, SECRET, { expiresIn: '24h' });</div>
+                            <div class="dissection-explain"><strong>1. JWT Token Signing:</strong> <code>jwt.sign()</code> 3 parameters leta hai: 
+                                • <strong>Payload:</strong> Public user info (password kabhi mat daalna!).<br>
+                                • <strong>Secret Key:</strong> Server ki private string jo <code>.env</code> me hoti hai.<br>
+                                • <strong>Options:</strong> Expiry time (<code>'24h'</code>) — 24 ghante baad token automatically invalid ho jayega.
+                            </div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const authHeader = req.headers['authorization'];</div>
+                            <div class="dissection-explain"><strong>2. Authorization Header Ingestion:</strong> Client request ke headers me se <code>"Bearer eyJhbGci..."</code> string read karta hai. Express me saare header names lowercase me accessible hote hain.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const token = authHeader && authHeader.split(' ')[1];</div>
+                            <div class="dissection-explain"><strong>3. The Space Split Trick:</strong> Header me do words hote hain — "Bearer" aur token string. <code>split(' ')</code> se array <code>["Bearer", "eyJhbGci..."]</code> banti hai, aur index <code>[1]</code> se hum clean JWT string nikaal lete hain.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const decoded = jwt.verify(token, process.env.JWT_SECRET);</div>
+                            <div class="dissection-explain"><strong>4. Cryptographic Validation:</strong> <code>jwt.verify()</code> secret key se HMAC-SHA256 signature calculate karta hai. Agar token client ne tamper kiya hai ya expire ho chuka hai, toh turant <code>catch</code> block me error throw ho jayegi.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">req.user = decoded; next();</div>
+                            <div class="dissection-explain"><strong>5. Context Injection:</strong> Decoded payload (<code>{ userId: 101, role: 'admin' }</code>) ko <code>req.user</code> me save kar diya aur <code>next()</code> call kiya taaki agle controllers ko bina database query kiye pata chal jaye ki kaunsa user logged in hai!</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">if (req.user.role !== 'admin') return res.status(403)...</div>
+                            <div class="dissection-explain"><strong>6. Role-Based Access Control (RBAC):</strong> Authenticated hone ke baad bhi role check kiya — normal user agar admin route access karega toh <strong>403 Forbidden</strong> bhej kar use reject kar diya.</div>
+                        </div>
                     </div>
 
                     <div class="analogy-note" style="margin: 16px 0;">
@@ -4555,6 +4754,22 @@ console.<span class="tok-fn">log</span>(job.postedBy.name);  <span class="tok-co
 console.<span class="tok-fn">log</span>(job.postedBy.email); <span class="tok-com">// "rahul@razorpay.com"</span></code></pre>
                     </div>
 
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Mongoose .populate() Ka Post-Mortem</span>
+                            <span class="genz-badge">RELATIONAL JOIN MECHANICS</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">postedBy: { type: ObjectId, ref: 'User' }</div>
+                            <div class="dissection-explain"><strong>1. Schema Reference Link:</strong> <code>ref: 'User'</code> Mongoose ko batata hai ki is field me store hone wali 24-hex ObjectId string <code>users</code> collection ke document ko point karti hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">await Job.findById(jobId).populate('postedBy', 'name email -_id');</div>
+                            <div class="dissection-explain"><strong>2. Automated 2-Query Join:</strong> Mongoose pehle Job fetch karta hai, phir uski <code>postedBy</code> ObjectId nikaal kar User collection par <code>User.findById()</code> chalata hai aur ID string ko poore User object se replace kar deta hai. <code>'name email -_id'</code> ka matlab hai sirf name aur email laao, password aur _id exclude karo!</div>
+                        </div>
+                    </div>
+
                     <div class="analogy-note">
                         <div class="analogy-note-title">🪪 Indian Real-Life Analogy: Aadhar Number vs UIDAI Database Fetch</div>
                         <p>Job document me <code>postedBy: "64f3..."</code> store karna waise hai jaise form pe sirf <strong>Aadhar number</strong> likhna. <code>.populate('postedBy')</code> call karna waise hai jaise us Aadhar number se <strong>UIDAI database query karke</strong> poora naam, photo aur address screen par populate kar dena.</p>
@@ -4866,6 +5081,30 @@ exports.login = <span class="tok-kw">async</span> (<span class="tok-num">req</sp
 module.exports = upload;</code></pre>
                     </div>
 
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Multer File Upload Engine Ka Post-Mortem</span>
+                            <span class="genz-badge">MULTIPART PARSER</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">cb(null, 'public/uploads/');</div>
+                            <div class="dissection-explain"><strong>1. Destination Callback Contract:</strong> Multer Node.js callback convention use karta hai — pehla argument <code>null</code> ka matlab "koi error nahi hai", dusra argument destination folder path hota hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const uniqueName = Date.now() + '-' + file.originalname;</div>
+                            <div class="dissection-explain"><strong>2. Unique File Timestamp Prefix:</strong> Agar 2 alag users <code>resume.pdf</code> upload karein, toh server par file overwrite na ho — isliye current timestamp (epoch milliseconds) prefix lagaya jata hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">if (file.mimetype.startsWith('image/'))</div>
+                            <div class="dissection-explain"><strong>3. MIME Type Whitelisting:</strong> File extension faked ho sakti hai (e.g. virus.exe ko image.png rename karna). Multer actual HTTP binary stream ka <code>mimetype</code> check karta hai (e.g. <code>image/jpeg</code>, <code>image/png</code>). Non-image aane par error throw karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">limits: { fileSize: 5 * 1024 * 1024 }</div>
+                            <div class="dissection-explain"><strong>4. Denial of Service (DoS) Defense:</strong> <code>5 * 1024 * 1024</code> bytes = Exactly 5 MegaBytes. Koi hacker 10GB ki video file bhej kar server ki hard disk full na kar sake, isliye hard limit lagayi hai.</div>
+                        </div>
+                    </div>
+
                     <div class="concept-sub-title">⚙️ 1.2 Route & Controller Integration</div>
                     <div class="code-container">
                         <div class="code-top-bar"><span>routes/jobRoutes.js + controllers/jobController.js</span><span>File Ingestion in Controller</span></div>
@@ -4931,6 +5170,33 @@ exports.createJob = <span class="tok-kw">async</span> (<span class="tok-num">req
 ];
 
 module.exports = { validateJobInput };</code></pre>
+                    </div>
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 express-validator Pipeline Ka Post-Mortem (Surgical Code Dissection)</span>
+                            <span class="genz-badge">PAYLOAD SANITIZATION</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">body('title').notEmpty().withMessage('...').trim()</div>
+                            <div class="dissection-explain"><strong>1. Field Validation Chain:</strong> <code>body('title')</code> incoming JSON payload ke <code>title</code> field ko target karta hai. <code>notEmpty()</code> ensure karta hai ki string empty na ho, aur <code>trim()</code> extra whitespace auto-remove karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">body('salary').isNumeric().isFloat({ min: 0 })</div>
+                            <div class="dissection-explain"><strong>2. Strict Numeric Constraints:</strong> Salary string ya alphabets nahi honi chahiye (<code>isNumeric</code>) aur negative value allow nahi hai (<code>isFloat({ min: 0 })</code>).</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const errors = validationResult(req);</div>
+                            <div class="dissection-explain"><strong>3. Error Result Evaluator:</strong> <code>validationResult(req)</code> pichli saari validation rules ko scan karta hai aur agar koi bhi field fail hui hai toh structured error array return karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">if (!errors.isEmpty()) return res.status(400)...</div>
+                            <div class="dissection-explain"><strong>4. 400 Bad Request Short-Circuit:</strong> Agar validation fail hui, toh request controller ya database tak jaane hi nahi di — turant 400 Bad Request status bhej kar response close kar diya. Database par zero useless CPU load pada!</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">next();</div>
+                            <div class="dissection-explain"><strong>5. Validation Passed Green Light:</strong> Agar koi error nahi hai, toh <code>next()</code> call hoke controller ko execution handoff ho jata hai.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -5042,6 +5308,29 @@ exports.isJobOwner = <span class="tok-kw">async</span> (<span class="tok-num">re
         <span class="tok-fn">next</span>(err);
     }
 };</code></pre>
+                    </div>
+                    <!-- SURGICAL LINE-BY-LINE DISSECTION -->
+                    <div class="code-dissection-box">
+                        <div class="dissection-header">
+                            <span>🔍 Ownership Authorization Middleware Ka Post-Mortem</span>
+                            <span class="genz-badge">SECURITY & AUTHORIZATION</span>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">const job = await Job.findById(req.params.id);</div>
+                            <div class="dissection-explain"><strong>1. Resource Lookup:</strong> URL param <code>/jobs/:id</code> se job ka ID utha kar database se Job document fetch karta hai. Agar document exist nahi karta, toh turant 404 Not Found return karta hai.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">if (job.postedBy.toString() !== req.user.userId && req.user.role !== 'admin')</div>
+                            <div class="dissection-explain"><strong>2. The ObjectId Trap (.toString()):</strong> <code>job.postedBy</code> MongoDB me ek <strong>BSON ObjectId Object</strong> hota hai, jabki <code>req.user.userId</code> JWT token se aayi hui <strong>String</strong> hoti hai. JavaScript me <code>object !== string</code> hamesha true ho jata hai! Isliye <code>.toString()</code> lagana mandatory hai taaki dono strings ka exact match ho sake. Sath hi agar user ka role <code>'admin'</code> hai toh use bhi bypass allow karte hain.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">return res.status(403).json({ error: ... });</div>
+                            <div class="dissection-explain"><strong>3. 403 Forbidden (Authorization Failure):</strong> User authenticated toh hai (uske paas valid token hai), lekin woh is job ka malik (creator) nahi hai — isliye 403 Forbidden bhej kar route terminate kar diya.</div>
+                        </div>
+                        <div class="dissection-row">
+                            <div class="dissection-code">req.job = job; next();</div>
+                            <div class="dissection-explain"><strong>4. DB Query Caching Optimization:</strong> Humne already DB query chala kar <code>job</code> object manga liya hai. Use <code>req.job</code> me attach kar diya taaki agle controller (update/delete) ko dubara database query na chalani pade!</div>
+                        </div>
                     </div>
                 </div>
 
