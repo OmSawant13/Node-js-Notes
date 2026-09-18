@@ -301,35 +301,42 @@
 
         .chapter-page-box {
             background: #ffffff;
-            border: 3px solid #0f172a;
+            border: 2.5px solid #0f172a;
             border-radius: 24px;
-            padding: 36px 44px;
-            box-shadow: 5px 5px 0px #0f172a;
-            margin-bottom: 32px;
+            padding: 44px 52px;
+            box-shadow: 6px 6px 0px #0f172a;
+            margin-bottom: 48px;
         }
 
         .chapter-header-area {
             border-bottom: 2.5px solid #0f172a;
-            padding-bottom: 20px;
-            margin-bottom: 32px;
+            padding-bottom: 24px;
+            margin-bottom: 36px;
         }
 
         .chapter-header-area h2 {
             font-family: var(--font-accent);
-            font-size: 50px;
+            font-size: 52px;
             font-weight: 700;
             color: #0f172a;
             margin-top: 8px;
         }
 
-        /* CONCEPT SECTIONS WITH CALM SPACIOUS AIRINESS */
+        /* CONCEPT SECTIONS: CLEAN UN-NESTED FLOW (NO REDUNDANT NESTED BORDERS) */
         .concept-block {
-            background: #ffffff;
-            border: 2.5px solid #0f172a;
-            border-radius: 24px;
-            padding: 42px 48px;
-            margin-bottom: 60px;
-            box-shadow: 5px 5px 0px #e2e8f0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            padding: 0;
+            margin-bottom: 64px;
+            box-shadow: none;
+            border-bottom: 2px dashed #cbd5e1;
+            padding-bottom: 48px;
+        }
+        .concept-block:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 24px;
         }
 
         .concept-heading {
