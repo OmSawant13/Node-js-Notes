@@ -1049,7 +1049,7 @@
             <div class="nav-pill-group">
                 <button class="nav-btn" onclick="showHome()">🏠 All Topics</button>
                 <select class="nav-select" id="chapterDropdown" onchange="jumpChapter(this.value)">
-                    <option value="">📖 Go to Chapter (1-11)...</option>
+                    <option value="">📖 Go to Chapter (1-16 + Capstone)...</option>
                     <option value="1">Ch 01: Core JS & ES6 Mechanics</option>
                     <option value="2">Ch 02: Node Architecture & Event Loop</option>
                     <option value="3">Ch 03: File System & Streams Mastery</option>
@@ -1061,6 +1061,12 @@
                     <option value="9">Ch 09: MVC Pattern & Modular Routers</option>
                     <option value="10">Ch 10: Static Assets & EJS Templating</option>
                     <option value="11">Ch 11: Production-Ready Node.js</option>
+                    <option value="12">Ch 12: Database Layer — MongoDB & Mongoose</option>
+                    <option value="13">Ch 13: Real Authentication — bcrypt & JWT Flow</option>
+                    <option value="14">Ch 14: File Uploads — Multer Mastery</option>
+                    <option value="15">Ch 15: Input Validation — express-validator</option>
+                    <option value="16">Ch 16: Deployment — Production Cloud Live</option>
+                    <option value="capstone">🎯 Capstone: TechJobs Portal & Request Traces</option>
                 </select>
                 <button class="nav-btn interview-btn" onclick="showInterviewHub()">💼 30+ Interview Hub</button>
             </div>
@@ -1307,6 +1313,138 @@
                     </div>
                     <div class="hand-card-footer">
                         <span>Open Chapter 11 Notes ➔</span>
+                        <span>🚀</span>
+                    </div>
+                </div>
+
+                <!-- Card 12 -->
+                <div class="hand-card" onclick="openChapter(12)">
+                    <div>
+                        <div class="hand-card-header">
+                            <span class="hand-card-pill">Chapter 12</span>
+                            <span>🍃 Database Layer</span>
+                        </div>
+                        <h3>MongoDB & Mongoose Persistence</h3>
+                        <p>In-memory array failure, MongoDB Atlas cloud cluster, Mongoose Schemas & Models, CRUD queries, ref & .populate() 2-query join mechanics.</p>
+                        <div class="hand-pill-tags">
+                            <span class="hand-pill-tag">NoSQL vs SQL</span>
+                            <span class="hand-pill-tag">Mongoose Schemas</span>
+                            <span class="hand-pill-tag">.populate()</span>
+                            <span class="hand-pill-tag">Aadhar Analogy</span>
+                        </div>
+                    </div>
+                    <div class="hand-card-footer">
+                        <span>Open Chapter 12 Notes ➔</span>
+                        <span>✨</span>
+                    </div>
+                </div>
+
+                <!-- Card 13 -->
+                <div class="hand-card" onclick="openChapter(13)">
+                    <div>
+                        <div class="hand-card-header">
+                            <span class="hand-card-pill">Chapter 13</span>
+                            <span>🔐 Real Authentication</span>
+                        </div>
+                        <h3>bcrypt Password Hashing & JWT Flow</h3>
+                        <p>Plain text disaster, one-way cryptographic hashing, Mongoose pre-save hooks, Signup/Login controllers, and Session vs JWT scaling comparison.</p>
+                        <div class="hand-pill-tags">
+                            <span class="hand-pill-tag">bcrypt (10 rounds)</span>
+                            <span class="hand-pill-tag">Pre-Save Hook</span>
+                            <span class="hand-pill-tag">Anti-Enumeration</span>
+                            <span class="hand-pill-tag">Session vs JWT</span>
+                        </div>
+                    </div>
+                    <div class="hand-card-footer">
+                        <span>Open Chapter 13 Notes ➔</span>
+                        <span>✨</span>
+                    </div>
+                </div>
+
+                <!-- Card 14 -->
+                <div class="hand-card" onclick="openChapter(14)">
+                    <div>
+                        <div class="hand-card-header">
+                            <span class="hand-card-pill">Chapter 14</span>
+                            <span>📁 File Uploads</span>
+                        </div>
+                        <h3>Multer & Multipart Form Data</h3>
+                        <p>Why express.json() fails on binary streams, multipart/form-data boundaries, diskStorage configuration, fileFilter validation & upload handling.</p>
+                        <div class="hand-pill-tags">
+                            <span class="hand-pill-tag">multipart/form-data</span>
+                            <span class="hand-pill-tag">diskStorage</span>
+                            <span class="hand-pill-tag">MIME Filter</span>
+                            <span class="hand-pill-tag">5MB Limits</span>
+                        </div>
+                    </div>
+                    <div class="hand-card-footer">
+                        <span>Open Chapter 14 Notes ➔</span>
+                        <span>✨</span>
+                    </div>
+                </div>
+
+                <!-- Card 15 -->
+                <div class="hand-card" onclick="openChapter(15)">
+                    <div>
+                        <div class="hand-card-header">
+                            <span class="hand-card-pill">Chapter 15</span>
+                            <span>🛡️ Input Validation</span>
+                        </div>
+                        <h3>express-validator — Never Trust Client</h3>
+                        <p>Why client-side checks are easily bypassed, server-side sanitization, schema chains, validationResult(req) error formatting.</p>
+                        <div class="hand-pill-tags">
+                            <span class="hand-pill-tag">body() Chains</span>
+                            <span class="hand-pill-tag">Sanitization</span>
+                            <span class="hand-pill-tag">validationResult</span>
+                            <span class="hand-pill-tag">400 Bad Request</span>
+                        </div>
+                    </div>
+                    <div class="hand-card-footer">
+                        <span>Open Chapter 15 Notes ➔</span>
+                        <span>✨</span>
+                    </div>
+                </div>
+
+                <!-- Card 16 -->
+                <div class="hand-card" onclick="openChapter(16)">
+                    <div>
+                        <div class="hand-card-header">
+                            <span class="hand-card-pill">Chapter 16</span>
+                            <span>🚀 Production Deployment</span>
+                        </div>
+                        <h3>Taking Node Apps Live to the Cloud</h3>
+                        <p>Pre-deployment hardening checklist, dynamic PORT binding, Render.com zero-downtime deployment, environment variable secrets configuration.</p>
+                        <div class="hand-pill-tags">
+                            <span class="hand-pill-tag">Pre-Flight Checklist</span>
+                            <span class="hand-pill-tag">process.env.PORT</span>
+                            <span class="hand-pill-tag">Render Cloud</span>
+                            <span class="hand-pill-tag">Atlas 0.0.0.0/0</span>
+                        </div>
+                    </div>
+                    <div class="hand-card-footer">
+                        <span>Open Chapter 16 Notes ➔</span>
+                        <span>✨</span>
+                    </div>
+                </div>
+
+                <!-- Card Capstone -->
+                <div class="hand-card" style="background: #eff6ff; border: 2px dashed #2563eb;" onclick="openChapter('capstone')">
+                    <div>
+                        <div class="hand-card-header">
+                            <span class="hand-card-pill" style="background: #1e3a8a; color: #fff;">🏆 Capstone & Tracing</span>
+                            <span>💼 6 LPA Standard</span>
+                        </div>
+                        <h3 style="color: #1e3a8a;">TechJobs Portal & Complete Request Traces</h3>
+                        <p>Full MVC production repository, custom isJobOwner authorization middleware, 11-step build matrix, 6 LPA checklist, and exact file-by-file execution diagrams.</p>
+                        <div class="hand-pill-tags">
+                            <span class="hand-pill-tag">Full MVC Repo</span>
+                            <span class="hand-pill-tag">isJobOwner Guard</span>
+                            <span class="hand-pill-tag">Request Traces</span>
+                            <span class="hand-pill-tag">6 LPA Checklist</span>
+                        </div>
+                    </div>
+                    <div class="hand-card-footer" style="color: #2563eb;">
+                        <span>Open Capstone & Request Traces ➔</span>
                         <span>🚀</span>
                     </div>
                 </div>
@@ -2206,6 +2344,62 @@ module.exports = { newFn: () => {} }; <span class="tok-com">// This is the actua
                 </div>
 
             </div>
+        
+                <!-- TOPIC 5: CLUSTER MODULE & MULTI-CORE SCALING -->
+                <div class="concept-block">
+                    <div class="concept-heading">5. Scaling Multi-Core CPUs — The Cluster Module & Worker Threads</div>
+
+                    <div class="concept-sub-title">🔴 5.1 Interview Trap: "Node.js Single-Threaded Hai Toh 8-Core CPU Kaise Use Karega?"</div>
+                    <p>Agar aapke server me 8-Core ya 16-Core CPU hai, aur aap sirf <code>node app.js</code> chalate ho, toh Node sirf <strong>1 single CPU Core</strong> use karega — baaki 7 Cores 0% utilization par idle baithe rahenge!</p>
+                    <p><strong>Solution — Cluster Module:</strong> Node.js ka built-in <code>cluster</code> module Master-Worker architecture use karta hai. Ek <strong>Primary process</strong> spawn hoti hai jo har CPU core par ek <strong>Worker Node process</strong> fork karti hai aur incoming TCP traffic ko automatically load-balance karti hai.</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>server_cluster.js</span><span>Multi-Core Cluster Scaling</span></div>
+                        <pre><code><span class="tok-kw">const</span> cluster = <span class="tok-fn">require</span>(<span class="tok-str">'cluster'</span>);
+<span class="tok-kw">const</span> os      = <span class="tok-fn">require</span>(<span class="tok-str">'os'</span>);
+<span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>);
+
+<span class="tok-kw">const</span> totalCPUs = os.<span class="tok-fn">cpus</span>().length; <span class="tok-com">// e.g. 8 Cores</span>
+
+<span class="tok-kw">if</span> (cluster.isPrimary) {
+    console.<span class="tok-fn">log</span>(<span class="tok-str">`👑 Primary Process ${process.pid} is running. Forking ${totalCPUs} workers...`</span>);
+
+    <span class="tok-com">// Har CPU Core ke liye ek worker spawn karo:</span>
+    <span class="tok-kw">for</span> (<span class="tok-kw">let</span> i = <span class="tok-num">0</span>; i &lt; totalCPUs; i++) {
+        cluster.<span class="tok-fn">fork</span>();
+    }
+
+    <span class="tok-com">// Auto-Healing: Agar koi worker crash ho jaye, turant naya fork karo!</span>
+    cluster.<span class="tok-fn">on</span>(<span class="tok-str">'exit'</span>, (<span class="tok-num">worker</span>) => {
+        console.<span class="tok-fn">warn</span>(<span class="tok-str">`⚠️ Worker ${worker.process.pid} died. Spawning replacement...`</span>);
+        cluster.<span class="tok-fn">fork</span>();
+    });
+} <span class="tok-kw">else</span> {
+    <span class="tok-com">// Workers share the SAME TCP Port (Port 4000):</span>
+    <span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();
+    app.<span class="tok-fn">get</span>(<span class="tok-str">'/'</span>, (<span class="tok-num">req</span>, <span class="tok-num">res</span>) => res.<span class="tok-fn">send</span>(<span class="tok-str">`Served by Worker PID: ${process.pid}`</span>));
+    app.<span class="tok-fn">listen</span>(<span class="tok-num">4000</span>);
+}</code></pre>
+                    </div>
+
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Cluster vs Worker Threads: Kab Kaunsa Use Karein?</span>
+                            <span class="genz-badge">SCALING MATRIX</span>
+                        </div>
+                        <div class="anatomy-callout-grid">
+                            <div class="anatomy-callout-card">
+                                <span class="callout-badge bg-green">⚡ Cluster Module</span>
+                                <div><strong>Multiple Independent Node Processes:</strong> Best for scaling HTTP Web Servers. Har process ki apni memory hoti hai aur wo same port share karte hain.</div>
+                            </div>
+                            <div class="anatomy-callout-card">
+                                <span class="callout-badge bg-yellow">🧠 Worker Threads (worker_threads)</span>
+                                <div><strong>Multiple Threads in SAME Process:</strong> Best for Heavy CPU-bound tasks (Image processing, AI encryption, Video transcoding) with shared memory.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
         </section>
 
         <!-- ==================== VIEW 2: CHAPTER 3 DEEP DIVE ==================== -->
@@ -3114,7 +3308,12 @@ app.<span class="tok-fn">listen</span>(<span class="tok-num">4000</span>);</code
                             </tbody>
                         </table>
                     </div>
-                </div>
+                
+                    <div class="analogy-note" style="margin-top: 24px;">
+                        <div class="analogy-note-title">🔒 Production Auth Bridge Note</div>
+                        <p>Yahan humne JWT signing aur Bearer token extraction ka architecture seekha. <strong>Complete User Signup, Login, Password Hashing with bcrypt, aur Database Hooks ka full production flow Chapter 13 me detail me cover kiya gaya hai!</strong></p>
+                    </div>
+</div>
             </div>
         </section>
 
@@ -3456,7 +3655,7 @@ app.<span class="tok-fn">delete</span>(<span class="tok-str">'/api/admin/user/:i
                     <p>Sabse pehle decide karo ki data kahan aur kaise store hoga. Model layer direct data se deal karti hai:</p>
                     <div class="code-container">
                         <div class="code-top-bar"><span>models/jobModel.js</span><span>Layer 1: Model (Data Store)</span></div>
-                        <pre><code><span class="tok-com">// In-memory data store (ya real MongoDB Mongoose Model):</span>
+                        <pre><code><span class="tok-com">// In-memory Model (Real MongoDB Mongoose Model ke sath complete DB connection Chapter 12 me hai):</span>
 <span class="tok-kw">let</span> jobsDatabase = [
     { id: <span class="tok-num">1</span>, title: <span class="tok-str">'Backend Developer'</span>, company: <span class="tok-str">'Razorpay'</span>, salary: <span class="tok-str">'6 LPA'</span> },
     { id: <span class="tok-num">2</span>, title: <span class="tok-str">'Node.js Engineer'</span>, company: <span class="tok-str">'Swiggy'</span>, salary: <span class="tok-str">'8 LPA'</span> }
@@ -3640,6 +3839,29 @@ app.<span class="tok-fn">listen</span>(PORT, () => console.<span class="tok-fn">
                         </table>
                     </div>
 
+                    
+                    <div class="concept-sub-title">🔄 1.3 HTML Form Limitation & method-override (PUT & DELETE from Browser)</div>
+                    <p>Standard HTML <code>&lt;form&gt;</code> tags sirf <strong>GET</strong> aur <strong>POST</strong> methods support karte hain — browser forms se <strong>PUT</strong> ya <strong>DELETE</strong> request directly trigger nahi ho sakti!</p>
+                    <p><strong>Solution — <code>method-override</code>:</strong> Ye middleware query string <code>?_method=DELETE</code> ya hidden input ko read karke HTTP POST request ko actual PUT ya DELETE request me transform kar deta hai.</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>app.js + views/jobs/edit.ejs</span><span>method-override Integration</span></div>
+                        <pre><code><span class="tok-com">// npm install method-override</span>
+<span class="tok-kw">const</span> methodOverride = <span class="tok-fn">require</span>(<span class="tok-str">'method-override'</span>);
+app.<span class="tok-fn">use</span>(<span class="tok-fn">methodOverride</span>(<span class="tok-str">'_method'</span>)); <span class="tok-com">// 👈 Enables ?_method=PUT / DELETE</span>
+
+<span class="tok-com">&lt;!-- EJS Form me Delete button: --&gt;</span>
+&lt;form action="/api/jobs/&lt;%= job.id %&gt;?_method=DELETE" method="POST"&gt;
+    &lt;button type="submit" class="btn-delete"&gt;Delete Job Opening&lt;/button&gt;
+&lt;/form&gt;
+
+<span class="tok-com">&lt;!-- EJS Form me Update (PUT) form: --&gt;</span>
+&lt;form action="/api/jobs/&lt;%= job.id %&gt;?_method=PUT" method="POST"&gt;
+    &lt;input type="text" name="title" value="&lt;%= job.title %&gt;" /&gt;
+    &lt;button type="submit"&gt;Update Job&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+                    </div>
+
                     <div class="concept-sub-title">🎨 1.2 Serving Static Assets securely with express.static()</div>
                     <p>CSS files, images (<code>logo.png</code>), aur client-side JavaScript ko serve karne ke liye <code>express.static</code> built-in middleware use hota hai:</p>
 
@@ -3734,7 +3956,42 @@ app.<span class="tok-fn">listen</span>(<span class="tok-num">4000</span>);</code
                             </tbody>
                         </table>
                     </div>
+                
+                <!-- TOPIC 6: RATE LIMITING, PM2 & COMPRESSION -->
+                <div class="concept-block">
+                    <div class="concept-heading">6. Production Performance & DDoS Protection — rate-limit, PM2 & compression</div>
+
+                    <div class="concept-sub-title">🛡️ 6.1 express-rate-limit — Brute-Force & DDoS Protection</div>
+                    <p>Agar koi hacker automated script chala kar aapke <code>/api/login</code> route par 1 second mein 10,000 passwords try karega (Brute-force attack), toh server crash ho sakta hai. <code>express-rate-limit</code> per IP requests ko limit karta hai:</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>middleware/rateLimiter.js</span><span>Rate Limiter Configuration</span></div>
+                        <pre><code><span class="tok-kw">const</span> rateLimit = <span class="tok-fn">require</span>(<span class="tok-str">'express-rate-limit'</span>);
+
+<span class="tok-com">// Global API Limiter: 100 requests per 15 minutes per IP:</span>
+<span class="tok-kw">const</span> apiLimiter = <span class="tok-fn">rateLimit</span>({
+    windowMs: <span class="tok-num">15</span> * <span class="tok-num">60</span> * <span class="tok-num">1000</span>, <span class="tok-com">// 15 minutes window</span>
+    max: <span class="tok-num">100</span>,                 <span class="tok-com">// Max 100 requests per IP</span>
+    message: { error: <span class="tok-str">'Too many requests from this IP. Please try again after 15 minutes.'</span> }
+});
+
+<span class="tok-com">// Strict Auth Limiter: Max 5 login attempts per hour per IP:</span>
+<span class="tok-kw">const</span> authLimiter = <span class="tok-fn">rateLimit</span>({
+    windowMs: <span class="tok-num">60</span> * <span class="tok-num">60</span> * <span class="tok-num">1000</span>,
+    max: <span class="tok-num">5</span>,
+    message: { error: <span class="tok-str">'Too many login attempts. Account temporarily locked for 1 hour.'</span> }
+});
+
+app.<span class="tok-fn">use</span>(<span class="tok-str">'/api/'</span>, apiLimiter);
+app.<span class="tok-fn">use</span>(<span class="tok-str">'/api/auth/login'</span>, authLimiter);</code></pre>
+                    </div>
+
+                    <div class="concept-sub-title">⚡ 6.2 PM2 (Process Manager) & gzip compression</div>
+                    <p>• <strong>PM2 Process Manager:</strong> Production Linux servers (AWS EC2 / DigitalOcean) par <code>nodemon</code> nahi, <strong>PM2</strong> chalta hai. PM2 server crash hone par 0.01 sec mein auto-restart karta hai, zero-downtime reloads deta hai, aur cluster mode enable karta hai: <code>pm2 start app.js -i max</code>.<br>
+                    • <strong>compression:</strong> <code>npm install compression</code> middleware HTTP response JSON/HTML payloads ko Gzip/Brotli format mein 70% compress kar deta hai, jisse mobile apps par response ultra-fast load hota hai.</p>
                 </div>
+
+</div>
             </div>
         </section>
 
@@ -4127,6 +4384,639 @@ app.<span class="tok-fn">listen</span>(PORT, () => {
             </div>
         </section>
 
+        
+        <!-- ==================== VIEW 2: CHAPTER 12 DEEP DIVE ==================== -->
+        <section id="chapter-12" class="chapter-content-section">
+            <div class="chapter-page-box">
+                <div class="chapter-header-area">
+                    <span class="genz-badge">Chapter 12 • Database Layer</span>
+                    <h2>MongoDB & Mongoose — From In-Memory Arrays to Real Persistence</h2>
+                </div>
+
+                <div class="brush-banner">Permanent Data Storage with Schemas, Models & Relationships</div>
+
+                <!-- TOPIC 1: THE WHY & NOSQL MONGODB -->
+                <div class="concept-block">
+                    <div class="concept-heading">1. Why In-Memory Arrays Fail & MongoDB Fundamentals</div>
+
+                    <div class="concept-sub-title">🤔 1.1 Problem Kya Thi? (Why In-Memory Arrays Fail)</div>
+                    <p>Ab tak humne data JavaScript array me store kiya: <code>let jobsDatabase = [{ id: 1, title: 'Dev' }];</code>. Ye <strong>fake persistence</strong> hai. Server restart hote hi (nodemon se ya crash se) ye array <strong>wapas empty</strong> ho jata hai — sab data gayab! Real users ka data memory me rakhna impossible hai. Chahiye ek <strong>database</strong> jo disk pe permanently store kare aur multiple server instances (scaling) se bhi access ho sake.</p>
+
+                    <div class="concept-sub-title">📖 1.2 MongoDB Kya Hai? (NoSQL Document Database)</div>
+                    <p>MongoDB ek <strong>NoSQL Document Database</strong> hai — data JSON jaise <strong>documents (BSON format)</strong> me store hota hai, aur similar documents ek <strong>collection</strong> me rehte hain.</p>
+
+                    <div class="mechanics-table-box">
+                        <table class="mechanics-table">
+                            <thead><tr><th>SQL World</th><th>MongoDB World</th><th>Real-Life Meaning</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>Database</code></td><td><code>Database</code></td><td>Pura company container</td></tr>
+                                <tr><td><code>Table</code></td><td><code>Collection</code></td><td>Jobs ya Users ki list</td></tr>
+                                <tr><td><code>Row</code></td><td><code>Document (BSON)</code></td><td>Ek single Job ka JSON-like object</td></tr>
+                                <tr><td><code>Column</code></td><td><code>Field</code></td><td><code>title</code>, <code>salary</code>, <code>company</code></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="analogy-note">
+                        <div class="analogy-note-title">🏢 Indian Real-Life Analogy: Rough Scratchpad vs Bank Central Vault</div>
+                        <p>• <strong>In-Memory Array:</strong> Table par rakha rough pencil paper — shaam ko jhadu lagte hi phek diya jata hai (Server restart par wipe).<br>
+                        • <strong>MongoDB Atlas Cloud:</strong> Bank ka underground fire-proof digital locker — chahe building ka light chala jaye ya manager badal jaye (server restart/crash), data 100 saal tak safe aur intact rehta hai.</p>
+                    </div>
+                </div>
+
+                <!-- TOPIC 2: MONGOOSE SCHEMAS & MODELS -->
+                <div class="concept-block">
+                    <div class="concept-heading">2. Mongoose ODM — Schemas, Field Options & Validation</div>
+
+                    <div class="concept-sub-title">📖 2.1 Mongoose Setup & Connection</div>
+                    <p>Raw MongoDB driver mein koi validation nahi hoti. <strong>Mongoose</strong> ek ODM (Object Data Modeling) library hai jo schema enforcement, validation, auto-casting, aur middleware hooks deti hai:</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>config/db.js</span><span>MongoDB Atlas Cloud Connection</span></div>
+                        <pre><code><span class="tok-kw">const</span> mongoose = <span class="tok-fn">require</span>(<span class="tok-str">'mongoose'</span>);
+
+<span class="tok-kw">const</span> <span class="tok-fn">connectDB</span> = <span class="tok-kw">async</span> () => {
+    <span class="tok-kw">try</span> {
+        <span class="tok-kw">const</span> conn = <span class="tok-kw">await</span> mongoose.<span class="tok-fn">connect</span>(process.env.MONGO_URI);
+        console.<span class="tok-fn">log</span>(<span class="tok-str">`✅ MongoDB Connected: ${conn.connection.host}`</span>);
+    } <span class="tok-kw">catch</span> (err) {
+        console.<span class="tok-fn">error</span>(<span class="tok-str">`❌ DB Connection Error: ${err.message}`</span>);
+        process.<span class="tok-fn">exit</span>(<span class="tok-num">1</span>); <span class="tok-com">// Fail-fast shutdown</span>
+    }
+};
+
+module.exports = connectDB;</code></pre>
+                    </div>
+
+                    <div class="concept-sub-title">📐 2.2 Schema Definition with Field Options & Relationships</div>
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>models/Job.js</span><span>Mongoose Job Schema</span></div>
+                        <pre><code><span class="tok-kw">const</span> mongoose = <span class="tok-fn">require</span>(<span class="tok-str">'mongoose'</span>);
+
+<span class="tok-kw">const</span> jobSchema = <span class="tok-kw">new</span> mongoose.<span class="tok-fn">Schema</span>({
+    title: {
+        type: String,
+        required: [<span class="tok-kw">true</span>, <span class="tok-str">'Job title is required'</span>],
+        trim: <span class="tok-kw">true</span>
+    },
+    company: {
+        type: String,
+        required: [<span class="tok-kw">true</span>, <span class="tok-str">'Company name is required'</span>],
+        trim: <span class="tok-kw">true</span>
+    },
+    salary: {
+        type: Number,
+        required: [<span class="tok-kw">true</span>, <span class="tok-str">'Salary is required'</span>],
+        min: [<span class="tok-num">0</span>, <span class="tok-str">'Salary cannot be negative'</span>]
+    },
+    category: {
+        type: String,
+        enum: [<span class="tok-str">'Engineering'</span>, <span class="tok-str">'Design'</span>, <span class="tok-str">'Marketing'</span>, <span class="tok-str">'Sales'</span>],
+        default: <span class="tok-str">'Engineering'</span>
+    },
+    <span class="tok-com">// 🔗 RELATIONSHIP: Yeh field User collection ke document ko reference karti hai</span>
+    postedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: <span class="tok-str">'User'</span>,       <span class="tok-com">// 👈 Kis Model ko point kar raha hai</span>
+        required: <span class="tok-kw">true</span>
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+module.exports = mongoose.<span class="tok-fn">model</span>(<span class="tok-str">'Job'</span>, jobSchema);
+<span class="tok-com">// Mongoose automatically 'jobs' naam ka collection banata hai (lowercase + plural)!</span></code></pre>
+                    </div>
+
+                    <!-- BIO-ANATOMY: SCHEMA FIELD OPTIONS -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Visual Anatomy: Schema Field Options Dissected</span>
+                            <span class="genz-badge">DATA INTEGRITY RULES</span>
+                        </div>
+                        <div class="anatomy-code-center">
+                            <div><span class="pill-kw">type: String/Number/ObjectId</span> ──> Strict type checking & auto-casting</div>
+                            <div style="margin-top: 8px;"><span class="pill-err">required: [true, 'Msg']</span> ────────> Validation error if missing in payload</div>
+                            <div style="margin-top: 8px;"><span class="pill-fn">trim: true</span> ──────────────────────> Auto-strips leading/trailing spaces</div>
+                            <div style="margin-top: 8px;"><span class="pill-await">enum: ['Eng', 'Design']</span> ─────────> Restricts string to predefined whitelist</div>
+                            <div style="margin-top: 8px;"><span class="pill-res">ref: 'User'</span> ─────────────────────> Foreign key reference link for .populate()</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TOPIC 3: CRUD & POPULATE RELATIONSHIPS -->
+                <div class="concept-block">
+                    <div class="concept-heading">3. Mongoose CRUD & Relationships with .populate()</div>
+
+                    <div class="concept-sub-title">📖 3.1 CRUD Operations with Mongoose Methods</div>
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>controllers/jobController.js</span><span>Async Mongoose Queries</span></div>
+                        <pre><code><span class="tok-kw">const</span> Job = <span class="tok-fn">require</span>(<span class="tok-str">'../models/Job'</span>);
+
+<span class="tok-com">// 1. CREATE:</span>
+<span class="tok-kw">const</span> newJob = <span class="tok-kw">await</span> Job.<span class="tok-fn">create</span>({
+    title: <span class="tok-str">'Backend Node.js Engineer'</span>,
+    company: <span class="tok-str">'Razorpay'</span>,
+    salary: <span class="tok-num">800000</span>,
+    postedBy: req.user.userId
+});
+
+<span class="tok-com">// 2. READ (Find, Filter & Operators):</span>
+<span class="tok-kw">const</span> allJobs    = <span class="tok-kw">await</span> Job.<span class="tok-fn">find</span>();                                 <span class="tok-com">// All documents</span>
+<span class="tok-kw">const</span> oneJob     = <span class="tok-kw">await</span> Job.<span class="tok-fn">findById</span>(req.params.id);               <span class="tok-com">// By ObjectId</span>
+<span class="tok-kw">const</span> highSalary = <span class="tok-kw">await</span> Job.<span class="tok-fn">find</span>({ salary: { $gte: <span class="tok-num">600000</span> } });     <span class="tok-com">// $gte = >= 6 LPA</span>
+
+<span class="tok-com">// 3. UPDATE:</span>
+<span class="tok-kw">const</span> updated = <span class="tok-kw">await</span> Job.<span class="tok-fn">findByIdAndUpdate</span>(
+    req.params.id,
+    { salary: <span class="tok-num">900000</span> },
+    { new: <span class="tok-kw">true</span>, runValidators: <span class="tok-kw">true</span> } <span class="tok-com">// { new: true } returns updated doc!</span>
+);
+
+<span class="tok-com">// 4. DELETE:</span>
+<span class="tok-kw">await</span> Job.<span class="tok-fn">findByIdAndDelete</span>(req.params.id);</code></pre>
+                    </div>
+
+                    <div class="concept-sub-title">🔗 3.2 Relationships: ref & .populate() (⭐ Top Interview Topic)</div>
+                    <p><strong>Problem:</strong> <code>job.postedBy</code> sirf ek 24-character hexadecimal ObjectId string hoti hai (e.g. <code>"64f3a2b1c9e77f0012ab34cd"</code>). Client ko recruiter ka naam aur email bhi chahiye.<br>
+                    <strong>Solution — <code>.populate()</code>:</strong> Mongoose automatically ek second query chala kar us ObjectId ko User collection ke actual document se replace kar deta hai!</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>populate_demo.js</span><span>Joining Collections with .populate()</span></div>
+                        <pre><code><span class="tok-com">// ❌ Bina populate:</span>
+<span class="tok-kw">const</span> job = <span class="tok-kw">await</span> Job.<span class="tok-fn">findById</span>(jobId);
+console.<span class="tok-fn">log</span>(job.postedBy); <span class="tok-com">// "64f3a2b1c9e77f0012ab34cd" (Sirf ID)</span>
+
+<span class="tok-com">// ✅ Populate ke sath:</span>
+<span class="tok-kw">const</span> job = <span class="tok-kw">await</span> Job.<span class="tok-fn">findById</span>(jobId).<span class="tok-fn">populate</span>(<span class="tok-str">'postedBy'</span>, <span class="tok-str">'name email -_id'</span>);
+console.<span class="tok-fn">log</span>(job.postedBy.name);  <span class="tok-com">// "Rahul Sharma" (Poora User Object!)</span>
+console.<span class="tok-fn">log</span>(job.postedBy.email); <span class="tok-com">// "rahul@razorpay.com"</span></code></pre>
+                    </div>
+
+                    <div class="analogy-note">
+                        <div class="analogy-note-title">🪪 Indian Real-Life Analogy: Aadhar Number vs UIDAI Database Fetch</div>
+                        <p>Job document me <code>postedBy: "64f3..."</code> store karna waise hai jaise form pe sirf <strong>Aadhar number</strong> likhna. <code>.populate('postedBy')</code> call karna waise hai jaise us Aadhar number se <strong>UIDAI database query karke</strong> poora naam, photo aur address screen par populate kar dena.</p>
+                    </div>
+
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Under The Hood: How .populate() Executes 2 Queries</span>
+                            <span class="genz-badge">TWO-QUERY JOIN</span>
+                        </div>
+                        <div class="anatomy-code-center">
+                            <div>Query 1 ──> <span class="pill-fn">db.jobs.findOne({ _id: jobId })</span> ──> Returns <code>{ title: 'Dev', postedBy: ObjectId('u1') }</code></div>
+                            <div style="margin-top: 8px;">│</div>
+                            <div>Query 2 ──> <span class="pill-kw">db.users.find({ _id: { $in: ['u1'] } })</span> ──> Fetches User document</div>
+                            <div style="margin-top: 8px;">│</div>
+                            <div>Merge ────> <span class="pill-res">postedBy: { name: 'Rahul', email: 'rahul@dev.com' }</span> ──> Client gets full JSON! ✅</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 2: CHAPTER 13 DEEP DIVE ==================== -->
+        <section id="chapter-13" class="chapter-content-section">
+            <div class="chapter-page-box">
+                <div class="chapter-header-area">
+                    <span class="genz-badge">Chapter 13 • Real Authentication</span>
+                    <h2>bcrypt Password Hashing & Complete Auth Architecture</h2>
+                </div>
+
+                <div class="brush-banner">One-Way Hashing, Pre-Save Hooks & Anti-Enumeration Defense</div>
+
+                <!-- TOPIC 1: BCRYPT & PRE-SAVE HOOK -->
+                <div class="concept-block">
+                    <div class="concept-heading">1. bcrypt One-Way Hashing & User Schema Pre-Save Hook</div>
+
+                    <div class="concept-sub-title">🔴 1.1 Problem: Plain-Text Passwords in DB = Crime & Catastrophe</div>
+                    <p>Agar <code>password = "rahul123"</code> database me seedha store karoge aur database leak ho jaye, toh sabhi users ke accounts hack ho jayenge. Passwords <strong>kabhi bhi plain-text me store nahi hote</strong>. Unhe <strong>One-Way Hashing algorithm (bcrypt)</strong> se hash kiya jata hai jisse hash ko kabhi decrypt na kiya ja sake.</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>models/User.js</span><span>User Schema with Automatic Password Hashing Hook</span></div>
+                        <pre><code><span class="tok-kw">const</span> mongoose = <span class="tok-fn">require</span>(<span class="tok-str">'mongoose'</span>);
+<span class="tok-kw">const</span> bcrypt   = <span class="tok-fn">require</span>(<span class="tok-str">'bcrypt'</span>);
+
+<span class="tok-kw">const</span> userSchema = <span class="tok-kw">new</span> mongoose.<span class="tok-fn">Schema</span>({
+    name:     { type: String, required: <span class="tok-kw">true</span> },
+    email:    { type: String, required: <span class="tok-kw">true</span>, unique: <span class="tok-kw">true</span>, lowercase: <span class="tok-kw">true</span> },
+    password: { type: String, required: <span class="tok-kw">true</span>, minlength: <span class="tok-num">6</span> },
+    role:     { type: String, enum: [<span class="tok-str">'candidate'</span>, <span class="tok-str">'recruiter'</span>, <span class="tok-str">'admin'</span>], default: <span class="tok-str">'candidate'</span> }
+});
+
+<span class="tok-com">// 🪝 PRE-SAVE HOOK: Document save hone se theek PEHLE automatically chalega:</span>
+userSchema.<span class="tok-fn">pre</span>(<span class="tok-str">'save'</span>, <span class="tok-kw">async</span> <span class="tok-kw">function</span> (<span class="tok-num">next</span>) {
+    <span class="tok-kw">if</span> (!<span class="tok-kw">this</span>.<span class="tok-fn">isModified</span>(<span class="tok-str">'password'</span>)) <span class="tok-kw">return</span> <span class="tok-fn">next</span>(); <span class="tok-com">// Password modify nahi hua toh skip karo</span>
+    <span class="tok-kw">this</span>.password = <span class="tok-kw">await</span> bcrypt.<span class="tok-fn">hash</span>(<span class="tok-kw">this</span>.password, <span class="tok-num">10</span>); <span class="tok-com">// 10 Salt Rounds</span>
+    <span class="tok-fn">next</span>();
+});
+
+module.exports = mongoose.<span class="tok-fn">model</span>(<span class="tok-str">'User'</span>, userSchema);</code></pre>
+                    </div>
+
+                    <div class="analogy-note">
+                        <div class="analogy-note-title">🍳 Indian Real-Life Analogy: Omlette vs Egg (Reversibility)</div>
+                        <p>• <strong>Encryption (AES/RSA):</strong> Ek locker me key lagana — jiske paas chaabi hai wo decrypt karke wapas original data dekh sakta hai.<br>
+                        • <strong>One-Way Hashing (bcrypt):</strong> Ande ka omlette bana dena — aap kitna bhi zor laga lo omlette se wapas kaccha anda nahi ban sakta! Login ke waqt naye password ka omlette bana kar purane omlette se match kiya jata hai.</p>
+                    </div>
+                </div>
+
+                <!-- TOPIC 2: SIGNUP & LOGIN FLOW -->
+                <div class="concept-block">
+                    <div class="concept-heading">2. Complete Signup & Login Controller with JWT Token Emission</div>
+
+                    <div class="concept-sub-title">⚙️ 2.1 Production Auth Controller (Anti-Enumeration Guard)</div>
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>controllers/authController.js</span><span>Signup + Login Logic</span></div>
+                        <pre><code><span class="tok-kw">const</span> User   = <span class="tok-fn">require</span>(<span class="tok-str">'../models/User'</span>);
+<span class="tok-kw">const</span> bcrypt = <span class="tok-fn">require</span>(<span class="tok-str">'bcrypt'</span>);
+<span class="tok-kw">const</span> jwt    = <span class="tok-fn">require</span>(<span class="tok-str">'jsonwebtoken'</span>);
+
+<span class="tok-com">// ===== 1. SIGNUP =====</span>
+exports.signup = <span class="tok-kw">async</span> (<span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) => {
+    <span class="tok-kw">try</span> {
+        <span class="tok-kw">const</span> { name, email, password, role } = req.body;
+
+        <span class="tok-kw">const</span> existingUser = <span class="tok-kw">await</span> User.<span class="tok-fn">findOne</span>({ email });
+        <span class="tok-kw">if</span> (existingUser) {
+            <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">409</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">false</span>, error: <span class="tok-str">'Email already registered'</span> }); <span class="tok-com">// 409 Conflict</span>
+        }
+
+        <span class="tok-com">// Pre-save hook will automatically hash the password:</span>
+        <span class="tok-kw">const</span> user = <span class="tok-kw">await</span> User.<span class="tok-fn">create</span>({ name, email, password, role });
+
+        <span class="tok-kw">const</span> token = jwt.<span class="tok-fn">sign</span>(
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: <span class="tok-str">'7d'</span> }
+        );
+
+        res.<span class="tok-fn">status</span>(<span class="tok-num">201</span>).<span class="tok-fn">json</span>({
+            success: <span class="tok-kw">true</span>,
+            token,
+            user: { id: user._id, name: user.name, email: user.email, role: user.role } <span class="tok-com">// ⚠️ Never return password!</span>
+        });
+    } <span class="tok-kw">catch</span> (err) {
+        <span class="tok-fn">next</span>(err);
+    }
+};
+
+<span class="tok-com">// ===== 2. LOGIN =====</span>
+exports.login = <span class="tok-kw">async</span> (<span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) => {
+    <span class="tok-kw">try</span> {
+        <span class="tok-kw">const</span> { email, password } = req.body;
+
+        <span class="tok-kw">const</span> user = <span class="tok-kw">await</span> User.<span class="tok-fn">findOne</span>({ email });
+        <span class="tok-kw">if</span> (!user) {
+            <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">401</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">false</span>, error: <span class="tok-str">'Invalid credentials'</span> }); <span class="tok-com">// Generic error!</span>
+        }
+
+        <span class="tok-com">// Compare plain password with DB hash:</span>
+        <span class="tok-kw">const</span> isMatch = <span class="tok-kw">await</span> bcrypt.<span class="tok-fn">compare</span>(password, user.password);
+        <span class="tok-kw">if</span> (!isMatch) {
+            <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">401</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">false</span>, error: <span class="tok-str">'Invalid credentials'</span> }); <span class="tok-com">// Same error message!</span>
+        }
+
+        <span class="tok-kw">const</span> token = jwt.<span class="tok-fn">sign</span>(
+            { userId: user._id, role: user.role },
+            process.env.JWT_SECRET,
+            { expiresIn: <span class="tok-str">'7d'</span> }
+        );
+
+        res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">true</span>, token, message: <span class="tok-str">'Login successful'</span> });
+    } <span class="tok-kw">catch</span> (err) {
+        <span class="tok-fn">next</span>(err);
+    }
+};</code></pre>
+                    </div>
+
+                    <!-- BIO-ANATOMY: SESSION VS JWT COMPARISON -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 Session vs JWT Matrix (Top 6 LPA Interview Q)</span>
+                            <span class="genz-badge">AUTH ARCHITECTURE</span>
+                        </div>
+                        <div class="mechanics-table-box" style="margin: 0;">
+                            <table class="mechanics-table">
+                                <thead><tr><th>Feature</th><th>Session-Based Auth</th><th>JWT-Based Token Auth</th></tr></thead>
+                                <tbody>
+                                    <tr><td>State Location</td><td>Server Memory / Redis DB</td><td>Client Storage (Stateless payload)</td></tr>
+                                    <tr><td>Horizontal Scaling</td><td>Requires shared Redis cluster</td><td>Effortless — Any server can verify</td></tr>
+                                    <tr><td>Instant Logout</td><td>Easy (Delete session from DB)</td><td>Requires token blacklist or short TTL</td></tr>
+                                    <tr><td>Ideal Use Case</td><td>Traditional SSR Websites (EJS)</td><td>REST APIs, Mobile Apps, Microservices</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 2: CHAPTER 14 DEEP DIVE ==================== -->
+        <section id="chapter-14" class="chapter-content-section">
+            <div class="chapter-page-box">
+                <div class="chapter-header-area">
+                    <span class="genz-badge">Chapter 14 • File Uploads</span>
+                    <h2>Multer — Handling Images, Resumes & Multipart Payloads</h2>
+                </div>
+
+                <div class="brush-banner">Binary Stream Ingestion, Disk Storage & File Filtering</div>
+
+                <!-- TOPIC 1: MULTIPART ENCODING & MULTER CONFIG -->
+                <div class="concept-block">
+                    <div class="concept-heading">1. Why express.json() Fails on Files & Multer DiskStorage</div>
+
+                    <div class="concept-sub-title">🔴 1.1 Problem Kya Thi? (Why JSON Parsers Cannot Parse Files)</div>
+                    <p><code>express.json()</code> sirf text-based JSON string parse karta hai. Image (PNG/JPEG) ya PDF files <strong>raw binary byte streams</strong> hoti hain jo HTML form se <code>multipart/form-data</code> encoding ke sath boundaries me aati hain. Isko handle karne ke liye <strong>multer</strong> streaming parser middleware use hota hai.</p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>middleware/upload.js</span><span>Multer Storage & FileFilter Config</span></div>
+                        <pre><code><span class="tok-kw">const</span> multer = <span class="tok-fn">require</span>(<span class="tok-str">'multer'</span>);
+<span class="tok-kw">const</span> path   = <span class="tok-fn">require</span>(<span class="tok-str">'path'</span>);
+
+<span class="tok-com">// 1. Disk Storage Configuration:</span>
+<span class="tok-kw">const</span> storage = multer.<span class="tok-fn">diskStorage</span>({
+    destination: (<span class="tok-num">req</span>, <span class="tok-num">file</span>, <span class="tok-num">cb</span>) => {
+        cb(<span class="tok-kw">null</span>, <span class="tok-str">'public/uploads/'</span>); <span class="tok-com">// Upload destination folder</span>
+    },
+    filename: (<span class="tok-num">req</span>, <span class="tok-num">file</span>, <span class="tok-num">cb</span>) => {
+        <span class="tok-com">// Collision avoidance with timestamp and random suffix:</span>
+        <span class="tok-kw">const</span> uniqueName = Date.<span class="tok-fn">now</span>() + <span class="tok-str">'-'</span> + Math.<span class="tok-fn">round</span>(Math.<span class="tok-fn">random</span>() * <span class="tok-num">1E9</span>) + path.<span class="tok-fn">extname</span>(file.originalname);
+        cb(<span class="tok-kw">null</span>, uniqueName);
+    }
+});
+
+<span class="tok-com">// 2. File Filter (Reject non-image files):</span>
+<span class="tok-kw">const</span> fileFilter = (<span class="tok-num">req</span>, <span class="tok-num">file</span>, <span class="tok-num">cb</span>) => {
+    <span class="tok-kw">if</span> (file.mimetype.<span class="tok-fn">startsWith</span>(<span class="tok-str">'image/'</span>)) {
+        cb(<span class="tok-kw">null</span>, <span class="tok-kw">true</span>);
+    } <span class="tok-kw">else</span> {
+        cb(<span class="tok-kw">new</span> <span class="tok-fn">Error</span>(<span class="tok-str">'Only image files (JPG, PNG, WebP) are allowed!'</span>), <span class="tok-kw">false</span>);
+    }
+};
+
+<span class="tok-kw">const</span> upload = <span class="tok-fn">multer</span>({
+    storage,
+    fileFilter,
+    limits: { fileSize: <span class="tok-num">5</span> * <span class="tok-num">1024</span> * <span class="tok-num">1024</span> } <span class="tok-com">// Max 5MB file size</span>
+});
+
+module.exports = upload;</code></pre>
+                    </div>
+
+                    <div class="concept-sub-title">⚙️ 1.2 Route & Controller Integration</div>
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>routes/jobRoutes.js + controllers/jobController.js</span><span>File Ingestion in Controller</span></div>
+                        <pre><code><span class="tok-kw">const</span> upload = <span class="tok-fn">require</span>(<span class="tok-str">'../middleware/upload'</span>);
+
+<span class="tok-com">// Route me single file middleware attach karo:</span>
+router.<span class="tok-fn">post</span>(<span class="tok-str">'/'</span>, authenticateToken, upload.<span class="tok-fn">single</span>(<span class="tok-str">'companyLogo'</span>), jobController.createJob);
+
+<span class="tok-com">// Controller me req.file se uploaded file details access karo:</span>
+exports.createJob = <span class="tok-kw">async</span> (<span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) => {
+    <span class="tok-kw">try</span> {
+        <span class="tok-kw">const</span> logoPath = req.file ? <span class="tok-str">`/uploads/${req.file.filename}`</span> : <span class="tok-str">'/uploads/default-logo.png'</span>;
+        <span class="tok-kw">const</span> job = <span class="tok-kw">await</span> Job.<span class="tok-fn">create</span>({
+            ...req.body,
+            companyLogo: logoPath,
+            postedBy: req.user.userId
+        });
+        res.<span class="tok-fn">status</span>(<span class="tok-num">201</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">true</span>, data: job });
+    } <span class="tok-kw">catch</span> (err) {
+        <span class="tok-fn">next</span>(err);
+    }
+};</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 2: CHAPTER 15 DEEP DIVE ==================== -->
+        <section id="chapter-15" class="chapter-content-section">
+            <div class="chapter-page-box">
+                <div class="chapter-header-area">
+                    <span class="genz-badge">Chapter 15 • Input Validation</span>
+                    <h2>express-validator — Never Trust Client Payload Data</h2>
+                </div>
+
+                <div class="brush-banner">Sanitization, Type Checking & Defense Against Malformed Payloads</div>
+
+                <!-- TOPIC 1: SERVER-SIDE VALIDATION -->
+                <div class="concept-block">
+                    <div class="concept-heading">1. Server-Side Schema Validation with express-validator</div>
+
+                    <div class="concept-sub-title">🔴 1.1 Problem Kya Thi? (Why Client-Side HTML Validation is Worthless)</div>
+                    <p>Frontend validation (HTML <code>required</code>, JS checks) sirf user experience ke liye hoti hai. Koi bhi hacker ya automated script Postman / curl se bina frontend ke directly server ko null ya negative salary ka corrupt payload bhej sakta hai. <strong>Server-side validation mandatory hai!</strong></p>
+
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>middleware/validators.js</span><span>Job Validation Middleware</span></div>
+                        <pre><code><span class="tok-kw">const</span> { body, validationResult } = <span class="tok-fn">require</span>(<span class="tok-str">'express-validator'</span>);
+
+<span class="tok-kw">const</span> validateJobInput = [
+    <span class="tok-fn">body</span>(<span class="tok-str">'title'</span>).<span class="tok-fn">notEmpty</span>().<span class="tok-fn">withMessage</span>(<span class="tok-str">'Title is required'</span>).<span class="tok-fn">trim</span>(),
+    <span class="tok-fn">body</span>(<span class="tok-str">'company'</span>).<span class="tok-fn">notEmpty</span>().<span class="tok-fn">withMessage</span>(<span class="tok-str">'Company name is required'</span>).<span class="tok-fn">trim</span>(),
+    <span class="tok-fn">body</span>(<span class="tok-str">'salary'</span>).<span class="tok-fn">isNumeric</span>().<span class="tok-fn">withMessage</span>(<span class="tok-str">'Salary must be a number'</span>).<span class="tok-fn">isFloat</span>({ min: <span class="tok-num">0</span> }),
+    <span class="tok-fn">body</span>(<span class="tok-str">'category'</span>).<span class="tok-fn">isIn</span>([<span class="tok-str">'Engineering'</span>, <span class="tok-str">'Design'</span>, <span class="tok-str">'Marketing'</span>, <span class="tok-str">'Sales'</span>]),
+
+    <span class="tok-com">// Validation Result Check Middleware:</span>
+    (<span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) => {
+        <span class="tok-kw">const</span> errors = <span class="tok-fn">validationResult</span>(req);
+        <span class="tok-kw">if</span> (!errors.<span class="tok-fn">isEmpty</span>()) {
+            <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">400</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">false</span>, errors: errors.<span class="tok-fn">array</span>() }); <span class="tok-com">// 400 Bad Request</span>
+        }
+        <span class="tok-fn">next</span>(); <span class="tok-com">// Validation Passed! Aage jao.</span>
+    }
+];
+
+module.exports = { validateJobInput };</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 2: CHAPTER 16 DEEP DIVE ==================== -->
+        <section id="chapter-16" class="chapter-content-section">
+            <div class="chapter-page-box">
+                <div class="chapter-header-area">
+                    <span class="genz-badge">Chapter 16 • Production Deployment</span>
+                    <h2>Taking TechJobs Portal Live on Cloud Platforms</h2>
+                </div>
+
+                <div class="brush-banner">Pre-flight Checklist, Dynamic Port Binding & Render Deployment</div>
+
+                <!-- TOPIC 1: DEPLOYMENT PIPELINE -->
+                <div class="concept-block">
+                    <div class="concept-heading">1. Production Readiness Checklist & Cloud Deployment</div>
+
+                    <div class="concept-sub-title">📋 1.1 Pre-Deployment Security & Code Checklist</div>
+                    <div class="mechanics-table-box">
+                        <table class="mechanics-table">
+                            <thead><tr><th>Checklist Item</th><th>Status</th><th>Why Mandatory for 6 LPA?</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>.env in .gitignore</code></td><td>✅ Done</td><td>Prevents API secrets and DB passwords from leaking on GitHub</td></tr>
+                                <tr><td><code>process.env.PORT || 4000</code></td><td>✅ Done</td><td>Cloud providers (Render/AWS/Heroku) assign random dynamic ports</td></tr>
+                                <tr><td><code>package.json "start" script</code></td><td>✅ Done</td><td>Cloud runners execute <code>npm start</code> (which runs <code>node app.js</code>)</td></tr>
+                                <tr><td><code>MongoDB Atlas IP Whitelist</code></td><td>✅ Done</td><td>Allow <code>0.0.0.0/0</code> so cloud container can connect to Atlas DB</td></tr>
+                                <tr><td><code>CORS Production Whitelist</code></td><td>✅ Done</td><td>Allow live Vercel/Netlify frontend origin in backend CORS config</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="concept-sub-title">☁️ 1.2 Step-by-Step Render.com Deployment</div>
+                    <ol>
+                        <li>Push your code to GitHub: <code>git push origin main</code></li>
+                        <li>Go to <a href="https://render.com" target="_blank">render.com</a> ➡️ Click <strong>"New Web Service"</strong> ➡️ Connect GitHub repo.</li>
+                        <li><strong>Build Command:</strong> <code>npm install</code></li>
+                        <li><strong>Start Command:</strong> <code>npm start</code></li>
+                        <li>Go to <strong>Environment</strong> tab ➡️ Add your <code>MONGO_URI</code>, <code>JWT_SECRET</code>, <code>NODE_ENV=production</code>.</li>
+                        <li>Click <strong>Deploy Web Service</strong> ➡️ Live in 2 minutes with free HTTPS URL!</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== VIEW 2: CAPSTONE PROJECT & REQUEST TRACING ==================== -->
+        <section id="chapter-capstone" class="chapter-content-section">
+            <div class="chapter-page-box">
+                <div class="chapter-header-area">
+                    <span class="genz-badge">🎯 Full Capstone Project</span>
+                    <h2>TechJobs Portal — Connecting All 16 Chapters into One Live App</h2>
+                </div>
+
+                <div class="brush-banner">The Complete Production Blueprint & End-to-End File-by-File Request Tracing</div>
+
+                <!-- CAPSTONE ARCHITECTURE & FOLDER STRUCTURE -->
+                <div class="concept-block">
+                    <div class="concept-heading">1. Full Enterprise MVC Folder Structure</div>
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>Project Root</span><span>techjobs-portal/</span></div>
+                        <pre><code>techjobs-portal/
+├── config/
+│   └── db.js                   <span class="tok-com">// Ch 12: Mongoose connection logic</span>
+├── models/
+│   ├── User.js                 <span class="tok-com">// Ch 12, 13: User Schema with bcrypt pre-save hook</span>
+│   └── Job.js                  <span class="tok-com">// Ch 12: Job Schema with ref: 'User'</span>
+├── controllers/
+│   ├── authController.js       <span class="tok-com">// Ch 13: Signup/Login with JWT generation</span>
+│   └── jobController.js        <span class="tok-com">// Ch 08, 12: CRUD queries with .populate()</span>
+├── routes/
+│   ├── authRoutes.js           <span class="tok-com">// Ch 09: /api/auth/signup & /login</span>
+│   └── jobRoutes.js            <span class="tok-com">// Ch 09: /api/jobs routes</span>
+├── middleware/
+│   ├── authenticateToken.js    <span class="tok-com">// Ch 08: JWT Bearer extractor</span>
+│   ├── isJobOwner.js           <span class="tok-com">// Ch 06, 12: Authorization ownership guard</span>
+│   ├── upload.js               <span class="tok-com">// Ch 14: Multer companyLogo upload</span>
+│   ├── validators.js           <span class="tok-com">// Ch 15: express-validator schemas</span>
+│   ├── rateLimiter.js          <span class="tok-com">// Ch 11: express-rate-limit brute force guard</span>
+│   └── errorHandler.js         <span class="tok-com">// Ch 11: 4-parameter centralized error handler</span>
+├── views/                      <span class="tok-com">// Ch 10: EJS SSR Views (Partials, Jobs, Auth)</span>
+├── public/                     <span class="tok-com">// Ch 10: CSS & Uploads static files</span>
+├── .env                        <span class="tok-com">// Ch 05, 11: Secrets (Never committed!)</span>
+├── app.js                      <span class="tok-com">// Ch 05, 11: Master application entry point</span>
+└── package.json                <span class="tok-com">// Ch 02: Dependencies & scripts</span></code></pre>
+                    </div>
+
+                    <div class="concept-sub-title">🔐 Ownership Authorization Middleware (Tying Ch 06 & Ch 12 Together)</div>
+                    <div class="code-container">
+                        <div class="code-top-bar"><span>middleware/isJobOwner.js</span><span>Role-Based Ownership Check</span></div>
+                        <pre><code><span class="tok-kw">const</span> Job = <span class="tok-fn">require</span>(<span class="tok-str">'../models/Job'</span>);
+
+exports.isJobOwner = <span class="tok-kw">async</span> (<span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) => {
+    <span class="tok-kw">try</span> {
+        <span class="tok-kw">const</span> job = <span class="tok-kw">await</span> Job.<span class="tok-fn">findById</span>(req.params.id);
+        <span class="tok-kw">if</span> (!job) <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">404</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">false</span>, error: <span class="tok-str">'Job not found'</span> });
+
+        <span class="tok-com">// Check if logged-in user matches job creator (or is an Admin):</span>
+        <span class="tok-kw">if</span> (job.postedBy.<span class="tok-fn">toString</span>() !== req.user.userId && req.user.role !== <span class="tok-str">'admin'</span>) {
+            <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">403</span>).<span class="tok-fn">json</span>({
+                success: <span class="tok-kw">false</span>,
+                error: <span class="tok-str">'Forbidden: You can only modify jobs posted by your own account!'</span>
+            });
+        }
+
+        req.job = job; <span class="tok-com">// Attach to req so next controller doesn't need to query DB again!</span>
+        <span class="tok-fn">next</span>();
+    } <span class="tok-kw">catch</span> (err) {
+        <span class="tok-fn">next</span>(err);
+    }
+};</code></pre>
+                    </div>
+                </div>
+
+                <!-- END-TO-END REQUEST TRACING -->
+                <div class="concept-block">
+                    <div class="concept-heading">2. End-to-End File-to-File Request Tracing (No Confusion Left!)</div>
+                    <p>Students sabse zyada confuse hote hain ki <em>"Maine code toh likh diya, lekin kaunsi file kisko call karti hai?"</em> Yahan real production requests ka line-by-line execution trace hai:</p>
+
+                    <!-- TRACE 1: POST /api/jobs -->
+                    <div class="bio-anatomy-board" style="margin-bottom: 36px;">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 TRACE 1: POST /api/jobs (Create Job with Auth, Logo Upload & Validation)</span>
+                            <span class="genz-badge">STEP-BY-STEP EXECUTION</span>
+                        </div>
+                        <div class="anatomy-code-center">
+                            <div><span class="pill-fn">Step 1: app.js</span> ─────────────> <code>app.use('/api/jobs', jobRoutes)</code> mounts request</div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-kw">Step 2: routes/jobRoutes.js</span> ─> Matches <code>router.post('/', authenticateToken, upload.single('logo'), validateJob, jobController.createJob)</code></div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-await">Step 3: authenticateToken.js</span> ─> Reads <code>req.headers.authorization</code>, verifies JWT, sets <code>req.user = { userId, role }</code> ──> <code>next()</code></div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-fn">Step 4: upload.js (Multer)</span> ───> Parses binary multipart stream, saves logo to <code>public/uploads/</code>, sets <code>req.file</code> ──> <code>next()</code></div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-kw">Step 5: validators.js</span> ───────> Checks <code>body('salary').isNumeric()</code>. No errors? ──> <code>next()</code></div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-res">Step 6: jobController.js</span> ────> <code>Job.create({ ...req.body, companyLogo: req.file.filename, postedBy: req.user.userId })</code></div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-await">Step 7: models/Job.js</span> ────────> Mongoose runs schema validators & inserts BSON into MongoDB Atlas cluster</div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-res">Step 8: Response Return</span> ──────> <code>res.status(201).json({ success: true, data: savedJob })</code> ──> Client Browser ✅</div>
+                        </div>
+                    </div>
+
+                    <!-- TRACE 2: GET /api/jobs/:id WITH POPULATE -->
+                    <div class="bio-anatomy-board" style="margin-bottom: 36px;">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 TRACE 2: GET /api/jobs/:id (Fetch Job with .populate('postedBy'))</span>
+                            <span class="genz-badge">POPULATE EXECUTION</span>
+                        </div>
+                        <div class="anatomy-code-center">
+                            <div><span class="pill-fn">Step 1: routes/jobRoutes.js</span> ──> Matches <code>router.get('/:id', jobController.getJobById)</code></div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-kw">Step 2: jobController.js</span> ───> Executes <code>await Job.findById(req.params.id).populate('postedBy', 'name email')</code></div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-await">Step 3: Mongoose DB Engine</span> ─> Query 1: Fetches Job doc from <code>jobs</code> collection (has <code>postedBy: ObjectId('u101')</code>)</div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-fn">Step 4: Mongoose Sub-Query</span> ─> Query 2: Automatically runs <code>User.findById('u101')</code> on <code>users</code> collection</div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-res">Step 5: In-Memory Merge</span> ────> Replaces ObjectId with <code>{ name: 'Rahul', email: 'rahul@dev.com' }</code></div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-res">Step 6: Client Delivery</span> ────> <code>res.status(200).json({ success: true, data: jobWithUser })</code> ✅</div>
+                        </div>
+                    </div>
+
+                    <!-- TRACE 3: ERROR HANDLING PIPELINE -->
+                    <div class="bio-anatomy-board">
+                        <div class="anatomy-board-header">
+                            <span class="anatomy-board-title">🔬 TRACE 3: Error Flow (How Express Jumps Directly to errorHandler.js)</span>
+                            <span class="genz-badge">GLOBAL ERROR PIPELINE</span>
+                        </div>
+                        <div class="anatomy-code-center">
+                            <div><span class="pill-err">1. Error Occurs</span> ─────────────> Inside controller: <code>try { ... } catch (err) { next(err); }</code></div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-fn">2. Express Pipeline Bypass</span> ───> Express detects argument in <code>next(err)</code> and SKIPS all remaining regular routes & middlewares!</div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-await">3. Jumps to Last Middleware</span> ─> Catches inside <code>middleware/errorHandler.js</code>: <code>(err, req, res, next)</code></div>
+                            <div style="margin-top: 6px;">│</div>
+                            <div><span class="pill-err">4. Structured JSON Response</span> ──> <code>res.status(err.statusCode || 500).json({ success: false, error: err.message })</code> ✅</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
         <!-- ==================== VIEW 3: DEDICATED 30+ INTERVIEW MASTERCLASS HUB ==================== -->
         <div id="interview-view">
             <div class="interview-hero">
@@ -4497,8 +5387,21 @@ app.<span class="tok-fn">listen</span>(PORT, () => {
         }
 
         function openChapter(num) {
-            var n = parseInt(num, 10);
-            if (isNaN(n) || n < 1 || n > 11) return;
+            var targetId = '';
+            var hashVal = '';
+            var dropdownVal = '';
+
+            if (num === 'capstone' || num === 'chapter-capstone') {
+                targetId = 'chapter-capstone';
+                hashVal = 'capstone';
+                dropdownVal = 'capstone';
+            } else {
+                var n = parseInt(num, 10);
+                if (isNaN(n) || n < 1 || n > 16) return;
+                targetId = 'chapter-' + n;
+                hashVal = 'chapter' + n;
+                dropdownVal = n.toString();
+            }
 
             document.getElementById('home-view').style.display = 'none';
             document.getElementById('interview-view').style.display = 'none';
@@ -4506,11 +5409,11 @@ app.<span class="tok-fn">listen</span>(PORT, () => {
                 sec.style.display = 'none';
             });
 
-            var target = document.getElementById('chapter-' + n);
+            var target = document.getElementById(targetId);
             if (target) {
                 target.style.display = 'block';
-                document.getElementById('chapterDropdown').value = n.toString();
-                window.location.hash = 'chapter' + n;
+                document.getElementById('chapterDropdown').value = dropdownVal;
+                window.location.hash = hashVal;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
@@ -4554,11 +5457,15 @@ app.<span class="tok-fn">listen</span>(PORT, () => {
                 showInterviewHub();
                 return;
             }
+            if (hash === '#capstone' || hash === '#chapter-capstone') {
+                openChapter('capstone');
+                return;
+            }
             if (hash) {
                 var match = hash.match(/chapter[-_]?(\d+)/i);
                 if (match) {
                     var chNum = parseInt(match[1], 10);
-                    if (chNum >= 1 && chNum <= 11) {
+                    if (chNum >= 1 && chNum <= 16) {
                         openChapter(chNum);
                         return;
                     }
