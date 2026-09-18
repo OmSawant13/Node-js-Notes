@@ -474,31 +474,46 @@
         /* LABELS & POINTER CALLOUT CARDS */
         .anatomy-callout-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 22px;
-            margin-top: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 28px;
+            width: 100%;
         }
 
         .anatomy-callout-card {
             background: #ffffff;
             border: 2px solid #0f172a;
             border-radius: 16px;
-            padding: 20px 24px;
+            padding: 18px 22px;
             box-shadow: 4px 4px 0px #0f172a;
             display: flex;
+            flex-direction: column;
             align-items: flex-start;
-            gap: 14px;
-            font-size: 22px;
+            gap: 10px;
+            font-size: 20px;
+            line-height: 1.55;
+            min-width: 0;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        .anatomy-callout-card div {
+            color: #1e293b;
+            width: 100%;
+            font-size: 20px;
             line-height: 1.55;
         }
 
         .callout-badge {
-            padding: 4px 12px;
+            padding: 4px 14px;
             border-radius: 8px;
             font-weight: 800;
             font-size: 17px;
             border: 1.5px solid #0f172a;
-            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 2px;
         }
 
         .callout-badge.bg-yellow { background: #fde047; }
@@ -2478,36 +2493,7 @@ res.<span class="tok-fn">writeHead</span>(<span class="tok-num">503</span>); <sp
                         • <strong>Express.js:</strong> Swiggy app par 1 click me order — payment, routing, delivery sab automatic handle ho jata hai (3 lines of clean code)!</p>
                     </div>
 
-                    <!-- VISUAL ARCHITECTURE BOARD: EXPRESS PIPELINE -->
-                    <div class="bio-anatomy-board">
-                        <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Visual Architecture Blueprint: Express Request Routing Engine</span>
-                            <span class="genz-badge">ROUTING & HELPERS</span>
-                        </div>
-
-                        <div class="anatomy-code-center">
-                            <div>Incoming Request ──> <span class="pill-fn">app.use(express.json())</span> (Auto parses body)</div>
-                            <div style="margin-top: 8px;">│</div>
-                            <div>▼ Internal Route Table Lookup: [ METHOD + PATH ]</div>
-                            <div style="margin-top: 8px;"><div><span class="pill-kw">GET /</span> ───────────────> <span class="pill-res">res.send('&lt;html&gt;')</span> (Sets text/html)</div>
-                            <div><span class="pill-kw">GET /api/user</span> ──────> <span class="pill-res">res.json({...})</span> (Sets application/json + ETag)</div>
-                            <div><span class="pill-kw">POST /api/user</span> ─────> <span class="pill-await">res.status(201).json({...})</span> (Created)</div>
-                            <div style="margin-top: 8px;">▼ No Route Matched?</div>
-                            <div><span class="pill-err">404 Handler</span> ────────> Returns "Cannot GET /unknown"</div>
-                        </div>
-
-                        <div class="anatomy-callout-grid">
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">⚡ res.send() vs res.json()</span>
-                                <div><code>res.send()</code> strings ke liye HTML bhejta hai. <code>res.json()</code> null/arrays/objects ko reliably JSON me format karta hai.</div>
-                            </div>
-                            <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-green">🔒 ETag Caching</span>
-                                <div>Express automatic ETag header generate karta hai taaki browser unmodified data dobara download na kare (304 Not Modified).</div>
-                            </div>
-                        </div>
                     </div>
-                </div>
 
                 <!-- COMPLETE PRODUCTION CODE -->
                 <div class="concept-block">
