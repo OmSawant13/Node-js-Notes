@@ -2785,6 +2785,20 @@ console.<span class="tok-fn">log</span>(<span class="tok-str">"--- Memory Safe S
                     <p>• <code>req</code> is a <strong>Readable Stream:</strong> Request payload <code>'data'</code> events ke form me chunks me flow hota hai.<br>
                     • <code>res</code> is a <strong>Writable Stream:</strong> Response headers <code>res.writeHead()</code> se aur body <code>res.end()</code> se TCP connection close karke bhejte hain (Bina <code>res.end()</code> browser hamesha ghumta rahega / infinite loading!).</p>
 
+                    <!-- 4-STEP TERMINAL EXECUTION GUIDE FOR BEGINNERS -->
+                    <div class="bio-anatomy-board" style="background: #f0fdf4; border-color: #16a34a; margin-bottom: 24px;">
+                        <div class="anatomy-board-header" style="border-bottom-color: #16a34a;">
+                            <span class="anatomy-board-title" style="color: #15803d;">🚀 Beginner Step-by-Step: Zero Se Server Run Karne Ke 4 Steps</span>
+                            <span class="genz-badge" style="background: #16a34a; color: white;">TERMINAL WORKFLOW</span>
+                        </div>
+                        <div style="padding: 14px 18px; font-size: 16px; line-height: 1.6; color: #166534;">
+                            <div><strong>Step 1 (Folder Banao):</strong> Terminal me likho <code>mkdir my-server && cd my-server</code></div>
+                            <div style="margin-top: 8px;"><strong>Step 2 (File Banao):</strong> Ek file banao <code>server.js</code> aur neeche diya gaya code copy karo.</div>
+                            <div style="margin-top: 8px;"><strong>Step 3 (Server Start Karo):</strong> Terminal me command chalao: <code style="background: #0f172a; color: #38bdf8; padding: 2px 8px; border-radius: 4px;">node server.js</code></div>
+                            <div style="margin-top: 8px;"><strong>Step 4 (Test in Browser):</strong> Chrome me open karo: <a href="http://localhost:3000" target="_blank" style="color: #2563eb; font-weight: bold;">http://localhost:3000</a> ➔ Screen par live response dikhega! 🎉</div>
+                        </div>
+                    </div>
+
                     <div class="code-container">
                         <div class="code-top-bar"><span>snippet_raw_http_post.js</span><span>Manual TCP Chunk Buffering</span></div>
                         <pre><code><span class="tok-kw">const</span> http = <span class="tok-fn">require</span>(<span class="tok-str">'http'</span>);
