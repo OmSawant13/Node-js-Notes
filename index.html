@@ -2544,114 +2544,40 @@ app.<span class="tok-fn">listen</span>(<span class="tok-num">4000</span>, () => 
                         </table>
                     </div>
 
-                                <!-- TOPIC 3: req.params vs req.query vs req.body — THE DEEP DIVE -->
+                                                <!-- TOPIC 3: req.params vs req.query vs req.body — THE DEEP DIVE -->
                 <div class="concept-block">
                     <div class="concept-heading">3. Deep Dive: req.params vs req.query vs req.body (Zero to Hero)</div>
 
                     <div class="concept-sub-title">🎯 3.1 req.params kya hai aur kyu use hota hai?</div>
-                    <p><strong><code>req.params</code></strong> ka simple matlab hai: <strong>URL ke dynamic/variable part ko code ke andar access karna.</strong></p>
-                    
-                    <p>Jab aap e-commerce site ya social media banate ho, toh har product ya user ke liye alag alag route manually nahi likh sakte (e.g. <code>/products/1</code>, <code>/products/2</code>, <code>/products/3</code>...). Iske liye Express hume <strong>Route Parameters</strong> (<code>:parameterName</code>) deta hai.</p>
+                    <p><strong><code>req.params</code></strong> ka simple matlab hai: <strong>URL ke dynamic/variable part ko code ke andar access karna.</strong> E-commerce me har product ke liye manual route (<code>/products/1</code>, <code>/products/2</code>...) nahi likh sakte, isliye Express hume <strong>Route Parameters</strong> (<code>:parameterName</code>) deta hai.</p>
 
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>route_params_basic.js</span><span>Step 1: Understanding :id Route Parameter</span></div>
-                        <pre><code><span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>);
-<span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();
-
-<span class="tok-com">// Yaha :id ek dynamic route parameter hai</span>
-app.<span class="tok-fn">get</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
-    <span class="tok-fn">console</span>.<span class="tok-fn">log</span>(req.params); 
-    <span class="tok-com">// Agar client hit kare: GET /products/25</span>
-    <span class="tok-com">// toh req.params milega: { id: "25" }</span>
-    <span class="tok-com">// Aur req.params.id milega: "25" (String)</span>
-    
-    res.<span class="tok-fn">send</span>(<span class="tok-str">`Product Requested: ${req.params.id}`</span>);
-});</code></pre>
-                    </div>
-
-                    <!-- STEP BY STEP FLOW DIAGRAM -->
-                    <div class="flow-diagram-container" style="background: #0f172a; border: 2px solid #3b82f6; border-radius: 12px; padding: 20px; margin: 20px 0; color: #f8fafc; font-family: 'Fira Code', monospace;">
-                        <div style="font-weight: 700; color: #38bdf8; margin-bottom: 12px; font-size: 16px;">🔄 Step-by-Step Execution Mental Flow:</div>
-                        <div style="display: flex; flex-direction: column; gap: 10px; font-size: 15px;">
-                            <div style="padding: 10px 14px; background: #1e293b; border-left: 4px solid #38bdf8; border-radius: 6px;">
-                                <strong>1. Client Request:</strong> <code style="color: #fbbf24;">GET /products/25</code>
-                            </div>
-                            <div style="text-align: center; color: #64748b; font-size: 18px;">⬇️</div>
-                            <div style="padding: 10px 14px; background: #1e293b; border-left: 4px solid #a855f7; border-radius: 6px;">
-                                <strong>2. Express Route Match:</strong> Path pattern <code style="color: #c084fc;">/products/:id</code> captures <code style="color: #34d399;">"25"</code>
-                            </div>
-                            <div style="text-align: center; color: #64748b; font-size: 18px;">⬇️</div>
-                            <div style="padding: 10px 14px; background: #1e293b; border-left: 4px solid #34d399; border-radius: 6px;">
-                                <strong>3. req.params Object Created:</strong> <code style="color: #34d399;">req.params = { id: "25" }</code>
-                            </div>
-                            <div style="text-align: center; color: #64748b; font-size: 18px;">⬇️</div>
-                            <div style="padding: 10px 14px; background: #1e293b; border-left: 4px solid #f43f5e; border-radius: 6px;">
-                                <strong>4. Value Extracted:</strong> <code style="color: #f43f5e;">req.params.id ➔ "25"</code> (Type: <strong>String</strong>)
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="concept-sub-title">💡 3.2 Real World Production Example: Product Find & Filter</div>
-                    <p>Suppose aapke paas database ya array mein products hain aur aapko specific ID ka product search karke return karna hai:</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>product_finder_demo.js</span><span>Complete Real-World Example with Type Casting</span></div>
-                        <pre><code><span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>);
-<span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();
-
-<span class="tok-kw">const</span> products = [
-    { id: <span class="tok-num">1</span>, name: <span class="tok-str">'Gaming Laptop'</span>, price: <span class="tok-num">75000</span> },
-    { id: <span class="tok-num">2</span>, name: <span class="tok-str">'Wireless Mouse'</span>, price: <span class="tok-num">1200</span> },
-    { id: <span class="tok-num">3</span>, name: <span class="tok-str">'Mechanical Keyboard'</span>, price: <span class="tok-num">3500</span> }
-];
-
-<span class="tok-com">// GET /products/2  ➔ Returns Wireless Mouse</span>
-app.<span class="tok-fn">get</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
-    <span class="tok-com">// ⚠️ STEP 1: String ko Number me convert karo (req.params.id gives "2")</span>
-    <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id);
-
-    <span class="tok-com">// STEP 2: Array me product find karo</span>
-    <span class="tok-kw">const</span> product = products.<span class="tok-fn">find</span>(p => p.id === id);
-
-    <span class="tok-com">// STEP 3: Guard clause - agar product nahi mila toh 404 bhejo</span>
-    <span class="tok-kw">if</span> (!product) {
-        <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">404</span>).<span class="tok-fn">json</span>({ 
-            success: <span class="tok-kw">false</span>, 
-            message: <span class="tok-str">`Product with ID ${req.params.id} not found!`</span> 
-        });
-    }
-
-    <span class="tok-com">// STEP 4: Product mil gaya - 200 OK ke saath JSON response bhejo</span>
-    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">true</span>, data: product });
-});</code></pre>
-                    </div>
-
-                    <!-- BIO ANATOMY LABELED BOARD FOR REQ.PARAMS -->
+                    <!-- UNIFIED BIO-ANATOMY BOARD (Zero Redundant Outer Boxes) -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Bio-Anatomy: req.params Execution Line-by-Line</span>
-                            <span class="genz-badge">DEEP DISSECTION</span>
+                            <span class="anatomy-board-title">🔬 Bio-Anatomy: req.params Execution & Type Casting</span>
+                            <span class="genz-badge">ROUTE PARAMS BLUEPRINT</span>
                         </div>
                         <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
-                            <div><span class="pill-kw">app.get('/products/:id', ...)</span> ───▶ <strong>1. Route Parameter:</strong> <code>:id</code> batata hai ki URL ka ye hissa dynamic hai. Jo bhi value aayegi wo <code>req.params.id</code> me store hogi.</div>
-                            <div style="margin-top: 10px;"><span class="pill-fn">const id = Number(req.params.id);</span> ───▶ <strong>2. Mandatory Type Casting:</strong> URL parameters hamesha <strong>String</strong> hote hain (e.g. <code>"2"</code>). Strict comparison (<code>===</code>) ke liye <code>Number()</code> karna zaroori hai!</div>
-                            <div style="margin-top: 10px;"><span class="pill-await">const product = products.find(...)</span> ───▶ <strong>3. Item Lookup:</strong> Array me se matching ID ka product object dhoondhta hai.</div>
-                            <div style="margin-top: 10px;"><span class="pill-err">if (!product) return res.status(404)...</span> ───▶ <strong>4. 404 Guard Clause:</strong> Agar invalid ID hit hui (e.g. <code>/products/999</code>), toh 404 status code ke saath error message dekar function se exit ho jata hai.</div>
+                            <div><span class="pill-kw">app.get('/products/:id', (req, res) => { ... })</span> ───▶ <strong>1. Dynamic Route Param:</strong> <code>:id</code> URL ka dynamic placeholder hai. Jab client <code>GET /products/25</code> hit karega, toh Express <code>req.params.id = "25"</code> bana dega.</div>
+                            <div style="margin-top: 10px;"><span class="pill-fn">const id = Number(req.params.id);</span> ───▶ <strong>2. Mandatory Type Casting:</strong> URL params hamesha <strong>String</strong> hote hain (<code>"25"</code>). Array ya DB search me strict equality (<code>===</code>) ke liye <code>Number()</code> karna mandatory hai!</div>
+                            <div style="margin-top: 10px;"><span class="pill-await">const product = products.find(p => p.id === id);</span> ───▶ <strong>3. Resource Lookup:</strong> Matching ID ka product array/database me search karta hai.</div>
+                            <div style="margin-top: 10px;"><span class="pill-err">if (!product) return res.status(404).json(...);</span> ───▶ <strong>4. 404 Guard Clause:</strong> Agar ID nahi mili (e.g. <code>/products/999</code>), toh turant 404 Not Found error return karke execution rok deta hai.</div>
+                            <div style="margin-top: 10px;"><span class="pill-res">res.status(200).json({ success: true, data: product });</span> ───▶ <strong>5. 200 OK JSON Response:</strong> Found product client ko formatted JSON payload ke roop me bhej deta hai.</div>
                         </div>
                         <div class="anatomy-callout-grid" style="margin-top: 20px;">
                             <div class="anatomy-callout-card">
                                 <span class="callout-badge bg-red">🚨 The String Triple-Equals Bug</span>
-                                <div>Agar aap likhoge <code>p.id === req.params.id</code>, toh <code>2 === "2"</code> evaluate hokar <strong>false</strong> dega aur product kabhi nahi milega! Hamesha <code>Number(req.params.id)</code> karein!</div>
+                                <div>Agar aap <code>p.id === req.params.id</code> likhoge, toh <code>25 === "25"</code> hamesha <strong>false</strong> hoga aur product exist hote hue bhi 404 aayega! Hamesha <code>Number(req.params.id)</code> karein!</div>
                             </div>
                             <div class="anatomy-callout-card">
-                                <span class="callout-badge bg-yellow">⚠️ Route Order Trap</span>
+                                <span class="callout-badge bg-yellow">⚠️ Route Order Rule</span>
                                 <div>Specific static routes (e.g. <code>/products/categories</code>) ko hamesha dynamic route (<code>/products/:id</code>) se <strong>UPAR</strong> define karein, warna Express <code>"categories"</code> ko bhi ID samajh lega!</div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="concept-sub-title">⚔️ 3.3 The Big Three: req.body vs req.params vs req.query</div>
-                    <p>Beginners aksar in teeno me confuse ho jate hain. Yaha crystal clear distinction dekho:</p>
+                    <div class="concept-sub-title">⚔️ 3.2 The Big Three Comparison: req.body vs req.params vs req.query</div>
+                    <p>Beginners in teeno me confuse hote hain. Yaha clear distinction dekho:</p>
 
                     <div class="mechanics-table-box" style="margin: 20px 0;">
                         <table class="mechanics-table">
@@ -2661,7 +2587,7 @@ app.<span class="tok-fn">get</span>(<span class="tok-str">'/products/:id'</span>
                                     <th>Example Hit / Payload</th>
                                     <th>Kab Aur Kyu Use Karein? (Meaning)</th>
                                     <th>Extraction Code</th>
-                                    <th>Middleware Required?</th>
+                                    <th>Parser Required?</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -2670,19 +2596,19 @@ app.<span class="tok-fn">get</span>(<span class="tok-str">'/products/:id'</span>
                                     <td><code>GET /products/25</code></td>
                                     <td><strong>URL ka Dynamic Path Part</strong> — Kisi ek specific resource ko unique ID se identify karne ke liye.</td>
                                     <td><code>const { id } = req.params;</code></td>
-                                    <td>❌ Nahi (Express me built-in)</td>
+                                    <td>❌ Nahi (Built-in)</td>
                                 </tr>
                                 <tr>
                                     <td><strong><code>req.query</code></strong></td>
                                     <td><code>GET /products?category=electronics&sort=asc&page=2</code></td>
                                     <td><strong>URL ke Query Parameters (? ke baad)</strong> — Filtering, sorting, searching aur pagination ke liye.</td>
                                     <td><code>const { category, page } = req.query;</code></td>
-                                    <td>❌ Nahi (Express me built-in)</td>
+                                    <td>❌ Nahi (Built-in)</td>
                                 </tr>
                                 <tr>
                                     <td><strong><code>req.body</code></strong></td>
                                     <td><code>{ "name": "Wireless Mouse", "price": 1200 }</code></td>
-                                    <td><strong>HTTP Request Payload</strong> — Client ne data hidden body me bheja (Forms, JSON, Sign Up, Add Product).</td>
+                                    <td><strong>HTTP Request Payload</strong> — Client ne data hidden body me bheja (Forms, JSON, Add/Update Product).</td>
                                     <td><code>const { name, price } = req.body;</code></td>
                                     <td>✅ <strong>HAAN!</strong> <code>app.use(express.json())</code></td>
                                 </tr>
@@ -2690,52 +2616,23 @@ app.<span class="tok-fn">get</span>(<span class="tok-str">'/products/:id'</span>
                         </table>
                     </div>
 
-                    <!-- COMBINED TRIPLE DEMO -->
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>all_three_together.js</span><span>Params + Query + Body in a Single Route</span></div>
-                        <pre><code><span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>);
-<span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();
-
-<span class="tok-com">// Mandatory for reading req.body!</span>
-app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>());
-
-<span class="tok-com">// Example: Update product in a specific warehouse</span>
-<span class="tok-com">// Hit: PUT /warehouses/mum-01/products/25?notifyManager=true</span>
-<span class="tok-com">// Body: { "stock": 50, "price": 1150 }</span>
-app.<span class="tok-fn">put</span>(<span class="tok-str">'/warehouses/:warehouseId/products/:productId'</span>, (req, res) => {
-    <span class="tok-com">// 1. req.params (Path me se location aur product identify karo)</span>
-    <span class="tok-kw">const</span> { warehouseId, productId } = req.params;
-
-    <span class="tok-com">// 2. req.query (URL query params se optional flags read karo)</span>
-    <span class="tok-kw">const</span> { notifyManager } = req.query;
-
-    <span class="tok-com">// 3. req.body (Payload me se update hone wala naya data read karo)</span>
-    <span class="tok-kw">const</span> { stock, price } = req.body;
-
-    res.<span class="tok-fn">json</span>({
-        message: <span class="tok-str">'Product updated successfully'</span>,
-        warehouse: warehouseId,
-        productId: <span class="tok-fn">Number</span>(productId),
-        updatedData: { stock, price },
-        notified: notifyManager === <span class="tok-str">'true'</span>
-    });
-});</code></pre>
-                    </div>
-
+                    <!-- COMBINED TRIPLE LABELED BOARD -->
                     <div class="bio-anatomy-board">
                         <div class="anatomy-board-header">
-                            <span class="anatomy-board-title">🔬 Summary Blueprint: Request Data Sources</span>
-                            <span class="genz-badge">CHEAT SHEET</span>
+                            <span class="anatomy-board-title">🔬 Master Dissection: Params, Query & Body in a Single Route</span>
+                            <span class="genz-badge">ALL 3 SOURCES COMBINED</span>
                         </div>
-                        <div class="anatomy-code-center">
-                            <div><span class="pill-kw">req.params</span> ── <code>/products/<span class="pill-err">25</span></code> ── <code>req.params.id = "25"</code> ── (Path ID)</div>
-                            <div style="margin-top:8px;"><span class="pill-fn">req.query</span> ── <code>/products?<span class="pill-err">category=electronics</span></code> ── <code>req.query.category = "electronics"</code> ── (Filter)</div>
-                            <div style="margin-top:8px;"><span class="pill-await">req.body</span> ── <code>{ "name": "Mouse" }</code> ── <code>req.body.name = "Mouse"</code> ── (Payload with express.json())</div>
+                        <div class="anatomy-code-center" style="font-size: 15.5px; line-height: 2.1;">
+                            <div><span class="pill-kw">app.put('/warehouses/:warehouseId/products/:productId', ...)</span> ───▶ <strong>1. Route Path:</strong> URL me multiple dynamic parameters (<code>:warehouseId</code>, <code>:productId</code>) define kiye gaye hain.</div>
+                            <div style="margin-top: 10px;"><span class="pill-fn">const { warehouseId, productId } = req.params;</span> ───▶ <strong>2. Path Extraction:</strong> URL path me se specific warehouse aur product ID nikaalta hai (e.g. <code>"mum-01"</code>, <code>"25"</code>).</div>
+                            <div style="margin-top: 10px;"><span class="pill-res">const { notifyManager } = req.query;</span> ───▶ <strong>3. Query Flag Extraction:</strong> URL query string <code>?notifyManager=true</code> se optional boolean/filter flag capture karta hai.</div>
+                            <div style="margin-top: 10px;"><span class="pill-await">const { stock, price } = req.body;</span> ───▶ <strong>4. JSON Body Extraction:</strong> <code>express.json()</code> dwara parse kiye gaye naye product details (stock, price) ko read karta hai.</div>
+                            <div style="margin-top: 10px;"><span class="pill-err">res.json({ message: 'Product updated', ... });</span> ───▶ <strong>5. Combined Success Response:</strong> Saare 3 sources ka processed data JSON format me client ko bhej deta hai.</div>
                         </div>
-                        <div class="anatomy-callout-grid">
+                        <div class="anatomy-callout-grid" style="margin-top: 20px;">
                             <div class="anatomy-callout-card">
                                 <span class="callout-badge bg-yellow">💼 Interview Golden Rule</span>
-                                <div>Jab specific resource identify karna ho ➔ <strong>req.params</strong>. Jab data filter/search/sort karna ho ➔ <strong>req.query</strong>. Jab sensitive ya heavy data create/update karna ho ➔ <strong>req.body</strong>.</div>
+                                <div>Single specific resource locate karna ➔ <strong>req.params</strong>. Data filter/sort/paginate karna ➔ <strong>req.query</strong>. Heavy/sensitive data create ya update karna ➔ <strong>req.body</strong>.</div>
                             </div>
                             <div class="anatomy-callout-card">
                                 <span class="callout-badge bg-red">🚨 req.body undefined?</span>
