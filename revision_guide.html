@@ -2589,14 +2589,14 @@ app.<span class="tok-fn">use</span>(express.<span class="tok-fn">urlencoded</spa
                     </div>
                 </div>
 
-                <!-- 5. THE BIG THREE: req.query, req.params & req.body -->
+                                <!-- 5. THE BIG THREE: req.query, req.params & req.body -->
                 <div class="concept-block">
-                    <div class="concept-heading">5. The Big Three: req.query, req.params & req.body</div>
+                    <div class="concept-heading">5. The Big Three: req.query, req.params & req.body (Step-by-Step Breakdown)</div>
                     <p>Backend interviews mein ye distinction <strong>BAHUT important</strong> hai. Teen jagah se client server ko data de sakta hai:</p>
                     <ol>
-                        <li><strong>req.query:</strong> URL ke <code>?</code> ke baad.</li>
-                        <li><strong>req.params:</strong> URL ke dynamic part mein.</li>
-                        <li><strong>req.body:</strong> HTTP request ke body/payload mein.</li>
+                        <li><strong>req.query:</strong> URL ke <code>?</code> ke baad (Filtering, Pagination, Searching).</li>
+                        <li><strong>req.params:</strong> URL ke dynamic path segment mein (<code>/products/:id</code>).</li>
+                        <li><strong>req.body:</strong> HTTP request ke payload/body mein (JSON data for Create/Update).</li>
                     </ol>
 
                     <div class="bio-anatomy-board" style="background: #0f172a; border-color: #38bdf8; color: #f8fafc;">
@@ -2612,135 +2612,202 @@ app.<span class="tok-fn">use</span>(express.<span class="tok-fn">urlencoded</spa
                         </div>
                     </div>
 
-                    <div class="concept-sub-title">🟢 SOURCE 1: req.query</div>
-                    <p>Query parameters URL ke <code>?</code> ke baad aate hain (e.g. <code>GET /products?category=electronics&search=mouse&limit=2</code>).<br>
-                    URL breakdown: <code>/products</code> (Route) ➔ <code>?</code> (Start) ➔ <code>category=electronics&search=mouse&limit=2</code>.<br>
-                    Query parameters generally: <strong>optional hote hain, filtering ke liye, searching ke liye, sorting ke liye, pagination ke liye</strong> use hote hain.<br>
-                    <strong>IMPORTANT:</strong> Query values generally STRING hoti hain (<code>limit=2</code> ➔ <code>req.query.limit === "2"</code>), isliye numeric calculation ke liye <code>Number(limit)</code> karna padta hai.</p>
+                    <!-- ================= SOURCE 1: req.query ================= -->
+                    <div class="concept-sub-title" style="margin-top: 30px;">🟢 SOURCE 1: req.query (Filtering, Searching & Limit)</div>
+                    <p>Query parameters URL ke <code>?</code> ke baad aate hain (e.g. <code>GET /products?category=electronics&search=mouse&limit=2</code>).</p>
 
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>get_products_query.js</span><span>GET /products (Filtering, Searching & Limit)</span></div>
-                        <pre><code><span class="tok-com">// Hit: GET /products?category=electronics&search=mouse&limit=2</span>
-app.<span class="tok-fn">get</span>(<span class="tok-str">'/products'</span>, (req, res) => {
-    <span class="tok-com">// Destructuring: req.query ke andar se category, search aur limit nikal rahe hain.</span>
-    <span class="tok-com">// Agar `limit` nahi diya gaya, toh default value 10 use hogi.</span>
+                    <!-- STEP 1 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 1: Extract Query Parameters with Defaults</strong><br>
+                        URL se category, search aur limit nikalte hain. Limit na ho toh default 10 set karte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>query_step1_destructure.js</span><span>Extract & Default Values</span></div>
+                            <pre><code>app.<span class="tok-fn">get</span>(<span class="tok-str">'/products'</span>, (req, res) => {
     <span class="tok-kw">const</span> {
         category,
         search,
         limit = <span class="tok-num">10</span>
-    } = req.query;
+    } = req.query;</code></pre>
+                        </div>
+                    </div>
 
-    <span class="tok-com">// Original products array ko directly modify nahi karna.</span>
-    <span class="tok-com">// `[...products]` ek shallow copy banata hai.</span>
-    <span class="tok-kw">let</span> result = [...products];
+                    <!-- STEP 2 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 2: Safe Shallow Copy</strong><br>
+                        Original array ko directly mutate karne ke bajaye copy banate hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>query_step2_copy.js</span><span>Array Copy</span></div>
+                            <pre><code>    <span class="tok-kw">let</span> result = [...products]; <span class="tok-com">// Shallow copy using spread operator</span></code></pre>
+                        </div>
+                    </div>
 
-    <span class="tok-com">// FILTER BY CATEGORY</span>
-    <span class="tok-kw">if</span> (category) {
+                    <!-- STEP 3 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 3: Category Filtering & Search Keyword Matching</strong><br>
+                        Case-insensitive match karke matching items filter out karte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>query_step3_filter.js</span><span>Category & Search Filtering</span></div>
+                            <pre><code>    <span class="tok-kw">if</span> (category) {
         result = result.<span class="tok-fn">filter</span>(
             p => p.category.<span class="tok-fn">toLowerCase</span>() === category.<span class="tok-fn">toLowerCase</span>()
         );
     }
-
-    <span class="tok-com">// SEARCH BY NAME</span>
     <span class="tok-kw">if</span> (search) {
         result = result.<span class="tok-fn">filter</span>(
             p => p.name.<span class="tok-fn">toLowerCase</span>().<span class="tok-fn">includes</span>(search.<span class="tok-fn">toLowerCase</span>())
         );
-    }
+    }</code></pre>
+                        </div>
+                    </div>
 
-    <span class="tok-com">// LIMIT: req.query.limit is STRING "2" -> Number(limit) se convert kiya</span>
-    <span class="tok-kw">const</span> numericLimit = <span class="tok-fn">Number</span>(limit);
-    result = result.<span class="tok-fn">slice</span>(<span class="tok-num">0</span>, numericLimit);
+                    <!-- STEP 4 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 4: Number Casting & Array Slicing (Pagination/Limit)</strong><br>
+                        Query param string hoti hai, isliye <code>Number()</code> cast karke slice karte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>query_step4_limit.js</span><span>Numeric Cast & Slice</span></div>
+                            <pre><code>    <span class="tok-kw">const</span> numericLimit = <span class="tok-fn">Number</span>(limit);
+    result = result.<span class="tok-fn">slice</span>(<span class="tok-num">0</span>, numericLimit);</code></pre>
+                        </div>
+                    </div>
 
-    <span class="tok-com">// RESPONSE: 200 = OK, .json() sends JSON response</span>
-    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({
+                    <!-- STEP 5 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 5: Send 200 OK JSON Response</strong><br>
+                        Standard formatted JSON client ko return karte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>query_step5_res.js</span><span>JSON Response</span></div>
+                            <pre><code>    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({
         success: <span class="tok-kw">true</span>,
         total: result.length,
         data: result
     });
 });</code></pre>
+                        </div>
                     </div>
 
-                    <div class="concept-sub-title">🟡 SOURCE 2: req.params</div>
-                    <p>Route parameters URL ke <strong>DYNAMIC</strong> parts hote hain (<code>/products/:id</code>). <code>:id</code> ek placeholder hai. Agar request <code>GET /products/2</code> aayi, toh <code>req.params.id</code> milega: <code>"2"</code>.<br>
-                    <strong>IMPORTANT:</strong> Ye <code>"2"</code> STRING hai. Hamare products ke IDs numbers hain (<code>id: 2</code>). Isliye comparison se pehle <code>Number(req.params.id)</code> kar rahe hain.</p>
-                    
-                    <p><strong>`req.params` kab use karte hain?</strong> Jab URL kisi specific resource ko identify kar raha ho (<code>/users/101</code>, <code>/products/2</code>, <code>/orders/5001</code>). <code>:id</code> ko dynamic isliye banaya kyunki <code>/products/1</code>, <code>/products/2</code>, <code>/products/3</code> sabke liye separate route likhne ki zarurat nahi — ek hi route sab handle kar leta hai.</p>
+                    <!-- ================= SOURCE 2: req.params ================= -->
+                    <div class="concept-sub-title" style="margin-top: 30px;">🟡 SOURCE 2: req.params (Lookup & 404 Guard)</div>
+                    <p>Route parameters URL ke <strong>DYNAMIC</strong> parts hote hain (<code>/products/:id</code>). <code>:id</code> ek placeholder hai.</p>
 
-                    <p><strong>⚠️ ROUTE ORDER TRAP:</strong> Agar tumhare paas <code>/products/categories</code> aur <code>/products/:id</code> dono hain, toh static/specific route ko pehle rakhna safer hai. Kyunki <code>:id</code> kisi bhi matching segment ko capture kar sakta hai (id = "categories" ho sakta hai).</p>
+                    <!-- PARAMS STEP 1 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 1: Param Extract & String-to-Number Cast</strong><br>
+                        URL segment <code>req.params.id</code> se string `"2"` milti hai, usse number `2` banate hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>param_step1_cast.js</span><span>Extract & Cast Param</span></div>
+                            <pre><code>app.<span class="tok-fn">get</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
+    <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id); <span class="tok-com">// "2" -> 2</span></code></pre>
+                        </div>
+                    </div>
 
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>get_single_product_params.js</span><span>GET /products/:id (Lookup & 404 Guard)</span></div>
-                        <pre><code><span class="tok-com">// Hit: GET /products/2</span>
-app.<span class="tok-fn">get</span>(<span class="tok-str">'/products/:id'</span>, (req, res) => {
-    <span class="tok-com">// req.params.id = "2" -> String ko number mein convert kar rahe hain</span>
-    <span class="tok-kw">const</span> id = <span class="tok-fn">Number</span>(req.params.id);
-
-    <span class="tok-com">// FIND PRODUCT: first element jo condition satisfy kare</span>
-    <span class="tok-kw">const</span> product = products.<span class="tok-fn">find</span>(
+                    <!-- PARAMS STEP 2 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 2: Find Product in Memory (.find())</strong><br>
+                        Array mein condition match karne wala first product object dhoondte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>param_step2_find.js</span><span>Array Lookup</span></div>
+                            <pre><code>    <span class="tok-kw">const</span> product = products.<span class="tok-fn">find</span>(
         p => p.id === id
-    );
+    );</code></pre>
+                        </div>
+                    </div>
 
-    <span class="tok-com">// 404 GUARD CLAUSE: product nahi mila toh 404 Not Found return karo</span>
-    <span class="tok-com">// IMPORTANT: `return` lagana zaroori hai warna function neeche continue karke duplicate response bhej dega</span>
-    <span class="tok-kw">if</span> (!product) {
+                    <!-- PARAMS STEP 3 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 3: 404 Guard Clause with Early Return</strong><br>
+                        Agar product nahi mila, toh 404 Not Found return karke execution turant rok dete hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>param_step3_guard.js</span><span>404 Guard Clause</span></div>
+                            <pre><code>    <span class="tok-kw">if</span> (!product) {
         <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">404</span>).<span class="tok-fn">json</span>({
             success: <span class="tok-kw">false</span>,
             message: <span class="tok-str">`Product with ID ${req.params.id} nahi mila!`</span>
         });
-    }
+    }</code></pre>
+                        </div>
+                    </div>
 
-    <span class="tok-com">// PRODUCT FOUND: 200 OK + product data</span>
-    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({
+                    <!-- PARAMS STEP 4 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 4: 200 OK Response with Product Object</strong><br>
+                        Mila hua product client ko send karte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>param_step4_response.js</span><span>200 OK Response</span></div>
+                            <pre><code>    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({
         success: <span class="tok-kw">true</span>,
         data: product
     });
 });</code></pre>
+                        </div>
                     </div>
 
-                    <div class="concept-sub-title">🔴 SOURCE 3: req.body</div>
-                    <p>Request body ka use client se DATA/PAYLOAD bhejne ke liye hota hai (Mostly POST ➔ create, PUT ➔ replace/update, PATCH ➔ partial update).<br>
-                    <code>express.json()</code> middleware ke baad <code>req.body</code> JavaScript object ban jata hai:</p>
+                    <!-- ================= SOURCE 3: req.body ================= -->
+                    <div class="concept-sub-title" style="margin-top: 30px;">🔴 SOURCE 3: req.body (Validation & 201 Created)</div>
+                    <p>Request body ka use client se JSON PAYLOAD lene ke liye hota hai (<code>POST /products</code>).</p>
 
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>post_product_body.js</span><span>POST /products (Validation & 201 Created)</span></div>
-                        <pre><code><span class="tok-com">// Hit: POST /products with JSON Body</span>
-app.<span class="tok-fn">post</span>(<span class="tok-str">'/products'</span>, (req, res) => {
-    <span class="tok-com">// Body se required values destructure kar rahe hain</span>
+                    <!-- BODY STEP 1 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 1: Destructure Body Fields</strong><br>
+                        <code>express.json()</code> parse hone ke baad <code>req.body</code> se values nikalte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>body_step1_extract.js</span><span>Destructure Body</span></div>
+                            <pre><code>app.<span class="tok-fn">post</span>(<span class="tok-str">'/products'</span>, (req, res) => {
     <span class="tok-kw">const</span> {
         name,
         price,
         category
-    } = req.body;
+    } = req.body;</code></pre>
+                        </div>
+                    </div>
 
-    <span class="tok-com">// VALIDATION: Client par blindly trust nahi karna chahiye ({ } empty request guard)</span>
-    <span class="tok-kw">if</span> (!name || price === undefined) {
+                    <!-- BODY STEP 2 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 2: 400 Bad Request Validation Guard</strong><br>
+                        Mandatory fields (name aur price) check karte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>body_step2_validate.js</span><span>Input Validation</span></div>
+                            <pre><code>    <span class="tok-kw">if</span> (!name || price === undefined) {
         <span class="tok-kw">return</span> res.<span class="tok-fn">status</span>(<span class="tok-num">400</span>).<span class="tok-fn">json</span>({
             success: <span class="tok-kw">false</span>,
             message: <span class="tok-str">'Name aur price bhejna mandatory hai!'</span>
         });
-    }
+    }</code></pre>
+                        </div>
+                    </div>
 
-    <span class="tok-com">// CREATE NEW PRODUCT: ID generate kar rahe hain</span>
-    <span class="tok-kw">const</span> newProduct = {
+                    <!-- BODY STEP 3 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 3: New Product Object & ID Generation</strong><br>
+                        Array ke aakhri element se increment karke unique ID banate hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>body_step3_create_obj.js</span><span>Construct Object</span></div>
+                            <pre><code>    <span class="tok-kw">const</span> newProduct = {
         id: products.length
             ? products[products.length - <span class="tok-num">1</span>].id + <span class="tok-num">1</span>
             : <span class="tok-num">1</span>,
         name,
-        price: <span class="tok-fn">Number</span>(price), <span class="tok-com">// Request se price string aa sakta hai -> Number cast</span>
-        category: category || <span class="tok-str">'general'</span> <span class="tok-com">// Fallback default</span>
-    };
+        price: <span class="tok-fn">Number</span>(price),           <span class="tok-com">// Ensure number type</span>
+        category: category || <span class="tok-str">'general'</span> <span class="tok-com">// Default fallback</span>
+    };</code></pre>
+                        </div>
+                    </div>
 
-    <span class="tok-com">// SAVE PRODUCT: array ke end mein new product add karta hai</span>
-    products.<span class="tok-fn">push</span>(newProduct);
+                    <!-- BODY STEP 4 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 4: Push to Array & Send 201 Created Response</strong><br>
+                        Resource successfully banne par `201 Created` status code bhejte hain.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>body_step4_save_res.js</span><span>Save & 201 Created</span></div>
+                            <pre><code>    products.<span class="tok-fn">push</span>(newProduct);
 
-    <span class="tok-com">// 201 CREATED: 200 = OK, 201 = NEW RESOURCE successfully created</span>
     res.<span class="tok-fn">status</span>(<span class="tok-num">201</span>).<span class="tok-fn">json</span>({
         success: <span class="tok-kw">true</span>,
         message: <span class="tok-str">'Product successfully created!'</span>,
         data: newProduct
     });
 });</code></pre>
+                        </div>
                     </div>
 
                     <div class="analogy-note">
@@ -2751,7 +2818,7 @@ app.<span class="tok-fn">post</span>(<span class="tok-str">'/products'</span>, (
                     </div>
                 </div>
 
-                                                <!-- 6. UPDATE (PUT) & DELETE -->
+                <!-- 6. UPDATE (PUT) & DELETE -->
                 <div class="concept-block">
                     <div class="concept-heading">6. Update (PUT) & Delete Operations (Line-by-Line Breakdown)</div>
                     <p>Yaha humare paas dono inputs hain: <code>req.params</code> (Kaunsa product update/delete karna hai?) aur <code>req.body</code> (Kya naya data set karna hai?).</p>
@@ -2960,37 +3027,53 @@ app.<span class="tok-fn">delete</span>(<span class="tok-str">'/products/:id'</sp
                     </div>
                 </div>
 
-                <!-- 7. 404 CATCH-ALL & GLOBAL ERROR HANDLER & LISTEN -->
+                                <!-- 7. 404 CATCH-ALL, GLOBAL ERROR HANDLER & LISTEN -->
                 <div class="concept-block">
-                    <div class="concept-heading">7. 404 Catch-All, Global Error Handler & app.listen()</div>
-                    <p>Express routes ko <strong>TOP ➔ BOTTOM</strong> order mein process karta hai. Agar upar koi route match nahi karta, toh catch-all middleware execute hota hai.</p>
+                    <div class="concept-heading">7. 404 Catch-All, Global Error Handler & app.listen() (Step-by-Step)</div>
+                    <p>Express routes ko <strong>TOP ➔ BOTTOM</strong> order mein process karta hai. Aakhri mein 404 fallback aur error handler lagaye jaate hain.</p>
 
-                    <p><strong>Global Error Handler:</strong> Express error-handling middleware ko identify karta hai because iske <strong>FOUR parameters</strong> hote hain: <code>(err, req, res, next)</code>. Normal middleware me 3 params hote hain <code>(req, res, next)</code>. Error handler ko hamesha routes ke BAAD rakha jata hai.</p>
-
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>errors_and_listen.js</span><span>404 Fallback, Error Handler & Socket Listener</span></div>
-                        <pre><code><span class="tok-com">// 1. 404 CATCH-ALL (Previous routes match nahi hue toh yaha request aayegi)</span>
-app.<span class="tok-fn">use</span>((req, res) => {
+                    <!-- STEP 1 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 1: 404 Route Catch-All Middleware</strong><br>
+                        Jab upar ka koi bhi route URL match nahi karta, request yaha drop hoti hai.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>err_step1_404.js</span><span>404 Catch-All</span></div>
+                            <pre><code>app.<span class="tok-fn">use</span>((req, res) => {
     res.<span class="tok-fn">status</span>(<span class="tok-num">404</span>).<span class="tok-fn">json</span>({
         success: <span class="tok-kw">false</span>,
         message: <span class="tok-str">`Route ${req.originalUrl} does not exist on this server!`</span>
     });
-});
+});</code></pre>
+                        </div>
+                    </div>
 
-<span class="tok-com">// 2. GLOBAL ERROR HANDLER (4 parameters: err, req, res, next)</span>
-app.<span class="tok-fn">use</span>((err, req, res, next) => {
+                    <!-- STEP 2 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 2: Global Error Handler (Exact 4 Parameters)</strong><br>
+                        Express <code>fn.length === 4</code> se identify karta hai ki ye Error Handler hai.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>err_step2_global.js</span><span>4-Arg Error Handler</span></div>
+                            <pre><code>app.<span class="tok-fn">use</span>((err, req, res, next) => {
     <span class="tok-fn">console</span>.<span class="tok-fn">error</span>(<span class="tok-str">'🔥 Server Error:'</span>, err.stack);
     res.<span class="tok-fn">status</span>(<span class="tok-num">500</span>).<span class="tok-fn">json</span>({
         success: <span class="tok-kw">false</span>,
         message: <span class="tok-str">'Internal Server Error'</span>,
         error: err.message
     });
-});
+});</code></pre>
+                        </div>
+                    </div>
 
-<span class="tok-com">// 3. START SERVER (Port 4000 par requests accept karega)</span>
-app.<span class="tok-fn">listen</span>(PORT, () => {
+                    <!-- STEP 3 -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 3: Start Server & Bind TCP Port</strong><br>
+                        Specified port par incoming network traffic sunna shuru karta hai.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>err_step3_listen.js</span><span>Start Server</span></div>
+                            <pre><code>app.<span class="tok-fn">listen</span>(PORT, () => {
     <span class="tok-fn">console</span>.<span class="tok-fn">log</span>(<span class="tok-str">`✅ Express Server running at http://localhost:${PORT}`</span>);
 });</code></pre>
+                        </div>
                     </div>
 
                     <!-- BIO ANATOMY BOARD FOR SECTION 7 -->
@@ -3004,21 +3087,6 @@ app.<span class="tok-fn">listen</span>(PORT, () => {
                             <div><span class="pill-err">Global Error: app.use((err, req, res, next))</span> ▶ <strong>Exact 4 arguments!</strong> Express <code>fn.length === 4</code> check karke isse error handler banata hai</div>
                             <div><span class="pill-res">res.status(500).json(...)</span> ──────────────────▶ Client ko generic 500 error deta hai (Production me <code>err.stack</code> hide karte hain)</div>
                             <div><span class="pill-fn">app.listen(PORT, callback)</span> ─────────────────▶ Node.js TCP port bind karke incoming HTTP requests sunna shuru karta hai</div>
-                        </div>
-
-                        <div class="anatomy-callout-grid" style="margin-top: 15px;">
-                            <div class="anatomy-callout-card" style="border-left: 4px solid #a855f7; background: #1e293b; padding: 14px; border-radius: 8px;">
-                                <div style="font-weight: 800; color: #a855f7; margin-bottom: 6px;">🧠 Why 4 Parameters Matter in Express?</div>
-                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
-                                    JavaScript functions ka <code>fn.length</code> unke parameter count ko batata hai. Express internally check karta hai: agar <code>fn.length === 4</code> hai, toh koi bhi route handler jab <code>next(err)</code> call karega, Express normal middleware bypass karke directly is 4-arg function ko execute karega!
-                                </div>
-                            </div>
-                            <div class="anatomy-callout-card" style="border-left: 4px solid #38bdf8; background: #1e293b; padding: 14px; border-radius: 8px;">
-                                <div style="font-weight: 800; color: #38bdf8; margin-bottom: 6px;">📍 Top-to-Bottom Pipeline Order</div>
-                                <div style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6;">
-                                    Order is everything: <code>Middleware ➔ Routes ➔ 404 Catch-All ➔ Global Error Handler</code>. Agar 404 middleware ko routes ke upar likh diya, toh koi bhi route chal hi nahi payega!
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -3180,37 +3248,61 @@ app.<span class="tok-fn">listen</span>(PORT, () => {
                     <p>Agar aapke backend me 50 routes hain aur sabhi routes me check karna hai: <em>"Kya user logged in hai?", "Request ka execution time kya tha?", "Kya incoming payload valid hai?"</em>. Agar middleware na ho, toh ye code har route ke andar 50 baar copy-paste karna padega!</p>
                     <p><strong>Middleware Solution:</strong> Request aane se lekar Response bhejne ke beech me lagaye gaye functions ki chain ko <strong>Middleware Pipeline</strong> kehte hain.</p>
 
-                    <div class="code-container">
-                        <div class="code-top-bar"><span>snippet_middleware_pipeline.js</span><span>Middleware Chain & next()</span></div>
-                        <pre><code><span class="tok-kw">const</span> express = <span class="tok-fn">require</span>(<span class="tok-str">'express'</span>);
-<span class="tok-kw">const</span> app = <span class="tok-fn">express</span>();
+                                        <div class="concept-sub-title">🛠️ Middleware Pipeline — Step-by-Step Breakdown</div>
 
-<span class="tok-com">// 1. Application-Level Logger Middleware:</span>
-app.<span class="tok-fn">use</span>((<span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) => {
+                    <!-- STEP 1: Global Logger -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 1: Application-Level Logger (Executes on EVERY incoming request)</strong><br>
+                        <code>app.use()</code> bina kisi route path ke likha gaya hai, isliye har single request isse guzregi.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>mw_step1_logger.js</span><span>Global Logger Middleware</span></div>
+                            <pre><code>app.<span class="tok-fn">use</span>((<span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) => {
     console.<span class="tok-fn">log</span>(<span class="tok-str">`[${new Date().toISOString()}] 👉 ${req.method} ${req.url}`</span>);
-    <span class="tok-fn">next</span>(); <span class="tok-com">// 👈 CRITICAL: Hands over control to the next middleware!</span>
-});
+    <span class="tok-fn">next</span>(); <span class="tok-com">// 👈 CRITICAL: Pipeline ke agle middleware ko handoff deta hai</span>
+});</code></pre>
+                        </div>
+                    </div>
 
-<span class="tok-com">// 2. Route-Specific Auth Guard Middleware:</span>
-<span class="tok-kw">function</span> <span class="tok-fn">requireAuth</span>(<span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) {
+                    <!-- STEP 2: Auth Guard -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 2: Route-Specific Auth Guard Middleware</strong><br>
+                        Request headers se <code>authorization</code> token verify karta hai. Token galat hone par turant 401 return karke pipeline rok deta hai.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>mw_step2_auth.js</span><span>Auth Guard Function</span></div>
+                            <pre><code><span class="tok-kw">function</span> <span class="tok-fn">requireAuth</span>(<span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) {
     <span class="tok-kw">const</span> token = req.headers[<span class="tok-str">'authorization'</span>];
     <span class="tok-kw">if</span> (token === <span class="tok-str">'Bearer secret-token-123'</span>) {
         <span class="tok-fn">next</span>(); <span class="tok-com">// User allowed to proceed!</span>
     } <span class="tok-kw">else</span> {
         res.<span class="tok-fn">status</span>(<span class="tok-num">401</span>).<span class="tok-fn">json</span>({ error: <span class="tok-str">'Unauthorized: Access Token Invalid or Missing'</span> });
     }
-}
+}</code></pre>
+                        </div>
+                    </div>
 
-<span class="tok-com">// 3. Protected Route using Auth Guard:</span>
-app.<span class="tok-fn">get</span>(<span class="tok-str">'/dashboard'</span>, requireAuth, (<span class="tok-num">req</span>, <span class="tok-num">res</span>) => {
+                    <!-- STEP 3: Protected Route -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 3: Protected Route with Attached Middleware</strong><br>
+                        Route handler se pehle <code>requireAuth</code> pass kiya gaya hai. Pehle auth guard chalega, fir controller.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>mw_step3_protected.js</span><span>Attach Guard to Route</span></div>
+                            <pre><code>app.<span class="tok-fn">get</span>(<span class="tok-str">'/dashboard'</span>, requireAuth, (<span class="tok-num">req</span>, <span class="tok-num">res</span>) => {
     res.<span class="tok-fn">json</span>({ secretData: <span class="tok-str">"Welcome to the VIP Admin Dashboard!"</span> });
-});
+});</code></pre>
+                        </div>
+                    </div>
 
-<span class="tok-com">// 4. Global 4-Argument Error Handler (err, req, res, next):</span>
-app.<span class="tok-fn">use</span>((<span class="tok-num">err</span>, <span class="tok-num">req</span>, <span class="tok-num">res</span>, <span class="tok-num">next</span>) => {
+                    <!-- STEP 4: Global Error Handler -->
+                    <div style="margin-bottom: 18px;">
+                        <p><strong>Step 4: Global 4-Argument Error Handler (err, req, res, next)</strong><br>
+                        Express 4 parameters dekh kar recognize karta hai ki ye error handler hai.</p>
+                        <div class="code-container">
+                            <div class="code-top-bar"><span>mw_step4_error.js</span><span>4-Arg Error Catcher</span></div>
+                            <pre><code>app.<span class="tok-fn">use</span>((<span class="tok-num">err</span>, <span class="tok-num">req</span>, <span class="tok-num">next</span>, <span class="tok-num">res</span>) => {
     console.<span class="tok-fn">error</span>(<span class="tok-str">"Global Error Caught:"</span>, err.message);
     res.<span class="tok-fn">status</span>(err.status || <span class="tok-num">500</span>).<span class="tok-fn">json</span>({ error: err.message });
 });</code></pre>
+                        </div>
                     </div>
 
                     <!-- SURGICAL LINE-BY-LINE DISSECTION -->
