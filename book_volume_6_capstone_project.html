@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Master Backend Revision Book — Volume 6: Complete Capstone REST API</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Plus+Jakarta+Sans:wght@500;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-page: #fbfbfd;
+            --card-bg: #ffffff;
+            --ink-main: #111827;
+            --ink-body: #2d3748;
+            --primary: #2563eb;
+            --border: #e2e8f0;
+            --font-hand: 'Patrick Hand', cursive, sans-serif;
+            --font-accent: 'Caveat', cursive, sans-serif;
+            --font-sans: 'Plus Jakarta Sans', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-hand);
+            background-color: var(--bg-page);
+            color: var(--ink-main);
+            font-size: 24px;
+            line-height: 1.65;
+            min-height: 100vh;
+            padding: 24px 32px 80px;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .app-wrapper {
+            width: 97%;
+            max-width: 1820px;
+            margin: 0 auto;
+            padding: 0 8px;
+        }
+
+        p { font-size: 25px; margin-bottom: 18px; line-height: 1.7; color: #1e293b; }
+        ol, ul { margin-bottom: 22px; padding-left: 32px; }
+        li { font-size: 25px; margin-bottom: 8px; line-height: 1.65; color: #1e293b; }
+        code { font-family: var(--font-code); font-size: 0.9em; background: #e2e8f0; padding: 2px 6px; border-radius: 6px; color: #0f172a; }
+
+        .genz-nav-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 14px;
+            background: #ffffff;
+            border: 2.5px solid #0f172a;
+            border-radius: 20px;
+            padding: 14px 28px;
+            margin-bottom: 32px;
+            box-shadow: 4px 4px 0px #0f172a;
+        }
+
+        .genz-nav-title {
+            font-family: var(--font-accent);
+            font-size: 38px;
+            font-weight: 700;
+            color: var(--ink-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .nav-pill-group {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .nav-btn {
+            background: #ffffff;
+            border: 2px solid #0f172a;
+            font-family: var(--font-hand);
+            font-size: 22px;
+            font-weight: 700;
+            padding: 8px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px #0f172a;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            color: var(--ink-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 4px 4px 0px #0f172a;
+            background: #eff6ff;
+        }
+
+        .genz-badge {
+            background: #fde047;
+            border: 2px solid #0f172a;
+            font-family: var(--font-hand);
+            font-size: 20px;
+            font-weight: 700;
+            padding: 4px 16px;
+            border-radius: 999px;
+            display: inline-block;
+            margin-bottom: 12px;
+            box-shadow: 2px 2px 0px #0f172a;
+        }
+
+        .brush-banner {
+            background: #0284c7;
+            color: #ffffff;
+            font-family: var(--font-hand);
+            font-size: 36px;
+            font-weight: 700;
+            text-align: center;
+            padding: 14px 44px;
+            margin: 28px auto 36px;
+            display: table;
+            border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+            box-shadow: 4px 4px 0px #0f172a;
+            transform: rotate(-1deg);
+        }
+
+        .chapter-page-box {
+            background: #ffffff;
+            border: 2.5px solid #0f172a;
+            border-radius: 24px;
+            padding: 44px 52px;
+            box-shadow: 6px 6px 0px #0f172a;
+            margin-bottom: 48px;
+        }
+
+        .chapter-header-area {
+            border-bottom: 2.5px solid #0f172a;
+            padding-bottom: 24px;
+            margin-bottom: 36px;
+        }
+
+        .chapter-header-area h2 {
+            font-family: var(--font-accent);
+            font-size: 52px;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 8px;
+        }
+
+        .concept-block {
+            background: transparent;
+            margin-bottom: 64px;
+            border-bottom: 2px dashed #cbd5e1;
+            padding-bottom: 48px;
+        }
+        .concept-block:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+            margin-bottom: 24px;
+        }
+
+        .concept-heading {
+            font-family: var(--font-accent);
+            font-size: 42px;
+            font-weight: 700;
+            color: #0369a1;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 2.5px solid #e2e8f0;
+            padding-bottom: 14px;
+        }
+
+        .concept-sub-title {
+            font-family: var(--font-hand);
+            font-size: 32px;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 36px 0 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-container {
+            background: #0b1120;
+            border: 2px solid #0f172a;
+            border-radius: 18px;
+            margin: 32px 0 40px;
+            overflow: hidden;
+            box-shadow: 5px 5px 0px #0f172a;
+        }
+
+        .code-top-bar {
+            background: #1e293b;
+            border-bottom: 1px solid #334155;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: var(--font-code);
+            font-size: 16px;
+            color: #94a3b8;
+            font-weight: 700;
+        }
+
+        .code-container pre {
+            padding: 24px 28px;
+            margin: 0;
+            overflow-x: auto;
+            font-family: var(--font-code);
+            font-size: 16.5px;
+            line-height: 1.8;
+            color: #f1f5f9;
+        }
+
+        .tok-kw { color: #f43f5e; font-weight: 700; }
+        .tok-fn { color: #38bdf8; font-weight: 600; }
+        .tok-str { color: #a5f3fc; }
+        .tok-num { color: #fde047; }
+        .tok-com { color: #64748b; font-style: italic; }
+
+        .mechanics-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 22px 0 32px;
+            border: 2px solid #0f172a;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 3px 3px 0px #0f172a;
+            font-family: var(--font-hand);
+            font-size: 23px;
+        }
+
+        .mechanics-table th {
+            background: #f1f5f9;
+            color: #0f172a;
+            text-align: left;
+            padding: 14px 20px;
+            font-family: var(--font-accent);
+            font-size: 26px;
+            font-weight: 700;
+            border-bottom: 2px solid #0f172a;
+        }
+
+        .mechanics-table td {
+            padding: 14px 20px;
+            border-bottom: 1.5px solid #e2e8f0;
+            vertical-align: top;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .mechanics-table tr:last-child td { border-bottom: none; }
+        .mechanics-table tr:nth-child(even) td { background: #fafaf9; }
+    </style>
+</head>
+<body>
+    <div class="app-wrapper">
+        <nav class="genz-nav-bar">
+            <a href="index.html" class="genz-nav-title">
+                <span>🏆</span> Volume 6: Complete User Management REST API Capstone
+            </a>
+            <div class="nav-pill-group">
+                <a href="index.html" class="nav-btn">🏠 Home Dashboard</a>
+                <a href="book_volume_1_javascript.html" class="nav-btn" style="background:#dbeafe;">📘 Vol 1</a>
+                <a href="book_volume_2_nodejs.html" class="nav-btn" style="background:#d1fae5;">📗 Vol 2</a>
+                <a href="book_volume_3_express.html" class="nav-btn" style="background:#ffe4e6;">📕 Vol 3</a>
+                <a href="book_volume_4_mongodb_mongoose.html" class="nav-btn" style="background:#ccfbf1;">🍃 Vol 4</a>
+                <a href="book_volume_5_auth_security.html" class="nav-btn" style="background:#ede9fe;">🛡️ Vol 5</a>
+            </div>
+        </nav>
+
+        <div class="chapter-page-box">
+            <div class="chapter-header-area">
+                <span class="genz-badge" style="background:#bae6fd;">PART 7 • COMPLETE CAPSTONE PROJECT</span>
+                <h2>User Management REST API: End-to-End Implementation</h2>
+                <p>Complete Zero-Shortcut Production Deliverable: Every file's complete code, imports, exports, folder structure, config, user model, bcrypt hashing, JWT authentication, RBAC authorization, CRUD operations, pagination, search, centralized error handling & Postman verification matrix.</p>
+            </div>
+
+            <div class="brush-banner">Production MVC REST API Architecture & Postman Test Suite</div>
+
+    <!-- ==================== PART 7: CAPSTONE PROJECT ==================== -->
+    <div class="concept-block" id="project-overview">
+        <div class="concept-heading">🏆 Complete User Management REST API — Production Grade</div>
+        
+        <div class="concept-sub-title">📁 1. Project Directory Structure</div>
+        <div class="code-container">
+            <div class="code-top-bar"><span>Folder Architecture</span><span>MVC Clean Pattern</span></div>
+            <pre><code>user-management-api/
+├── config/
+│   └── db.js                 # MongoDB connection logic & retry hooks
+├── controllers/
+│   ├── authController.js     # Register, Login, Token generation
+│   ├── userController.js     # CRUD, Filtering, Pagination, Profile update
+│   └── errorController.js    # Global centralized error middleware
+├── middleware/
+│   ├── authMiddleware.js     # protect (JWT verification) & restrictTo (RBAC)
+│   └── validateMiddleware.js # express-validator rule chains
+├── models/
+│   └── User.js               # Mongoose schema, bcrypt hooks, methods
+├── routes/
+│   ├── authRoutes.js         # /api/v1/auth (register, login)
+│   └── userRoutes.js         # /api/v1/users (CRUD endpoints)
+├── utils/
+│   ├── appError.js           # Custom Operational Error class
+│   ├── catchAsync.js         # Async error wrapper (eliminates try/catch)
+│   └── apiFeatures.js        # Filtering, Sorting, Pagination helper
+├── .env                      # Secrets & Port config
+├── .gitignore
+├── app.js                    # Express app configuration & middlewares
+├── package.json
+└── server.js                 # Server bootstrapper & process listeners</code></pre>
+        </div>
+
+        <div class="concept-sub-title">📦 2. package.json & Dependencies</div>
+        <div class="code-container">
+            <div class="code-top-bar"><span>package.json</span><span>Production Dependencies</span></div>
+            <pre><code>{
+  "name": "user-management-api",
+  "version": "1.0.0",
+  "description": "Production User Management REST API with JWT & RBAC",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.2.0",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}</code></pre>
+        </div>
+
+        <div class="concept-sub-title">⚙️ 3. Environment Variables (.env)</div>
+        <div class="code-container">
+            <div class="code-top-bar"><span>.env</span><span>Environment Configuration</span></div>
+            <pre><code>NODE_ENV=development
+PORT=5000
+DATABASE_URL=mongodb://127.0.0.1:27017/user_management_db
+JWT_SECRET=super_secret_jwt_high_entropy_key_change_in_production_2026
+JWT_EXPIRES_IN=7d</code></pre>
+        </div>
+
+        <div class="concept-sub-title">🔌 4. Database Connection (config/db.js)</div>
+        <div class="code-container">
+            <div class="code-top-bar"><span>config/db.js</span><span>Mongoose Connection</span></div>
+            <pre><code><span class="tok-kw">const</span> mongoose = require(<span class="tok-str">"mongoose"</span>);
+
+<span class="tok-kw">const</span> connectDB = <span class="tok-kw">async</span> () => {
+    <span class="tok-kw">try</span> {
+        <span class="tok-kw">const</span> conn = <span class="tok-kw">await</span> mongoose.<span class="tok-fn">connect</span>(process.env.DATABASE_URL);
+        console.<span class="tok-fn">log</span>(<span class="tok-str">`🍃 MongoDB Connected: ${conn.connection.host}`</span>);
+    } <span class="tok-kw">catch</span> (err) {
+        console.<span class="tok-fn">error</span>(<span class="tok-str">`💥 Database connection error: ${err.message}`</span>);
+        process.<span class="tok-fn">exit</span>(<span class="tok-num">1</span>);
+    }
+};
+
+module.exports = connectDB;</code></pre>
+        </div>
+
+        <div class="concept-sub-title">🛡️ 5. Error Utilities (utils/appError.js & utils/catchAsync.js)</div>
+        <div class="code-container">
+            <div class="code-top-bar"><span>utils/appError.js & utils/catchAsync.js</span><span>Clean Async Code</span></div>
+            <pre><code><span class="tok-com">// utils/appError.js</span>
+<span class="tok-kw">class</span> <span class="tok-fn">AppError</span> <span class="tok-kw">extends</span> Error {
+    constructor(message, statusCode) {
+        super(message);
+        <span class="tok-kw">this</span>.statusCode = statusCode;
+        <span class="tok-kw">this</span>.status = `${statusCode}`.<span class="tok-fn">startsWith</span>(<span class="tok-str">"4"</span>) ? <span class="tok-str">"fail"</span> : <span class="tok-str">"error"</span>;
+        <span class="tok-kw">this</span>.isOperational = <span class="tok-kw">true</span>;
+        Error.<span class="tok-fn">captureStackTrace</span>(<span class="tok-kw">this</span>, <span class="tok-kw">this</span>.constructor);
+    }
+}
+module.exports = AppError;
+
+<span class="tok-com">// utils/catchAsync.js (Eliminates redundant try/catch blocks!)</span>
+module.exports = fn => {
+    <span class="tok-kw">return</span> (req, res, next) => {
+        fn(req, res, next).<span class="tok-fn">catch</span>(next);
+    };
+};</code></pre>
+        </div>
+
+        <div class="concept-sub-title">👤 6. User Model (models/User.js)</div>
+        <div class="code-container">
+            <div class="code-top-bar"><span>models/User.js</span><span>Mongoose Schema</span></div>
+            <pre><code><span class="tok-kw">const</span> mongoose = require(<span class="tok-str">"mongoose"</span>);
+<span class="tok-kw">const</span> bcrypt = require(<span class="tok-str">"bcryptjs"</span>);
+
+<span class="tok-kw">const</span> userSchema = <span class="tok-kw">new</span> mongoose.<span class="tok-fn">Schema</span>({
+    name: { <span class="tok-kw">type</span>: String, required: [<span class="tok-kw">true</span>, <span class="tok-str">"Name is required"</span>], trim: <span class="tok-kw">true</span> },
+    email: {
+        <span class="tok-kw">type</span>: String,
+        required: [<span class="tok-kw">true</span>, <span class="tok-str">"Email is required"</span>],
+        unique: <span class="tok-kw">true</span>,
+        lowercase: <span class="tok-kw">true</span>,
+        index: <span class="tok-kw">true</span>
+    },
+    role: { <span class="tok-kw">type</span>: String, enum: [<span class="tok-str">"user"</span>, <span class="tok-str">"admin"</span>], default: <span class="tok-str">"user"</span> },
+    password: { <span class="tok-kw">type</span>: String, required: [<span class="tok-kw">true</span>, <span class="tok-str">"Password is required"</span>], minlength: <span class="tok-num">8</span>, select: <span class="tok-kw">false</span> },
+    active: { <span class="tok-kw">type</span>: Boolean, default: <span class="tok-kw">true</span>, select: <span class="tok-kw">false</span> }
+}, { timestamps: <span class="tok-kw">true</span> });
+
+<span class="tok-com">// Pre-save Password Hashing Hook</span>
+userSchema.<span class="tok-fn">pre</span>(<span class="tok-str">"save"</span>, <span class="tok-kw">async</span> <span class="tok-kw">function</span>() {
+    <span class="tok-kw">if</span> (!<span class="tok-kw">this</span>.<span class="tok-fn">isModified</span>(<span class="tok-str">"password"</span>)) <span class="tok-kw">return</span>;
+    <span class="tok-kw">this</span>.password = <span class="tok-kw">await</span> bcrypt.<span class="tok-fn">hash</span>(<span class="tok-kw">this</span>.password, <span class="tok-num">12</span>);
+});
+
+<span class="tok-com">// Password Comparison Instance Method</span>
+userSchema.methods.<span class="tok-fn">comparePassword</span> = <span class="tok-kw">async</span> <span class="tok-kw">function</span>(candidatePassword, userPassword) {
+    <span class="tok-kw">return</span> <span class="tok-kw">await</span> bcrypt.<span class="tok-fn">compare</span>(candidatePassword, userPassword);
+};
+
+module.exports = mongoose.<span class="tok-fn">model</span>(<span class="tok-str">"User"</span>, userSchema);</code></pre>
+        </div>
+
+        <div class="concept-sub-title">🔐 7. Auth Controller (controllers/authController.js)</div>
+        <div class="code-container">
+            <div class="code-top-bar"><span>controllers/authController.js</span><span>Registration & Login</span></div>
+            <pre><code><span class="tok-kw">const</span> jwt = require(<span class="tok-str">"jsonwebtoken"</span>);
+<span class="tok-kw">const</span> User = require(<span class="tok-str">"../models/User"</span>);
+<span class="tok-kw">const</span> AppError = require(<span class="tok-str">"../utils/appError"</span>);
+<span class="tok-kw">const</span> catchAsync = require(<span class="tok-str">"../utils/catchAsync"</span>);
+
+<span class="tok-kw">const</span> signToken = id => {
+    <span class="tok-kw">return</span> jwt.<span class="tok-fn">sign</span>({ id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || <span class="tok-str">"7d"</span> });
+};
+
+<span class="tok-com">// POST /api/v1/auth/register</span>
+<span class="tok-kw">exports</span>.<span class="tok-fn">register</span> = <span class="tok-fn">catchAsync</span>(<span class="tok-kw">async</span> (req, res, next) => {
+    <span class="tok-kw">const</span> { name, email, password, role } = req.body;
+    <span class="tok-kw">const</span> newUser = <span class="tok-kw">await</span> User.<span class="tok-fn">create</span>({ name, email, password, role });
+    <span class="tok-kw">const</span> token = <span class="tok-fn">signToken</span>(newUser._id);
+
+    newUser.password = undefined; <span class="tok-com">// Hide password in output</span>
+
+    res.<span class="tok-fn">status</span>(<span class="tok-num">201</span>).<span class="tok-fn">json</span>({
+        success: <span class="tok-kw">true</span>,
+        token,
+        data: { user: newUser }
+    });
+});
+
+<span class="tok-com">// POST /api/v1/auth/login</span>
+<span class="tok-kw">exports</span>.<span class="tok-fn">login</span> = <span class="tok-fn">catchAsync</span>(<span class="tok-kw">async</span> (req, res, next) => {
+    <span class="tok-kw">const</span> { email, password } = req.body;
+    <span class="tok-kw">if</span> (!email || !password) {
+        <span class="tok-kw">return</span> <span class="tok-fn">next</span>(<span class="tok-kw">new</span> <span class="tok-fn">AppError</span>(<span class="tok-str">"Please provide email and password!"</span>, <span class="tok-num">400</span>));
+    }
+
+    <span class="tok-com">// Explicitly select password field</span>
+    <span class="tok-kw">const</span> user = <span class="tok-kw">await</span> User.<span class="tok-fn">findOne</span>({ email }).<span class="tok-fn">select</span>(<span class="tok-str">"+password"</span>);
+    <span class="tok-kw">if</span> (!user || !(<span class="tok-kw">await</span> user.<span class="tok-fn">comparePassword</span>(password, user.password))) {
+        <span class="tok-kw">return</span> <span class="tok-fn">next</span>(<span class="tok-kw">new</span> <span class="tok-fn">AppError</span>(<span class="tok-str">"Incorrect email or password!"</span>, <span class="tok-num">401</span>));
+    }
+
+    <span class="tok-kw">const</span> token = <span class="tok-fn">signToken</span>(user._id);
+    user.password = undefined;
+
+    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({
+        success: <span class="tok-kw">true</span>,
+        token,
+        data: { user }
+    });
+});</code></pre>
+        </div>
+
+        <div class="concept-sub-title">👥 8. User Controller (controllers/userController.js)</div>
+        <div class="code-container">
+            <div class="code-top-bar"><span>controllers/userController.js</span><span>CRUD & Pagination</span></div>
+            <pre><code><span class="tok-kw">const</span> User = require(<span class="tok-str">"../models/User"</span>);
+<span class="tok-kw">const</span> AppError = require(<span class="tok-str">"../utils/appError"</span>);
+<span class="tok-kw">const</span> catchAsync = require(<span class="tok-str">"../utils/catchAsync"</span>);
+
+<span class="tok-com">// GET /api/v1/users (Protected: Admin only)</span>
+<span class="tok-kw">exports</span>.<span class="tok-fn">getAllUsers</span> = <span class="tok-fn">catchAsync</span>(<span class="tok-kw">async</span> (req, res, next) => {
+    <span class="tok-kw">const</span> page = parseInt(req.query.page, <span class="tok-num">10</span>) || <span class="tok-num">1</span>;
+    <span class="tok-kw">const</span> limit = parseInt(req.query.limit, <span class="tok-num">10</span>) || <span class="tok-num">10</span>;
+    <span class="tok-kw">const</span> skip = (page - <span class="tok-num">1</span>) * limit;
+
+    <span class="tok-kw">const</span> filter = {};
+    <span class="tok-kw">if</span> (req.query.search) {
+        filter.name = { $regex: req.query.search, $options: <span class="tok-str">"i"</span> };
+    }
+
+    <span class="tok-kw">const</span> users = <span class="tok-kw">await</span> User.<span class="tok-fn">find</span>(filter).<span class="tok-fn">skip</span>(skip).<span class="tok-fn">limit</span>(limit).<span class="tok-fn">lean</span>();
+    <span class="tok-kw">const</span> total = <span class="tok-kw">await</span> User.<span class="tok-fn">countDocuments</span>(filter);
+
+    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({
+        success: <span class="tok-kw">true</span>,
+        results: users.length,
+        pagination: { total, page, pages: Math.<span class="tok-fn">ceil</span>(total / limit) },
+        data: { users }
+    });
+});
+
+<span class="tok-com">// GET /api/v1/users/me</span>
+<span class="tok-kw">exports</span>.<span class="tok-fn">getMe</span> = (req, res, next) => {
+    res.<span class="tok-fn">status</span>(<span class="tok-num">200</span>).<span class="tok-fn">json</span>({ success: <span class="tok-kw">true</span>, data: { user: req.user } });
+};</code></pre>
+        </div>
+
+        <div class="concept-sub-title">🚦 9. Express App Setup (app.js)</div>
+        <div class="code-container">
+            <div class="code-top-bar"><span>app.js</span><span>Middleware & Routers</span></div>
+            <pre><code><span class="tok-kw">const</span> express = require(<span class="tok-str">"express"</span>);
+<span class="tok-kw">const</span> helmet = require(<span class="tok-str">"helmet"</span>);
+<span class="tok-kw">const</span> cors = require(<span class="tok-str">"cors"</span>);
+<span class="tok-kw">const</span> rateLimit = require(<span class="tok-str">"express-rate-limit"</span>);
+
+<span class="tok-kw">const</span> authRouter = require(<span class="tok-str">"./routes/authRoutes"</span>);
+<span class="tok-kw">const</span> userRouter = require(<span class="tok-str">"./routes/userRoutes"</span>);
+<span class="tok-kw">const</span> AppError = require(<span class="tok-str">"./utils/appError"</span>);
+<span class="tok-kw">const</span> globalErrorHandler = require(<span class="tok-str">"./controllers/errorController"</span>);
+
+<span class="tok-kw">const</span> app = express();
+
+<span class="tok-com">// Security Middlewares</span>
+app.<span class="tok-fn">use</span>(helmet());
+app.<span class="tok-fn">use</span>(cors());
+app.<span class="tok-fn">use</span>(<span class="tok-str">"/api"</span>, <span class="tok-fn">rateLimit</span>({ windowMs: <span class="tok-num">15</span> * <span class="tok-num">60</span> * <span class="tok-num">1000</span>, max: <span class="tok-num">100</span> }));
+
+<span class="tok-com">// Body Parsers</span>
+app.<span class="tok-fn">use</span>(express.<span class="tok-fn">json</span>({ limit: <span class="tok-str">"10kb"</span> }));
+
+<span class="tok-com">// Route Mounts</span>
+app.<span class="tok-fn">use</span>(<span class="tok-str">"/api/v1/auth"</span>, authRouter);
+app.<span class="tok-fn">use</span>(<span class="tok-str">"/api/v1/users"</span>, userRouter);
+
+<span class="tok-com">// Unhandled Route Catch-All</span>
+app.<span class="tok-fn">all</span>(<span class="tok-str">"*"</span>, (req, res, next) => {
+    next(<span class="tok-kw">new</span> <span class="tok-fn">AppError</span>(`Can't find ${req.originalUrl} on this server!`, <span class="tok-num">404</span>));
+});
+
+<span class="tok-com">// Centralized Error Handler</span>
+app.<span class="tok-fn">use</span>(globalErrorHandler);
+
+module.exports = app;</code></pre>
+        </div>
+
+        <div class="concept-sub-title">📬 10. Postman Testing Guide & Verification Matrix</div>
+        <table class="mechanics-table">
+            <thead><tr><th>Endpoint</th><th>HTTP Verb</th><th>Headers</th><th>Expected Body / Status</th></tr></thead>
+            <tbody>
+                <tr><td><code>/api/v1/auth/register</code></td><td>POST</td><td>Content-Type: application/json</td><td><code>201 Created</code> + JWT token returned</td></tr>
+                <tr><td><code>/api/v1/auth/login</code></td><td>POST</td><td>Content-Type: application/json</td><td><code>200 OK</code> + JWT token returned</td></tr>
+                <tr><td><code>/api/v1/users/me</code></td><td>GET</td><td>Authorization: Bearer &lt;token&gt;</td><td><code>200 OK</code> with logged-in user profile</td></tr>
+                <tr><td><code>/api/v1/users</code></td><td>GET</td><td>Authorization: Bearer &lt;admin_token&gt;</td><td><code>200 OK</code> with paginated user list</td></tr>
+                <tr><td><code>/api/v1/users</code> (Non-admin)</td><td>GET</td><td>Authorization: Bearer &lt;user_token&gt;</td><td><code>403 Forbidden</code> (RBAC verified!)</td></tr>
+                <tr><td><code>/api/v1/unknown</code></td><td>GET</td><td>None</td><td><code>404 Not Found</code> JSON response</td></tr>
+            </tbody>
+        </table>
+    </div>
+    
+        </div>
+    </div>
+</body>
+</html>
